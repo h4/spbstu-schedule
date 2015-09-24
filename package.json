@@ -1,0 +1,33 @@
+{
+  "name": "spbstu-schedule",
+  "version": "1.0.0",
+  "description": "Schedule interface for SPbPU university",
+  "main": "src/index.js",
+  "repository": "http://github.com/h4/spbstu-schedule",
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "react": "^0.13.3",
+    "react-redux": "^3.0.0",
+    "react-router": "^0.13.3",
+    "reactify": "^1.1.1",
+    "redux": "^3.0.0"
+  },
+  "devDependencies": {
+    "browserify": "^11.2.0",
+    "envify": "^3.4.0",
+    "redux-devtools": "^2.1.3",
+    "watchify": "^3.4.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify ./src/js/app.js > src/js/bundle.js"
+  },
+  "author": "Mikhail Baranov <mikhail.baranov@gmail.com>",
+  "license": "ISC",
+  "browserify": {
+    "transform": [
+      "reactify",
+      "envify"
+    ]
+  }
+}
