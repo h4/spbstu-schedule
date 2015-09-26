@@ -11,10 +11,6 @@ var React = require('react'),
 var history = createBrowserHistory();
 var store = configureStore();
 
-RuzData.init();
-
-RuzAPI.getFacultyData();
-
 var routes = (<Route handler={FacultyList} path="/spbstu-schedule/src/index.html" />);
 
 Router.run(routes, Router.HistoryLocation, function(Handler, routerState) { // note "routerState" here
