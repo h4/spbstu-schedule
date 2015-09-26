@@ -5,12 +5,16 @@
   "main": "src/index.js",
   "repository": "http://github.com/h4/spbstu-schedule",
   "dependencies": {
+    "history": "^1.11.0",
+    "isomorphic-fetch": "^2.1.1",
     "lodash": "^3.10.1",
+    "normalizr": "^1.0.0",
     "react": "^0.13.3",
     "react-redux": "^3.0.0",
     "react-router": "^0.13.3",
     "reactify": "^1.1.1",
-    "redux": "^3.0.0"
+    "redux": "^3.0.0",
+    "redux-thunk": "^1.0.0"
   },
   "devDependencies": {
     "browserify": "^11.2.0",
