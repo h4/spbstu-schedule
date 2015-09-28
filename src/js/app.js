@@ -9,7 +9,7 @@ var React = require('react'),
 var history = createBrowserHistory();
 var store = configureStore();
 
-var routes = (<Route handler={FacultyList} path="/spbstu-schedule/src/index.html" />);
+var routes = (<Route handler={FacultyList} path="/" />);
 
 Router.run(routes, Router.HistoryLocation, function(Handler, routerState) { // note "routerState" here
     React.render(

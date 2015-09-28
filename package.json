@@ -24,7 +24,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "browserify ./src/js/app.js > src/js/bundle.js"
+    "build": "browserify ./src/js/app.js > ./src/js/bundle.js",
+    "server": "cd src && python -m SimpleHTTPServer"
   },
   "author": "Mikhail Baranov <mikhail.baranov@gmail.com>",
   "license": "ISC",
