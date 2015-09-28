@@ -1,6 +1,4 @@
 var React = require('react'),
-    RuzData = require('./RuzData'),
-    RuzAPI = require('./utils/RuzAPI'),
     FacultyList = require('./components/FacultyList.jsx'),
     createBrowserHistory = require('history/lib/createBrowserHistory'),
     Router = require('react-router'),
