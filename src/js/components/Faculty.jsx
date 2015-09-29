@@ -29,7 +29,7 @@ var Faculty = React.createClass({
                 {
                     faculty.groups &&
                     <div className="groups-list">
-                        <Groups groups={this.props.faculty.groups} facultyId={this.props.faculty.id}/>
+                        <Groups groups={faculty.groups} facultyId={faculty.id}/>
                     </div>
                 }
             </div>
@@ -42,7 +42,7 @@ Faculty.propTypes = {
     isFetching: React.PropTypes.bool.isRequired
 };
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
     return {
         isFetching: state.entities.isFetching,
         faculties: state.entities.faculties

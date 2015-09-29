@@ -23,7 +23,6 @@ function requestGroups() {
     };
 }
 
-
 function fetchGroups(facultyId, response) {
     return {
         type: FETCH_GROUPS,
@@ -35,7 +34,7 @@ function fetchGroups(facultyId, response) {
 module.exports = {
     fetchFaculties: function () {
         return function(dispatch) {
-            dispatch(requestFaculties);
+            dispatch(requestFaculties());
             return api('faculties', function(response) {
                 dispatch(fetchFaculties(response));
             });
@@ -46,7 +45,7 @@ module.exports = {
         var endpoint = 'faculties/' + id + '/groups';
 
         return function(dispatch) {
-            dispatch(requestGroups);
+            dispatch(requestGroups());
             return api(endpoint, function (response) {
                 dispatch(fetchGroups(id, response));
             });

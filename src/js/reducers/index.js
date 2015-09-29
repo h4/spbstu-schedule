@@ -8,8 +8,8 @@ function entities(state, action) {
             state.isFetching = true;
             return state;
         case 'FETCH_FACULTIES':
-            state.isFetching = false;
             state.faculties = action.faculties;
+            state.isFetching = false;
             return state;
         case 'REQUEST_GROUPS':
             state.isFetching = true;
