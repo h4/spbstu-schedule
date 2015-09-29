@@ -3,6 +3,8 @@ var REQUEST_FACULTIES = 'REQUEST_FACULTIES';
 var FETCH_FACULTIES = 'FETCH_FACULTIES';
 var REQUEST_GROUPS = 'REQUEST_GROUPS';
 var FETCH_GROUPS = 'FETCH_GROUPS';
+var REQUEST_LESSONS = 'REQUEST_LESSONS';
+var FETCH_LESSONS = 'FETCH_LESSONS';
 
 function requestFaculties() {
     return {
@@ -31,6 +33,21 @@ function fetchGroups(facultyId, response) {
     }
 }
 
+function requestLessons() {
+    return {
+        type: REQUEST_LESSONS
+    };
+}
+
+function fetchLessons(facultyId, groupId, response) {
+    return {
+        type: FETCH_LESSONS,
+        faculty: facultyId,
+        group: groupId,
+        lessons: response.days
+    }
+}
+
 module.exports = {
     fetchFaculties: function () {
         return function(dispatch) {
@@ -48,6 +65,17 @@ module.exports = {
             dispatch(requestGroups());
             return api(endpoint, function (response) {
                 dispatch(fetchGroups(id, response));
+            });
+        };
+    },
+
+    fetchLessons: function(faculyId, groupId) {
+        var endpoint = 'scheduler/' + groupId;
+
+        return function(dispatch) {
+            dispatch(requestLessons());
+            return api(endpoint, function (response) {
+                dispatch(fetchLessons(faculyId, groupId, response));
             });
         };
     }

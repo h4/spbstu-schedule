@@ -15,7 +15,20 @@ function entities(state, action) {
             state.isFetching = true;
             return state;
         case 'FETCH_GROUPS':
-            state.faculties.find(function(faculty) {return faculty.id == action.faculty;})['groups'] = action.groups;
+            state.faculties.find(function(faculty) {
+                return faculty.id == action.faculty;
+            })['groups'] = action.groups;
+            state.isFetching = false;
+            return state;
+        case 'REQUEST_LESSONS':
+            state.isFetching = true;
+            return state;
+        case 'FETCH_LESSONS':
+            state.faculties.find(function(faculty) {
+                return faculty.id == action.faculty;
+            })['groups'].find(function(group) {
+                return group.id == action.group;
+            })['lessons'] = action.lessons;
             state.isFetching = false;
             return state;
         default :
