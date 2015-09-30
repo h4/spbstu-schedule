@@ -1,4 +1,5 @@
 var React = require('react');
+var _ = require('lodash');
 var reactRedux = require('react-redux');
 var actions = require('../actions/FacultyActions');
 
@@ -11,13 +12,8 @@ var Schedule = React.createClass({
     },
 
     render: function() {
-        var facultyId = this.props.params.facultyId;
         var groupId = this.props.params.groupId;
-        var faculty = this.props.faculties.find(function(faculty) {return faculty.id == facultyId});
-        var lessons = faculty.groups
-            .find(function(group) {
-                return group.id == groupId
-            })['lessons'];
+        var lessons = this.props.lessons && this.props.lessons[groupId];
 
         if (this.props.isFetching) {
             return (
@@ -49,8 +45,9 @@ Schedule.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        isFetching: state.entities.isFetching,
-        faculties: state.entities.faculties
+        isFetching: state.lessons.isFetching,
+        faculties: state.faculties.data,
+        lessons: state.lessons.data
     }
 }
 

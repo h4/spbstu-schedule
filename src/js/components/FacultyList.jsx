@@ -33,8 +33,8 @@ FacultyList.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        isFetching: state.entities.isFetching,
-        faculties: state.entities.faculties
+        isFetching: state.faculties.isFetching,
+        faculties: state.faculties.data
     }
 }
 
