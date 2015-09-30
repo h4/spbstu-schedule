@@ -12,7 +12,7 @@ var Faculty = React.createClass({
     },
 
     render: function() {
-        var facultyId = this.props.params.facultyId;
+        var facultyId = parseInt(this.props.params.facultyId, 10);
         var faculty = _.find(this.props.faculties, 'id', facultyId);
         var groups = this.props.groups && this.props.groups[facultyId];
 

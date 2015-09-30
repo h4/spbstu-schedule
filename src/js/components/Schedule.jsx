@@ -2,6 +2,7 @@ var React = require('react');
 var _ = require('lodash');
 var reactRedux = require('react-redux');
 var actions = require('../actions/FacultyActions');
+var Day = require('./Schedule/Day.jsx');
 
 var Schedule = React.createClass({
     componentDidMount: function() {
@@ -12,7 +13,10 @@ var Schedule = React.createClass({
     },
 
     render: function() {
-        var groupId = this.props.params.groupId;
+        var groupId = parseInt(this.props.params.groupId, 10);
+        var facultyId = parseInt(this.props.params.facultyId, 10);
+        var faculty = _.find(this.props.faculties, 'id', facultyId);
+        var group = this.props.groups[facultyId];
         var lessons = this.props.lessons && this.props.lessons[groupId];
 
         if (this.props.isFetching) {
@@ -22,15 +26,14 @@ var Schedule = React.createClass({
         }
 
         return (
-            <div>{
+            <div>
+                <h2>{faculty.name}</h2>
+                <h3>{group.name}</h3>
+                {
                 lessons &&
                 <ul>
-                    {lessons.map((day) =>
-                        <li>{day.date} {day.lessons && <ul>
-                            {day.lessons.map((lesson) => <li>
-                                {lesson.time_start} {lesson.subject}
-                            </li>)}
-                        </ul>}</li>
+                    {lessons.map((day, i) =>
+                        <Day key={i} date={day.date} lessons={day.lessons} />
                     )}
                 </ul>
             }</div>
@@ -46,6 +49,7 @@ Schedule.propTypes = {
 function mapStateToProps(state) {
     return {
         isFetching: state.lessons.isFetching,
+        groups: state.groups.data,
         faculties: state.faculties.data,
         lessons: state.lessons.data
     }
