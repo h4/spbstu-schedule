@@ -17,6 +17,7 @@ var routes = (<Route handler={App} path="/">
     <DefaultRoute handler={FacultyList} />
     <Route handler={Faculty} path="faculty/:facultyId/groups" />
     <Route handler={Schedule} path="faculty/:facultyId/groups/:groupId" />
+    <Route handler={Schedule} path="faculty/:facultyId/groups/:groupId?date=:date" />
 </Route>);
 
 Router.run(routes, Router.HistoryLocation, function(Handler, routerState) { // note "routerState" here

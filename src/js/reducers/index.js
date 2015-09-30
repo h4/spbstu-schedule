@@ -53,6 +53,7 @@ function lessons(state, action) {
     state = state || {
             isFetching: false,
             data: null,
+            week: null,
             errors: null
         };
     switch (action.type) {
@@ -62,6 +63,7 @@ function lessons(state, action) {
         case 'FETCH_LESSONS':
             state.data = state.data || {};
             state.data[action.group] = action.lessons;
+            state.week = action.week;
             state.isFetching = false;
             return state;
         case 'FAIL_LESSONS':

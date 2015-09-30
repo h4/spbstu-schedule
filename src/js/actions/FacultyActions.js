@@ -44,7 +44,8 @@ function fetchLessons(facultyId, groupId, response) {
         type: FETCH_LESSONS,
         faculty: facultyId,
         group: groupId,
-        lessons: response.days
+        lessons: response.days,
+        week: response.week
     }
 }
 
@@ -69,8 +70,11 @@ module.exports = {
         };
     },
 
-    fetchLessons: function(faculyId, groupId) {
+    fetchLessons: function(faculyId, groupId, date) {
         var endpoint = 'scheduler/' + groupId;
+        if (date) {
+            endpoint += '?date' + date;
+        }
 
         return function(dispatch) {
             dispatch(requestLessons());

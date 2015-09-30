@@ -1,6 +1,7 @@
 var React = require('react');
 var _ = require('lodash');
 var reactRedux = require('react-redux');
+var Link = require('react-router').Link;
 var actions = require('../actions/FacultyActions');
 var Day = require('./Schedule/Day.jsx');
 
@@ -8,8 +9,23 @@ var Schedule = React.createClass({
     componentDidMount: function() {
         var facultyId = this.props.params.facultyId;
         var groupId = this.props.params.groupId;
+        var date = this.props.params.date;
 
-        this.props.dispatch(actions.fetchLessons(facultyId, groupId));
+        this.props.dispatch(actions.fetchLessons(facultyId, groupId, date));
+    },
+
+    getNextDate: function(week) {
+        if (! week) {
+            return;
+        }
+
+        return week.date_end.split('.').map(function (el, idx) {
+            if (idx === 2) {
+                return parseInt(el, 10) + 1;
+            } else {
+                return el;
+            }
+        }).join('-');
     },
 
     render: function() {
@@ -18,6 +34,8 @@ var Schedule = React.createClass({
         var faculty = _.find(this.props.faculties, 'id', facultyId);
         var group = _.find(this.props.groups[facultyId], 'id', groupId);
         var lessons = this.props.lessons && this.props.lessons[groupId];
+        var week = this.props.week;
+        var nextDate = this.getNextDate(week);
 
         if (this.props.isFetching) {
             return (
@@ -33,6 +51,7 @@ var Schedule = React.createClass({
             <div>
                 <h2>{faculty.name}</h2>
                 <h3>{group.name}</h3>
+                <p>{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}?date=${nextDate}` }>Следующая неделя</Link>}</p>
                 {
                 lessons &&
                 <ul>
@@ -55,7 +74,8 @@ function mapStateToProps(state) {
         isFetching: state.lessons.isFetching,
         groups: state.groups.data,
         faculties: state.faculties.data,
-        lessons: state.lessons.data
+        lessons: state.lessons.data,
+        week: state.lessons.week
     }
 }
 
