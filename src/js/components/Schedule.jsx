@@ -16,12 +16,16 @@ var Schedule = React.createClass({
         var groupId = parseInt(this.props.params.groupId, 10);
         var facultyId = parseInt(this.props.params.facultyId, 10);
         var faculty = _.find(this.props.faculties, 'id', facultyId);
-        var group = this.props.groups[facultyId];
+        var group = _.find(this.props.groups[facultyId], 'id', groupId);
         var lessons = this.props.lessons && this.props.lessons[groupId];
 
         if (this.props.isFetching) {
             return (
-                <div>Loading...</div>
+                <div>
+                    {faculty.name && <h2>{faculty.name}</h2>}
+                    {group.name && <h3>{group.name}</h3>}
+                    <div>Loading...</div>
+                </div>
             )
         }
 
