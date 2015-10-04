@@ -73,7 +73,7 @@ module.exports = {
     fetchLessons: function(faculyId, groupId, date) {
         var endpoint = 'scheduler/' + groupId;
         if (date) {
-            endpoint += '?date' + date;
+            endpoint += '?date=' + date;
         }
 
         return function(dispatch) {
