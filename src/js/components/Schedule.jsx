@@ -1,5 +1,6 @@
 var React = require('react');
 var _ = require('lodash');
+var dateUtils = require('../utils/date');
 var reactRedux = require('react-redux');
 var Link = require('react-router').Link;
 var actions = require('../actions/FacultyActions');
@@ -26,20 +27,6 @@ var Schedule = React.createClass({
         }
     },
 
-    getNextDate: function(week) {
-        if (! week) {
-            return;
-        }
-
-        return week.date_end.split('.').map(function (el, idx) {
-            if (idx === 2) {
-                return parseInt(el, 10) + 1;
-            } else {
-                return el;
-            }
-        }).join('-');
-    },
-
     render: function() {
         var groupId = parseInt(this.props.params.groupId, 10);
         var facultyId = parseInt(this.props.params.facultyId, 10);
@@ -47,7 +34,7 @@ var Schedule = React.createClass({
         var group = _.find(this.props.groups[facultyId], 'id', groupId);
         var lessons = this.props.lessons && this.props.lessons[groupId];
         var week = this.props.week;
-        var nextDate = this.getNextDate(week);
+        var nextDate = week && dateUtils.getNextWeekStartString(week);
 
         if (this.props.isFetching) {
             return (
