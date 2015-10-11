@@ -35,6 +35,7 @@ var Schedule = React.createClass({
         var lessons = this.props.lessons && this.props.lessons[groupId];
         var week = this.props.week;
         var nextDate = week && dateUtils.getNextWeekStartString(week);
+        var prevDate = week && dateUtils.getPrevWeekStartString(week);
 
         if (this.props.isFetching) {
             return (
@@ -50,6 +51,8 @@ var Schedule = React.createClass({
             <div>
                 <h2>{faculty.name}</h2>
                 <h3>{group.name}</h3>
+                <p>{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}?date=${prevDate}` }>Предыдущая неделя</Link>}</p>
+                <p>{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}` }>Текущая неделя</Link>}</p>
                 <p>{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}?date=${nextDate}` }>Следующая неделя</Link>}</p>
                 {
                 lessons &&
