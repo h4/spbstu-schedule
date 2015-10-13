@@ -5,38 +5,56 @@ var actions = require('../actions/FacultyActions');
 var Groups = require('./Groups.jsx');
 
 var Faculty = React.createClass({
-    componentDidMount: function() {
+    componentWillMount: function () {
+        var id = this.props.params.facultyId;
+
+        if (!this.props.faculties) {
+            this.props.dispatch(actions.fetchFaculties());
+        }
+
+        this.props.dispatch(actions.fetchGroups(id));
+    },
+
+    componentDidMount: function () {
         var id = this.props.params.facultyId;
 
         this.props.dispatch(actions.fetchGroups(id));
     },
 
-    getGroupPart: function(group, part) {
-        return parseInt(group.name.split('/')[part]);
+    getGroupPart: function (group, part) {
+        return parseInt(group.name.split('/')[ part ]);
     },
 
-    getGroupNum: function(group) {
+    getGroupNum: function (group) {
         return this.getGroupPart(group, 0);
     },
 
-    getSubgroupNum: function(group) {
+    getSubgroupNum: function (group) {
         return this.getGroupPart(group, 1);
     },
 
-    render: function() {
+    render: function () {
         var facultyId = parseInt(this.props.params.facultyId, 10);
         var faculty = _.find(this.props.faculties, 'id', facultyId);
-        var groups = this.props.groups && this.props.groups[facultyId];
+        var groups = this.props.groups && this.props.groups[ facultyId ];
         var levels = groups && _.chain(groups)
                 .sortBy('level')
-                .sortByOrder([this.getGroupNum, this.getSubgroupNum])
+                .sortByOrder([ this.getGroupNum, this.getSubgroupNum ])
                 .groupBy('level')
                 .value();
 
-        if (this.props.isFetching) {
+        if (this.props.isFetching && faculty) {
             return (
                 <div>
                     <h2>{faculty.name}</h2>
+                    <div>Loading...</div>
+                </div>
+            )
+        }
+
+        if (!faculty) {
+            return (
+                <div>
                     <div>Loading...</div>
                 </div>
             )
@@ -51,17 +69,17 @@ var Faculty = React.createClass({
                         {
                             Object.keys(levels)
                                 .map(function(level, i) {
-                                    return (
-                                        <div key={i}>
-                                            <h3>{level} курс</h3>
-                                            <Groups groups={levels[level]} facultyId={facultyId} />
-                                        </div>
+                                return (
+                                <div key={i}>
+                                    <h3>{level} курс</h3>
+                                    <Groups groups={levels[level]} facultyId={facultyId}/>
+                                </div>
                                     );
                                 }
-                            )
-                        }
+                                )
+                            }
                     </div>
-                }
+                    }
             </div>
         )
     }

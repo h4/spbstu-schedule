@@ -7,6 +7,23 @@ var actions = require('../actions/FacultyActions');
 var Day = require('./Schedule/Day.jsx');
 
 var Schedule = React.createClass({
+    componentWillMount: function () {
+        var facultyId = this.props.params.facultyId;
+        var groupId = this.props.params.groupId;
+
+        if (!this.props.faculties) {
+            this.props.dispatch(actions.fetchFaculties());
+        }
+
+        if (!this.props.groups) {
+            this.props.dispatch(actions.fetchGroups(facultyId));
+        }
+
+        this.date = this.props.query && this.props.query.date;
+
+        this.props.dispatch(actions.fetchLessons(facultyId, groupId, this.date));
+    },
+
     componentDidMount: function() {
         var facultyId = this.props.params.facultyId;
         var groupId = this.props.params.groupId;
@@ -31,17 +48,26 @@ var Schedule = React.createClass({
         var groupId = parseInt(this.props.params.groupId, 10);
         var facultyId = parseInt(this.props.params.facultyId, 10);
         var faculty = _.find(this.props.faculties, 'id', facultyId);
-        var group = _.find(this.props.groups[facultyId], 'id', groupId);
+        var groups = this.props.groups || {};
+        var group = _.find(groups[facultyId], 'id', groupId);
         var lessons = this.props.lessons && this.props.lessons[groupId];
         var week = this.props.week;
         var nextDate = week && dateUtils.getNextWeekStartString(week);
         var prevDate = week && dateUtils.getPrevWeekStartString(week);
 
-        if (this.props.isFetching) {
+        if (this.props.isFetching && faculty && group) {
             return (
                 <div>
                     {faculty.name && <h2>{faculty.name}</h2>}
                     {group.name && <h3>{group.name}</h3>}
+                    <div>Loading...</div>
+                </div>
+            )
+        }
+
+        if (!faculty || !group) {
+            return (
+                <div>
                     <div>Loading...</div>
                 </div>
             )
