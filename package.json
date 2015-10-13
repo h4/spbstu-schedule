@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "repository": "http://github.com/h4/spbstu-schedule",
   "dependencies": {
+    "express": "^4.13.3",
     "history": "^1.11.0",
     "isomorphic-fetch": "^2.1.1",
     "lodash": "^3.10.1",
