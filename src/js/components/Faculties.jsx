@@ -5,9 +5,11 @@ var Link = require('react-router').Link;
 var Faculties = React.createClass({
     render: function() {
         return (
-            <ul>
+            <ul className="faculty-list__list">
             {this.props.faculties.map((faculty, i) =>
-                    <li key={i}><Link to={`/faculty/${faculty.id}/groups`}>{faculty.name}</Link></li>
+                    <li key={i} className="faculty-list__item">
+                        <Link to={`/faculty/${faculty.id}/groups`} className="faculty-list__link">{faculty.name}</Link>
+                    </li>
             )}
             </ul>
         )

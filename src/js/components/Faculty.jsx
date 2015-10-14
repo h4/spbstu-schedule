@@ -45,33 +45,33 @@ var Faculty = React.createClass({
 
         if (this.props.isFetching && faculty) {
             return (
-                <div>
-                    <h2>{faculty.name}</h2>
-                    <div>Loading...</div>
+                <div className="faculty">
+                    <h2 className="page__h2">{faculty.name}</h2>
+                    <div>Данные загружаются...</div>
                 </div>
             )
         }
 
         if (!faculty) {
             return (
-                <div>
-                    <div>Loading...</div>
+                <div className="faculty">
+                    <div>Данные загружаются...</div>
                 </div>
             )
         }
 
         return (
-            <div>
-                <h2>{faculty.name}</h2>
+            <div className="faculty">
+                <h2 className="page__h2">{faculty.name}</h2>
                 {
                     levels &&
-                    <div className="groups-list">
+                    <div className="faculty__levels">
                         {
                             Object.keys(levels)
                                 .map(function(level, i) {
                                 return (
-                                <div key={i}>
-                                    <h3>{level} курс</h3>
+                                <div key={i} className="faculty__level">
+                                    <h3 className="page__h3">{level} курс</h3>
                                     <Groups groups={levels[level]} facultyId={facultyId}/>
                                 </div>
                                     );

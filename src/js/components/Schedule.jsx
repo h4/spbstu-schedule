@@ -57,9 +57,9 @@ var Schedule = React.createClass({
 
         if (this.props.isFetching && faculty && group) {
             return (
-                <div>
-                    {faculty.name && <h2>{faculty.name}</h2>}
-                    {group.name && <h3>{group.name}</h3>}
+                <div className="schedule-page">
+                    {faculty.name && <h2 className="page__h2">{faculty.name}</h2>}
+                    {group.name && <h3 className="page__h3">Группа № {group.name}</h3>}
                     <div>Loading...</div>
                 </div>
             )
@@ -67,27 +67,47 @@ var Schedule = React.createClass({
 
         if (!faculty || !group) {
             return (
-                <div>
-                    <div>Loading...</div>
+                <div className="schedule-page">
+                    <div>Данные загружаются...</div>
                 </div>
             )
         }
 
         return (
-            <div>
-                <h2>{faculty.name}</h2>
-                <h3>{group.name}</h3>
-                <p>{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}?date=${prevDate}` }>Предыдущая неделя</Link>}</p>
-                <p>{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}` }>Текущая неделя</Link>}</p>
-                <p>{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}?date=${nextDate}` }>Следующая неделя</Link>}</p>
+            <div className="schedule-page">
+                <h2 className="page__h2">{faculty.name}</h2>
+                <h3 className="page__h3">Группа № {group.name}</h3>
+                <div className="switcher">
+                    <div className="switcher__item">{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}?date=${prevDate}` }
+                                                                       className="switcher__link"
+                                                                       activeClassName="switcher__link_active">Предыдущая неделя</Link>}</div>
+                    <div className="switcher__item">{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}` }
+                                                                       className="switcher__link"
+                                                                       activeClassName="switcher__link_active">Текущая неделя</Link>}</div>
+                    <div className="switcher__item">{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}?date=${nextDate}` }
+                                                                     className="switcher__link"
+                                                                     activeClassName="switcher__link_active">Следующая неделя</Link>}</div>
+                </div>
                 {
                 lessons &&
-                <ul>
+                <ul className="schedule">
                     {lessons.map((day, i) =>
                         <Day key={i} date={day.date} lessons={day.lessons} />
                     )}
                 </ul>
-            }</div>
+                }
+                <div className="switcher">
+                    <div className="switcher__item">{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}?date=${prevDate}` }
+                                                                       className="switcher__link"
+                                                                       activeClassName="switcher__link_active">Предыдущая неделя</Link>}</div>
+                    <div className="switcher__item">{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}` }
+                                                                       className="switcher__link"
+                                                                       activeClassName="switcher__link_active">Текущая неделя</Link>}</div>
+                    <div className="switcher__item">{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}?date=${nextDate}` }
+                                                                       className="switcher__link"
+                                                                       activeClassName="switcher__link_active">Следующая неделя</Link>}</div>
+                </div>
+            </div>
         )
     }
 });

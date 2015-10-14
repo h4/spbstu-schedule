@@ -4,7 +4,7 @@ var React = require('react');
 var Place = React.createClass({
     render: function() {
         return (
-            <div>
+            <div className="lesson__places">
                 {this.props.data.map(function(place, i) {
                     return (
                         <div key={i}>

@@ -8,8 +8,6 @@ var App = React.createClass({
     render: function() {
         return (
             <div>
-                <h1>Расписание</h1>
-
                 <RouteHandler />
             </div>
         )

@@ -3,10 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Расписание занятий</title>
-    <link rel="stylesheet" href="/css/app.css">
+    <link href="http://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/assets/bundle.css">
 </head>
-<body>
-    <div id="root"></div>
-    <script src="/js/bundle.js"></script>
+<body class="page">
+<header class="page__header">
+    <a href="/" class="logo page__logo">
+        <img src="/img/logo.svg"
+             alt="Политехнический университет Петра Великого"
+             class="logo__img">
+    </a>
+
+    <h1 class="page__headline">Расписание занятий</h1>
+</header>
+<div id="root" class="page__container"></div>
+<script src="/assets/bundle.js"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@ var React = require('react');
 var Teachers = React.createClass({
     render: function() {
         return (
-            <div>
+            <div className="lesson__teachers">
                 {this.props.data.map(function(person, i) {
                     return (
                         <div key={i}>

@@ -11,14 +11,14 @@ var FacultyList = React.createClass({
     render: function() {
         if (this.props.isFetching) {
             return (
-                <div>Loading...</div>
+                <div className="faculty-list">Данные загружаются...</div>
             )
         }
 
         return (
             <div>{
                 this.props.faculties &&
-                <div className="facultity-list">
+                <div className="faculty-list">
                     <Faculties faculties={this.props.faculties} />
                 </div>
             }</div>
