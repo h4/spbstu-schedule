@@ -10,6 +10,8 @@ var React = require('react'),
     Provider = require('react-redux').Provider,
     configureStore = require('./store/mainStore');
 
+require('es6-promise').polyfill();
+
 var history = createBrowserHistory();
 var store = configureStore();
 

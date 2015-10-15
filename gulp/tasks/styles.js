@@ -4,7 +4,7 @@ var stylus = require('gulp-stylus');
 var rename = require('gulp-rename');
 
 gulp.task('styles', function() {
-    gulp.src('src/css/screen.styl')
+    return gulp.src('src/css/screen.styl')
         .pipe(stylus({
             errors: true
         }))
