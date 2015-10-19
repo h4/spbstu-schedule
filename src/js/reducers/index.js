@@ -75,10 +75,69 @@ function lessons(state, action) {
     }
 }
 
+function teachers(state, action) {
+    state = state || {
+            isFetching: false,
+            teacher: null,
+            data: null,
+            week: null,
+            errors: null
+        };
+    switch (action.type) {
+        case 'REQUEST_TEACHER':
+            state.isFetching = true;
+            return state;
+        case 'FETCH_TEACHER':
+            state.data = state.data || {};
+            state.data[action.teacherId] = action.lessons;
+            state.teacher = action.teacher;
+            state.week = action.week;
+            state.isFetching = false;
+            return state;
+        case 'FAIL_TEACHER':
+            state.errors = action.errors;
+            state.isFetching = false;
+            return state;
+        default :
+            return state;
+    }
+}
+
+
+function places(state, action) {
+    state = state || {
+            isFetching: false,
+            data: null,
+            place: null,
+            week: null,
+            errors: null
+        };
+    switch (action.type) {
+        case 'REQUEST_PLACE':
+            state.isFetching = true;
+            return state;
+        case 'FETCH_PLACE':
+            state.data = state.data || {};
+            state.data[action.placeId] = action.lessons;
+            state.place = action.place;
+            state.week = action.week;
+            state.isFetching = false;
+            return state;
+        case 'FAIL_PLACE':
+            state.errors = action.errors;
+            state.isFetching = false;
+            return state;
+        default :
+            return state;
+    }
+}
+
 module.exports = {
     rootReducer: redux.combineReducers({
         faculties: faculties,
         groups: groups,
-        lessons: lessons
+        lessons: lessons,
+        teachers: teachers,
+        places: places
     })
 };
