@@ -1,4 +1,8 @@
 'use strict';
+var moment = require('moment');
+require('moment/locale/ru');
+
+moment.locale('ru');
 
 function getPrevWeekStart(week) {
     if (! week) {
@@ -40,9 +44,14 @@ function getNextWeekStartString(week) {
     return dateToString(nextWeekStartDate);
 }
 
+function humanDate(date) {
+    return moment(date, "YYYY.MM.DD").format("DD MMMM");
+}
+
 module.exports = {
     getNextWeekStart: getNextWeekStart,
     getNextWeekStartString: getNextWeekStartString,
     getPrevWeekStart: getPrevWeekStart,
     getPrevWeekStartString: getPrevWeekStartString,
+    humanDate: humanDate
 };

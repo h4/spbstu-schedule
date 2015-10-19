@@ -5,6 +5,7 @@ var reactRedux = require('react-redux');
 var Link = require('react-router').Link;
 var actions = require('../actions/FacultyActions');
 var Day = require('./Schedule/Day.jsx');
+var Week = require('./Schedule/Week.jsx');
 
 var Schedule = React.createClass({
     componentWillMount: function () {
@@ -77,6 +78,9 @@ var Schedule = React.createClass({
             <div className="schedule-page">
                 <h2 className="page__h2">{faculty.name}</h2>
                 <h3 className="page__h3">Группа № {group.name}</h3>
+
+                <Week week={week} />
+
                 <div className="switcher">
                     <div className="switcher__item">{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}?date=${prevDate}` }
                                                                        className="switcher__link"

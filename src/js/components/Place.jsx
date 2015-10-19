@@ -5,6 +5,7 @@ var reactRedux = require('react-redux');
 var Link = require('react-router').Link;
 var actions = require('../actions/PlaceActions');
 var Day = require('./Schedule/Day.jsx');
+var Week = require('./Schedule/Week.jsx');
 
 var Place = React.createClass({
     componentWillMount: function () {
@@ -58,6 +59,9 @@ var Place = React.createClass({
                     {place.building && <span>{place.building.name}, {place.building.address} </span> }
                     {place.name && <span>ауд. {place.name}</span> }
                 </h2>
+
+                <Week week={week} />
+
                 <div className="switcher">
                     <div className="switcher__item">{nextDate && <Link to={`/places/${buildingId}/${placeId}?date=${prevDate}` }
                                                                        className="switcher__link"
