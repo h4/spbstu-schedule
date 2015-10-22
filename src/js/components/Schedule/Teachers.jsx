@@ -1,5 +1,6 @@
 'use strict';
 var React = require('react');
+var Link = require('react-router').Link;
 
 var Teachers = React.createClass({
     render: function() {
@@ -8,7 +9,11 @@ var Teachers = React.createClass({
                 {this.props.data.map(function(person, i) {
                     return (
                         <div key={i}>
-                            {person.grade} {person.full_name}
+                            <Link to={`/teachers/${person.id}`}
+                                  className="lesson__link"
+                                  activeClassName="lesson__link_active">
+                                    {person.grade} {person.full_name}
+                                </Link>
                         </div>
                     )
                 })}

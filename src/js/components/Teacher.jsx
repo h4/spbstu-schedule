@@ -3,70 +3,46 @@ var _ = require('lodash');
 var dateUtils = require('../utils/date');
 var reactRedux = require('react-redux');
 var Link = require('react-router').Link;
-var actions = require('../actions/FacultyActions');
+var actions = require('../actions/TeacherActions');
 var Day = require('./Schedule/Day.jsx');
 var Week = require('./Schedule/Week.jsx');
 
-var Schedule = React.createClass({
+var Teacher = React.createClass({
     componentWillMount: function () {
-        var facultyId = this.props.params.facultyId;
-        var groupId = this.props.params.groupId;
-
-        if (!this.props.faculties) {
-            this.props.dispatch(actions.fetchFaculties());
-        }
-
-        if (!this.props.groups) {
-            this.props.dispatch(actions.fetchGroups(facultyId));
-        }
+        var teacherId = this.props.params.teacherId;
 
         this.date = this.props.query && this.props.query.date;
 
-        this.props.dispatch(actions.fetchLessons(facultyId, groupId, this.date));
-    },
-
-    componentDidMount: function() {
-        var facultyId = this.props.params.facultyId;
-        var groupId = this.props.params.groupId;
-
-        this.date = this.props.query && this.props.query.date;
-
-        this.props.dispatch(actions.fetchLessons(facultyId, groupId, this.date));
+        this.props.dispatch(actions.fetchTeacher(teacherId, this.date));
     },
 
     componentDidUpdate: function() {
-        var facultyId = this.props.params.facultyId;
-        var groupId = this.props.params.groupId;
+        var teacherId = this.props.params.teacherId;
         var date = this.props.query && this.props.query.date;
 
         if (this.date !== date) {
             this.date = date;
-            this.props.dispatch(actions.fetchLessons(facultyId, groupId, date));
+            this.props.dispatch(actions.fetchTeacher(teacherId, this.date));
         }
     },
 
     render: function() {
-        var groupId = parseInt(this.props.params.groupId, 10);
-        var facultyId = parseInt(this.props.params.facultyId, 10);
-        var faculty = _.find(this.props.faculties, 'id', facultyId);
-        var groups = this.props.groups || {};
-        var group = _.find(groups[facultyId], 'id', groupId);
-        var lessons = this.props.lessons && this.props.lessons[groupId];
+        var teacherId = parseInt(this.props.params.teacherId, 10);
+        var lessons = this.props.lessons && this.props.lessons[teacherId];
+        var teacher = this.props.teacher;
         var week = this.props.week;
         var nextDate = week && dateUtils.getNextWeekStartString(week);
         var prevDate = week && dateUtils.getPrevWeekStartString(week);
 
-        if (this.props.isFetching && faculty && group) {
+        if (this.props.isFetching) {
             return (
                 <div className="schedule-page">
-                    {faculty.name && <h2 className="page__h2">{faculty.name}</h2>}
-                    {group.name && <h3 className="page__h3">Группа № {group.name}</h3>}
-                    <div>Loading...</div>
+                    <div>Данные загружаются...</div>
                 </div>
             )
         }
 
-        if (!faculty || !group) {
+        if (! teacher) {
             return (
                 <div className="schedule-page">
                     <div>Данные загружаются...</div>
@@ -76,19 +52,18 @@ var Schedule = React.createClass({
 
         return (
             <div className="schedule-page">
-                <h2 className="page__h2">{faculty.name}</h2>
-                <h3 className="page__h3">Группа № {group.name}</h3>
+                <h2 className="page__h2">{teacher.full_name}</h2>
 
                 <Week week={week} />
 
                 <div className="switcher">
-                    <div className="switcher__item">{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}?date=${prevDate}` }
+                    <div className="switcher__item">{nextDate && <Link to={`/teachers/${teacherId}?date=${prevDate}` }
                                                                        className="switcher__link"
                                                                        activeClassName="switcher__link_active">Предыдущая неделя</Link>}</div>
-                    <div className="switcher__item">{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}` }
+                    <div className="switcher__item">{nextDate && <Link to={`/teachers/${teacherId}` }
                                                                        className="switcher__link"
                                                                        activeClassName="switcher__link_active">Текущая неделя</Link>}</div>
-                    <div className="switcher__item">{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}?date=${nextDate}` }
+                    <div className="switcher__item">{nextDate && <Link to={`/teachers/${teacherId}?date=${nextDate}` }
                                                                      className="switcher__link"
                                                                      activeClassName="switcher__link_active">Следующая неделя</Link>}</div>
                 </div>
@@ -101,13 +76,13 @@ var Schedule = React.createClass({
                 </ul>
                 }
                 <div className="switcher">
-                    <div className="switcher__item">{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}?date=${prevDate}` }
+                    <div className="switcher__item">{nextDate && <Link to={`/teachers/${teacherId}?date=${prevDate}` }
                                                                        className="switcher__link"
                                                                        activeClassName="switcher__link_active">Предыдущая неделя</Link>}</div>
-                    <div className="switcher__item">{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}` }
+                    <div className="switcher__item">{nextDate && <Link to={`/teachers/${teacherId}` }
                                                                        className="switcher__link"
                                                                        activeClassName="switcher__link_active">Текущая неделя</Link>}</div>
-                    <div className="switcher__item">{nextDate && <Link to={`/faculty/${facultyId}/groups/${groupId}?date=${nextDate}` }
+                    <div className="switcher__item">{nextDate && <Link to={`/teachers/${teacherId}?date=${nextDate}` }
                                                                        className="switcher__link"
                                                                        activeClassName="switcher__link_active">Следующая неделя</Link>}</div>
                 </div>
@@ -116,19 +91,18 @@ var Schedule = React.createClass({
     }
 });
 
-Schedule.propTypes = {
+Teacher.propTypes = {
     dispatch: React.PropTypes.func.isRequired,
     isFetching: React.PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
     return {
-        isFetching: state.lessons.isFetching,
-        groups: state.groups.data,
-        faculties: state.faculties.data,
-        lessons: state.lessons.data,
-        week: state.lessons.week
+        isFetching: state.teachers.isFetching,
+        teacher: state.teachers.teacher,
+        lessons: state.teachers.data,
+        week: state.teachers.week
     }
 }
 
-module.exports = reactRedux.connect(mapStateToProps)(Schedule);
+module.exports = reactRedux.connect(mapStateToProps)(Teacher);
