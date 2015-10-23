@@ -2,11 +2,12 @@
 var redux = require('redux');
 
 function faculties(state, action) {
-    state = state || {
-            isFetching: false,
-            data: null,
-            errors: null
-        };
+    var baseState = {
+        isFetching: false,
+        data: null,
+        errors: null
+    };
+    state = Object.assign(baseState, state);
 
     switch (action.type) {
         case 'REQUEST_FACULTIES':
@@ -26,11 +27,13 @@ function faculties(state, action) {
 }
 
 function groups(state, action) {
-    state = state || {
-            isFetching: false,
-            data: null,
-            errors: null
-        };
+    var baseState = {
+        isFetching: false,
+        data: null,
+        errors: null
+    };
+    state = Object.assign(baseState, state);
+
     switch (action.type) {
         case 'REQUEST_GROUPS':
             state.isFetching = true;
@@ -50,12 +53,14 @@ function groups(state, action) {
 }
 
 function lessons(state, action) {
-    state = state || {
-            isFetching: false,
-            data: null,
-            week: null,
-            errors: null
-        };
+    var baseState =  {
+        isFetching: false,
+        data: null,
+        week: null,
+        errors: null
+    };
+    state = Object.assign(baseState, state);
+
     switch (action.type) {
         case 'REQUEST_LESSONS':
             state.isFetching = true;
@@ -76,13 +81,15 @@ function lessons(state, action) {
 }
 
 function teachers(state, action) {
-    state = state || {
+    var baseState = {
             isFetching: false,
             teacher: null,
             data: null,
             week: null,
             errors: null
         };
+    state = Object.assign(baseState, state);
+
     switch (action.type) {
         case 'REQUEST_TEACHER':
             state.isFetching = true;
@@ -103,15 +110,16 @@ function teachers(state, action) {
     }
 }
 
-
 function places(state, action) {
-    state = state || {
+    var baseState = {
             isFetching: false,
             data: null,
             place: null,
             week: null,
             errors: null
         };
+    state = Object.assign(baseState, state);
+
     switch (action.type) {
         case 'REQUEST_PLACE':
             state.isFetching = true;
