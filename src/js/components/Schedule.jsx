@@ -63,12 +63,12 @@ var Schedule = React.createClass({
                 <div className="schedule-page">
                     {faculty.name && <h2 className="page__h2">{faculty.name}</h2>}
                     {group.name && <h3 className="page__h3">Группа № {group.name}</h3>}
-                    <div>Loading...</div>
+                    <div>Данные загружаются...</div>
                 </div>
             )
         }
 
-        if (!faculty || !group) {
+        if (!faculty || !group || !week) {
             return (
                 <div className="schedule-page">
                     <div>Данные загружаются...</div>
