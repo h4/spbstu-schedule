@@ -12,7 +12,8 @@ var Place = React.createClass({
         var placeId = this.props.params.placeId;
         var buildingId = this.props.params.buildingId;
 
-        this.date = this.props.query && this.props.query.date;
+        var location = this.props.location;
+        this.date = location.query && location.query.date;
 
         this.props.dispatch(actions.fetchPlace(buildingId, placeId, this.date));
     },
@@ -20,7 +21,8 @@ var Place = React.createClass({
     componentDidUpdate: function() {
         var placeId = this.props.params.placeId;
         var buildingId = this.props.params.buildingId;
-        var date = this.props.query && this.props.query.date;
+        var location = this.props.location;
+        var date = location.query && location.query.date;
 
         if (this.date !== date) {
             this.date = date;

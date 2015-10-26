@@ -29,7 +29,8 @@ var Schedule = React.createClass({
         var facultyId = this.props.params.facultyId;
         var groupId = this.props.params.groupId;
 
-        this.date = this.props.query && this.props.query.date;
+        var location = this.props.location;
+        this.date = location.query && location.query.date;
 
         this.props.dispatch(actions.fetchLessons(facultyId, groupId, this.date));
     },
@@ -37,7 +38,8 @@ var Schedule = React.createClass({
     componentDidUpdate: function() {
         var facultyId = this.props.params.facultyId;
         var groupId = this.props.params.groupId;
-        var date = this.props.query && this.props.query.date;
+        var location = this.props.location;
+        var date = location.query && location.query.date;
 
         if (this.date !== date) {
             this.date = date;

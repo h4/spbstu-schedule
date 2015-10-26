@@ -1,18 +1,27 @@
 'use strict';
 var React = require('react');
-var Router = require('react-router');
-var RouteHandler = Router.RouteHandler;
-
+var ReactRouter = require('react-router');
+var Redux = require('react-redux');
 
 var App = React.createClass({
+    propTypes: {
+        children: React.PropTypes.node,
+        pushState: React.PropTypes.func.isRequired
+    },
+
     render: function() {
+        const { children } = this.props;
+
         return (
             <div>
-                <RouteHandler />
+                { children }
             </div>
         )
     }
 });
 
-module.exports = App;
+function mapStateToProps(state) {
+    return {};
+}
 
+module.exports = Redux.connect(mapStateToProps, {pushState: ReactRouter.pushState})(App);
