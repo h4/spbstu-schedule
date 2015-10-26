@@ -1,35 +1,26 @@
 var api = require('../midleware/api');
 var REQUEST_PLACE = 'REQUEST_PLACE';
 var FETCH_PLACE = 'FETCH_PLACE';
+var FAIL_PLACE = 'FAIL_PLACE';
 
-function requestPlace() {
-    return {
-        type: REQUEST_PLACE
-    };
-}
+function fetchPlace(buildingId, placeId, date) {
+    let endpoint = `buildings/${buildingId}/rooms/${placeId}/scheduler`;
+    if (date) {
+        endpoint = `${endpoint}?date=${date}`;
+    }
 
-function fetchPlace(placeId, response) {
     return {
-        type: FETCH_PLACE,
-        placeId: placeId,
-        lessons: response.days,
-        place: response.room,
-        week: response.week
+        callApi: {
+            types: [REQUEST_PLACE, FETCH_PLACE, FAIL_PLACE],
+            endpoint
+        }
     }
 }
 
 module.exports = {
     fetchPlace: function(buildingId, placeId, date) {
-        var endpoint = 'buildings/' + buildingId + '/rooms/' + placeId + '/scheduler';
-        if (date) {
-            endpoint += '?date=' + date;
-        }
-
         return function(dispatch) {
-            dispatch(requestPlace());
-            return api(endpoint, function (response) {
-                dispatch(fetchPlace(placeId, response));
-            });
+            return dispatch(fetchPlace(buildingId, placeId, date));
         };
     }
 };

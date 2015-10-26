@@ -1,35 +1,26 @@
 var api = require('../midleware/api');
 var REQUEST_TEACHER = 'REQUEST_TEACHER';
 var FETCH_TEACHER = 'FETCH_TEACHER';
+var FAIL_TEACHER = 'FAIL_TEACHER';
 
-function requestTeacher() {
-    return {
-        type: REQUEST_TEACHER
-    };
-}
+function fetchTeacher(teacherId, date) {
+    let endpoint = `teachers/${teacherId}/scheduler`;
+    if (date) {
+        endpoint = `${endpoint}?date=${date}`;
+    }
 
-function fetchTeacher(teacherId, response) {
     return {
-        type: FETCH_TEACHER,
-        teacherId: teacherId,
-        lessons: response.days,
-        teacher: response.teacher,
-        week: response.week
+        callApi: {
+            types: [REQUEST_TEACHER, FETCH_TEACHER, FAIL_TEACHER],
+            endpoint
+        }
     }
 }
 
 module.exports = {
     fetchTeacher: function(teacherId, date) {
-        var endpoint = 'teachers/' + teacherId + '/scheduler';
-        if (date) {
-            endpoint += '?date=' + date;
-        }
-
         return function(dispatch) {
-            dispatch(requestTeacher());
-            return api(endpoint, function (response) {
-                dispatch(fetchTeacher(teacherId, response));
-            });
+            return dispatch(fetchTeacher(teacherId, date));
         };
     }
 };

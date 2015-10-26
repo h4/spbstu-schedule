@@ -7,9 +7,9 @@ var source = require('vinyl-source-stream');
 
 gulp.task('app-js', function() {
     return browserify()
-        .transform(reactify)
-        .transform(envify)
         .transform(babelify)
+        .transform(reactify, {"es6": true})
+        .transform(envify)
         .add('src/js/app.js')
         .bundle()
         .pipe(source('bundle.js'))
