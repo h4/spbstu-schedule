@@ -1,86 +1,65 @@
 var api = require('../midleware/api');
 var REQUEST_FACULTIES = 'REQUEST_FACULTIES';
 var FETCH_FACULTIES = 'FETCH_FACULTIES';
+var FAIL_FACULTIES = 'FAIL_FACULTIES';
 var REQUEST_GROUPS = 'REQUEST_GROUPS';
 var FETCH_GROUPS = 'FETCH_GROUPS';
+var FAIL_GROUPS = 'FETCH_GROUPS';
 var REQUEST_LESSONS = 'REQUEST_LESSONS';
 var FETCH_LESSONS = 'FETCH_LESSONS';
+var FAIL_LESSONS = 'FETCH_LESSONS';
 
-function requestFaculties() {
+function fetchFaculties() {
     return {
-        type: REQUEST_FACULTIES
-    };
-}
-
-function fetchFaculties(response) {
-    return {
-        type: FETCH_FACULTIES,
-        faculties: response.faculties
+        callApi: {
+            types: [REQUEST_FACULTIES, FETCH_FACULTIES, FAIL_FACULTIES],
+            endpoint: 'faculties'
+        }
     }
 }
 
-function requestGroups() {
-    return {
-        type: REQUEST_GROUPS
-    };
-}
+function fetchGroups(groupId) {
+    let endpoint = `faculties/${groupId}/groups`;
 
-function fetchGroups(facultyId, response) {
     return {
-        type: FETCH_GROUPS,
-        faculty: facultyId,
-        groups: response.groups
+        callApi: {
+            types: [REQUEST_GROUPS, FETCH_GROUPS, FAIL_GROUPS],
+            endpoint
+        }
     }
 }
 
-function requestLessons() {
-    return {
-        type: REQUEST_LESSONS
-    };
-}
+function fetchLessons(groupId, date) {
+    var endpoint = `scheduler/${groupId}`;
 
-function fetchLessons(facultyId, groupId, response) {
+    if (date) {
+        endpoint = `${endpoint}?date=${date}`;
+    }
+
     return {
-        type: FETCH_LESSONS,
-        faculty: facultyId,
-        group: groupId,
-        lessons: response.days,
-        week: response.week
+        callApi: {
+            types: [REQUEST_LESSONS, FETCH_LESSONS, FAIL_LESSONS],
+            endpoint
+        }
     }
 }
 
 module.exports = {
     fetchFaculties: function () {
         return function(dispatch) {
-            dispatch(requestFaculties());
-            return api('faculties', function(response) {
-                dispatch(fetchFaculties(response));
-            });
+            return dispatch(fetchFaculties());
         };
     },
 
-    fetchGroups: function(id) {
-        var endpoint = 'faculties/' + id + '/groups';
-
+    fetchGroups: function(groupId) {
         return function(dispatch) {
-            dispatch(requestGroups());
-            return api(endpoint, function (response) {
-                dispatch(fetchGroups(id, response));
-            });
+            return dispatch(fetchGroups(groupId));
         };
     },
 
-    fetchLessons: function(faculyId, groupId, date) {
-        var endpoint = 'scheduler/' + groupId;
-        if (date) {
-            endpoint += '?date=' + date;
-        }
-
+    fetchLessons: function(facultyId, groupId, date) {
         return function(dispatch) {
-            dispatch(requestLessons());
-            return api(endpoint, function (response) {
-                dispatch(fetchLessons(faculyId, groupId, response));
-            });
+            return dispatch(fetchLessons(groupId, date));
         };
     }
 };

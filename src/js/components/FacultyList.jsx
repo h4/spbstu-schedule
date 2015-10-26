@@ -4,7 +4,7 @@ var actions = require('../actions/FacultyActions');
 var Faculties = require('./Faculties.jsx');
 
 var FacultyList = React.createClass({
-    componentDidMount: function() {
+    componentWillMount: function() {
         this.props.dispatch(actions.fetchFaculties());
     },
 

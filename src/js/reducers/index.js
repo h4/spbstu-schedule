@@ -1,5 +1,6 @@
 'use strict';
 var redux = require('redux');
+import { routerStateReducer as router } from 'redux-router';
 
 function faculties(state, action) {
     var baseState = {
@@ -14,7 +15,7 @@ function faculties(state, action) {
             state.isFetching = true;
             return state;
         case 'FETCH_FACULTIES':
-            state.data = action.faculties;
+            state.data = action.response.faculties;
             state.isFetching = false;
             return state;
         case 'FAIL_FACULTIES':
@@ -40,7 +41,7 @@ function groups(state, action) {
             return state;
         case 'FETCH_GROUPS':
             state.data = state.data || {};
-            state.data[action.faculty] = action.groups;
+            state.data[action.response.faculty.id] = action.response.groups;
             state.isFetching = false;
             return state;
         case 'FAIL_GROUPS':
@@ -67,8 +68,8 @@ function lessons(state, action) {
             return state;
         case 'FETCH_LESSONS':
             state.data = state.data || {};
-            state.data[action.group] = action.lessons;
-            state.week = action.week;
+            state.data[action.response.group.id] = action.response.days;
+            state.week = action.response.week;
             state.isFetching = false;
             return state;
         case 'FAIL_LESSONS':
@@ -96,9 +97,9 @@ function teachers(state, action) {
             return state;
         case 'FETCH_TEACHER':
             state.data = state.data || {};
-            state.data[action.teacherId] = action.lessons;
-            state.teacher = action.teacher;
-            state.week = action.week;
+            state.data[action.response.teacher.id] = action.response.days;
+            state.teacher = action.response.teacher;
+            state.week = action.response.week;
             state.isFetching = false;
             return state;
         case 'FAIL_TEACHER':
@@ -126,9 +127,9 @@ function places(state, action) {
             return state;
         case 'FETCH_PLACE':
             state.data = state.data || {};
-            state.data[action.placeId] = action.lessons;
-            state.place = action.place;
-            state.week = action.week;
+            state.data[action.response.room.id] = action.response.days;
+            state.place = action.response.room;
+            state.week = action.response.week;
             state.isFetching = false;
             return state;
         case 'FAIL_PLACE':
@@ -139,13 +140,13 @@ function places(state, action) {
             return state;
     }
 }
+const rootReducer = redux.combineReducers({
+        faculties,
+        groups,
+        lessons,
+        teachers,
+        places,
+        router
+    });
 
-module.exports = {
-    rootReducer: redux.combineReducers({
-        faculties: faculties,
-        groups: groups,
-        lessons: lessons,
-        teachers: teachers,
-        places: places
-    })
-};
+export default rootReducer;

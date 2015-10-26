@@ -12,10 +12,12 @@
     "moment": "^2.10.6",
     "normalizr": "^1.0.0",
     "react": "^0.14.0",
+    "react-dom": "^0.14.0",
     "react-redux": "^4.0.0",
     "react-router": "^1.0.0-rc3",
     "reactify": "^1.1.1",
     "redux": "^3.0.0",
+    "redux-router": "^1.0.0-beta3",
     "redux-thunk": "^1.0.0"
   },
   "devDependencies": {
@@ -42,7 +44,7 @@
   "license": "ISC",
   "browserify": {
     "transform": [
-      "reactify",
+      ["reactify", {"es6": true}],
       "envify"
     ]
   }

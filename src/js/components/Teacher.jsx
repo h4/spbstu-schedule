@@ -10,15 +10,16 @@ var Week = require('./Schedule/Week.jsx');
 var Teacher = React.createClass({
     componentWillMount: function () {
         var teacherId = this.props.params.teacherId;
-
-        this.date = this.props.query && this.props.query.date;
+        var location = this.props.location;
+        this.date = location.query && location.query.date;
 
         this.props.dispatch(actions.fetchTeacher(teacherId, this.date));
     },
 
     componentDidUpdate: function() {
         var teacherId = this.props.params.teacherId;
-        var date = this.props.query && this.props.query.date;
+        var location = this.props.location;
+        var date = location.query && location.query.date;
 
         if (this.date !== date) {
             this.date = date;
