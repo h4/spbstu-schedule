@@ -1,11 +1,11 @@
 var React = require('react');
 var _ = require('lodash');
-var dateUtils = require('../utils/date');
 var reactRedux = require('react-redux');
-var Link = require('react-router').Link;
 var actions = require('../actions/TeacherActions');
 var Day = require('./Schedule/Day.jsx');
 var Week = require('./Schedule/Week.jsx');
+var Pager = require('./Schedule/Pager.jsx');
+var LessonsList = require('./Schedule/LessonsList.jsx');
 
 var Teacher = React.createClass({
     componentWillMount: function () {
@@ -16,7 +16,7 @@ var Teacher = React.createClass({
         this.props.dispatch(actions.fetchTeacher(teacherId, this.date));
     },
 
-    componentWillUpdate: function() {
+    componentDidUpdate: function() {
         var teacherId = this.props.params.teacherId;
         var location = this.props.location;
         var date = location.query && location.query.date;
@@ -32,8 +32,7 @@ var Teacher = React.createClass({
         var lessons = this.props.lessons && this.props.lessons[teacherId];
         var teacher = this.props.teacher;
         var week = this.props.week;
-        var nextDate = week && dateUtils.getNextWeekStartString(week);
-        var prevDate = week && dateUtils.getPrevWeekStartString(week);
+        var pagerLink = `/teachers/${teacherId}`;
 
         if (this.props.isFetching) {
             return (
@@ -43,7 +42,7 @@ var Teacher = React.createClass({
             )
         }
 
-        if (! teacher) {
+        if (! teacher || ! week) {
             return (
                 <div className="schedule-page">
                     <div>Данные загружаются...</div>
@@ -57,36 +56,11 @@ var Teacher = React.createClass({
 
                 <Week week={week} />
 
-                <div className="switcher">
-                    <div className="switcher__item">{nextDate && <Link to={`/teachers/${teacherId}?date=${prevDate}` }
-                                                                       className="switcher__link"
-                                                                       activeClassName="switcher__link_active">Предыдущая неделя</Link>}</div>
-                    <div className="switcher__item">{nextDate && <Link to={`/teachers/${teacherId}` }
-                                                                       className="switcher__link"
-                                                                       activeClassName="switcher__link_active">Текущая неделя</Link>}</div>
-                    <div className="switcher__item">{nextDate && <Link to={`/teachers/${teacherId}?date=${nextDate}` }
-                                                                     className="switcher__link"
-                                                                     activeClassName="switcher__link_active">Следующая неделя</Link>}</div>
-                </div>
-                {
-                lessons &&
-                <ul className="schedule">
-                    {lessons.map((day, i) =>
-                        <Day key={i} date={day.date} lessons={day.lessons} />
-                    )}
-                </ul>
-                }
-                <div className="switcher">
-                    <div className="switcher__item">{nextDate && <Link to={`/teachers/${teacherId}?date=${prevDate}` }
-                                                                       className="switcher__link"
-                                                                       activeClassName="switcher__link_active">Предыдущая неделя</Link>}</div>
-                    <div className="switcher__item">{nextDate && <Link to={`/teachers/${teacherId}` }
-                                                                       className="switcher__link"
-                                                                       activeClassName="switcher__link_active">Текущая неделя</Link>}</div>
-                    <div className="switcher__item">{nextDate && <Link to={`/teachers/${teacherId}?date=${nextDate}` }
-                                                                       className="switcher__link"
-                                                                       activeClassName="switcher__link_active">Следующая неделя</Link>}</div>
-                </div>
+                <Pager week={week} link={pagerLink} />
+
+                <LessonsList lessons={lessons} />
+
+                <Pager week={week} link={pagerLink} />
             </div>
         )
     }
