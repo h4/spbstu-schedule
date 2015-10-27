@@ -15,12 +15,6 @@ var Faculty = React.createClass({
         this.props.dispatch(actions.fetchGroups(id));
     },
 
-    componentDidMount: function () {
-        var id = this.props.params.facultyId;
-
-        this.props.dispatch(actions.fetchGroups(id));
-    },
-
     getGroupPart: function (group, part) {
         return parseInt(group.name.split('/')[ part ]);
     },

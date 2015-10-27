@@ -16,7 +16,7 @@ var Teacher = React.createClass({
         this.props.dispatch(actions.fetchTeacher(teacherId, this.date));
     },
 
-    componentDidUpdate: function() {
+    componentWillUpdate: function() {
         var teacherId = this.props.params.teacherId;
         var location = this.props.location;
         var date = location.query && location.query.date;

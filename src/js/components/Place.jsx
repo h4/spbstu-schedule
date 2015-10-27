@@ -18,7 +18,7 @@ var Place = React.createClass({
         this.props.dispatch(actions.fetchPlace(buildingId, placeId, this.date));
     },
 
-    componentDidUpdate: function() {
+    componentWillUpdate: function() {
         var placeId = this.props.params.placeId;
         var buildingId = this.props.params.buildingId;
         var location = this.props.location;
