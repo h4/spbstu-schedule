@@ -57,6 +57,7 @@ function lessons(state, action) {
     var baseState =  {
         isFetching: false,
         data: null,
+        group: null,
         week: null,
         errors: null
     };
@@ -69,6 +70,7 @@ function lessons(state, action) {
         case 'FETCH_LESSONS':
             state.data = state.data || {};
             state.data[action.response.group.id] = action.response.days;
+            state.group = action.response.group;
             state.week = action.response.week;
             state.isFetching = false;
             return state;

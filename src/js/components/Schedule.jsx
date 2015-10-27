@@ -27,14 +27,18 @@ var Schedule = React.createClass({
 
     componentWillUpdate: function() {
         var facultyId = this.props.params.facultyId;
-        var groupId = this.props.params.groupId;
+        var groupId = parseInt(this.props.params.groupId, 10);
         var location = this.props.location;
         var date = location.query && location.query.date;
 
-        if (this.date !== date) {
+        if (this.date !== date || ! this.isCurrentGroup(groupId)) {
             this.date = date;
             this.props.dispatch(actions.fetchLessons(facultyId, groupId, date));
         }
+    },
+
+    isCurrentGroup(groupId) {
+        return (this.props.group && this.props.group.id === groupId);
     },
 
     render: function() {
@@ -118,6 +122,7 @@ function mapStateToProps(state) {
         isFetching: state.lessons.isFetching,
         groups: state.groups.data,
         faculties: state.faculties.data,
+        group: state.lessons.group,
         lessons: state.lessons.data,
         week: state.lessons.week
     }
