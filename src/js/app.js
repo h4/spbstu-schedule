@@ -8,5 +8,5 @@ require('es6-promise').polyfill();
 var store = configureStore();
 
 render(<Root store={store} />,
-    document.getElementById('root')
+    document.getElementById('rootPageContainer')
 );
