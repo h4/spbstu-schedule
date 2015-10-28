@@ -6,7 +6,7 @@
   "repository": "http://github.com/h4/spbstu-schedule",
   "dependencies": {
     "express": "^4.13.3",
-    "history": "^1.12.6",
+    "history": "^1.13.0",
     "isomorphic-fetch": "^2.1.1",
     "lodash": "^3.10.1",
     "moment": "^2.10.6",
@@ -44,7 +44,12 @@
   "license": "ISC",
   "browserify": {
     "transform": [
-      ["reactify", {"es6": true}],
+      [
+        "reactify",
+        {
+          "es6": true
+        }
+      ],
       "envify"
     ]
   }
