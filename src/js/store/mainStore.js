@@ -11,7 +11,12 @@ const finalCreateStore = compose(
     reduxReactRouter({ routes, createHistory })
 )(createStore);
 
-export default function configureStore(initialState) {
+export function createMainStore(reduxReactRouter, createHistory, initialState) {
+    const finalCreateStore = compose(
+        applyMiddleware(thunk, api),
+        reduxReactRouter({ routes, createHistory })
+    )(createStore);
+
     return finalCreateStore(rootReducer, initialState);
 }
 
