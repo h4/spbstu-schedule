@@ -22,7 +22,7 @@
     "redux-thunk": "^1.0.0"
   },
   "devDependencies": {
-    "babelify": "^6.3.0",
+    "babelify": "^7.0.1",
     "browserify": "^11.2.0",
     "envify": "^3.4.0",
     "es6-promise": "^3.0.2",
