@@ -8,8 +8,8 @@ var Faculty = React.createClass({
     componentWillMount: function () {
         var facultyId = this.props.params.facultyId;
 
-        if (! this.props.groups && ! this.props.groups[ facultyId ]) {
-            this.props.dispatch(actions.fetchGroups(id));
+        if (! this.props.groups || ! this.props.groups[ facultyId ]) {
+            this.props.dispatch(actions.fetchGroups(facultyId));
         }
     },
 

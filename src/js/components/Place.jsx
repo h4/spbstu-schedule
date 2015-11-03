@@ -9,13 +9,15 @@ var LessonsList = require('./Schedule/LessonsList.jsx');
 
 var Place = React.createClass({
     componentWillMount: function () {
-        var placeId = this.props.params.placeId;
+        var placeId = parseInt(this.props.params.placeId, 10);
         var buildingId = this.props.params.buildingId;
 
         var location = this.props.location;
         this.date = location.query && location.query.date;
 
-        this.props.dispatch(actions.fetchPlace(buildingId, placeId, this.date));
+        if (! this.props.place || this.props.place.id !== placeId) {
+            this.props.dispatch(actions.fetchPlace(buildingId, placeId, this.date));
+        }
     },
 
     componentDidUpdate: function() {

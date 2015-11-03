@@ -44,6 +44,7 @@ function handleRender(req, res) {
         } else {
             let params = routerState.params;
             let path = routerState.routes[1].path || routerState.routes[0].path;
+            let location = routerState.location;
             let endpoint;
             let actionType;
 
@@ -55,6 +56,21 @@ function handleRender(req, res) {
                 case pathEnum.groups:
                     endpoint = `faculties/${params.facultyId}/groups`;
                     actionType = 'FETCH_GROUPS';
+
+                    break;
+                case pathEnum.groupScheduleDefault:
+                    endpoint = `scheduler/${params.groupId}${location.search}`;
+                    actionType = 'FETCH_LESSONS';
+
+                    break;
+                case pathEnum.teacherScheduleDefault:
+                    endpoint = `teachers/${params.teacherId}/scheduler${location.search}`;
+                    actionType = 'FETCH_TEACHER';
+
+                    break;
+                case pathEnum.placeScheduleDefault:
+                    endpoint = `buildings/${params.buildingId}/rooms/${params.placeId}/scheduler${location.search}`;
+                    actionType = 'FETCH_PLACE';
 
                     break;
                 default:
