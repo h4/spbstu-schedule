@@ -1,6 +1,6 @@
 'use strict';
 var redux = require('redux');
-import { routerStateReducer as router } from 'redux-router';
+import { routerStateReducer } from 'redux-router';
 
 function faculties(state, action) {
     var baseState = {
@@ -148,7 +148,7 @@ const rootReducer = redux.combineReducers({
         lessons,
         teachers,
         places,
-        router
+        router: routerStateReducer
     });
 
 export default rootReducer;

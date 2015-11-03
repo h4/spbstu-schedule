@@ -10,16 +10,28 @@ var React = require('react'),
     Teacher = require('./components/Teacher.jsx'),
     Place = require('./components/Place.jsx');
 
-var routes = (
-    <Route path="/" component={App}>
-        <IndexRoute component={FacultyList} />
-        <Route path="/faculty/:facultyId/groups" component={Faculty} />
-        <Route path="/faculty/:facultyId/groups/:groupId" component={Schedule} />
-        <Route path="/faculty/:facultyId/groups/:groupId?date=:date" component={Schedule} />
-        <Route path="/teachers/:teacherId" component={Teacher} />
-        <Route path="/teachers/:teacherId?date=:date" component={Teacher} />
-        <Route path="/places/:buildingId/:placeId" component={Place} />
-        <Route path="/places/:buildingId/:placeId?date=:date" component={Place} />
-    </Route>);
+const pathEnum = {
+        faculties: '/',
+        groups: '/faculty/:facultyId/groups',
+        groupScheduleDefault: '/faculty/:facultyId/groups/:groupId',
+        groupSchedule: '/faculty/:facultyId/groups/:groupId?date=:date',
+        teacherScheduleDefault: '/teachers/:teacherId',
+        teacherSchedule: '/teachers/:teacherId?date=:date',
+        placeScheduleDefault: '/places/:buildingId/:placeId',
+        placeSchedule: '/places/:buildingId/:placeId?date=:date'
+};
 
-module.exports = routes;
+var routes = (
+    <Route path={pathEnum.faculties} component={App}>
+        <IndexRoute component={FacultyList} />
+        <Route path={pathEnum.groups} component={Faculty} />
+        <Route path={pathEnum.groupScheduleDefault} component={Schedule} />
+        <Route path={pathEnum.groupSchedule} component={Schedule} />
+        <Route path={pathEnum.teacherScheduleDefault} component={Teacher} />
+        <Route path={pathEnum.teacherSchedule} component={Teacher} />
+        <Route path={pathEnum.placeScheduleDefault} component={Place} />
+        <Route path={pathEnum.placeSchedule} component={Place} />
+    </Route>
+);
+
+module.exports = { routes, pathEnum };

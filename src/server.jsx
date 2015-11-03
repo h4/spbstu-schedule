@@ -5,7 +5,7 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 
 import { createMainStore } from './js/store/mainStore';
-import App from './js/containers/App';
+import Root from './js/containers/Root';
 import { fetchFaculties } from './js/actions/FacultyActions';
 
 import {ReduxRouter} from 'redux-router';
@@ -13,7 +13,9 @@ import createHistory from 'history/lib/createMemoryHistory';
 import {reduxReactRouter, match} from 'redux-router/server';
 import {Provider} from 'react-redux';
 import qs from 'query-string';
-import { routes } from './js/routes';
+import { routes, pathEnum } from './js/routes';
+
+import { callApi } from './js/midleware/api';
 
 const app = new Express();
 
@@ -22,6 +24,7 @@ var html = fs.readFileSync('./index.html');
 
 app.use('/assets', Express.static('assets'));
 app.use('/img', Express.static('img'));
+app.use('/favicon.ico', Express.static('img/favicon.ico'));
 
 app.use(handleRender);
 
@@ -39,14 +42,35 @@ function handleRender(req, res) {
             res.status(500);
             res.end(500);
         } else {
-            console.log((store.getState().router));
+            let params = routerState.params;
+            let path = routerState.routes[1].path || routerState.routes[0].path;
+            let endpoint;
+            let actionType;
 
-            store.getState().router
-                .then(() => {
-                    const html = (
-                        <Provider store={store} key="provider">
-                            <ReduxRouter/>
-                        </Provider>
+            switch (path) {
+                case pathEnum.faculties:
+                    endpoint = 'faculties';
+                    actionType = 'FETCH_FACULTIES';
+                    break;
+                case pathEnum.groups:
+                    endpoint = `faculties/${params.facultyId}/groups`;
+                    actionType = 'FETCH_GROUPS';
+
+                    break;
+                default:
+                    res.status(404);
+                    res.end('404');
+            }
+
+            callApi(endpoint)
+                .then((response) => {
+                    store.dispatch({
+                        type: actionType,
+                        response
+                    });
+
+                    const html = renderToString(
+                        <Root store={store} />
                     );
 
                     // Grab the initial state from our Redux store
@@ -54,14 +78,14 @@ function handleRender(req, res) {
 
                     // Send the rendered page back to the client
                     res.send(renderFullPage(html, finalState));
-                })
-                .catch((err) => {
-                    console.error('DATA FETCHING ERROR:', pretty.render(err));
-                    res.status(500);
-                    res.end(500);
+                    res.end('');
                 });
         }
     }));
+}
+
+function apiSuccessHandler(store, eventType, response) {
+
 }
 
 function renderFullPage(html, initialState) {

@@ -10,9 +10,10 @@ var Root = React.createClass({
 
     render: function() {
         const store = this.props.store;
+        const routes = store.getState().router.routes;
         return (
-            <Provider store={store}>
-                <ReduxRouter />
+            <Provider store={store} key="provider">
+                <ReduxRouter routes={routes} />
             </Provider>
         );
     }

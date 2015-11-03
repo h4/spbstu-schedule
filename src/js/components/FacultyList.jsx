@@ -5,7 +5,9 @@ var Faculties = require('./Faculties.jsx');
 
 var FacultyList = React.createClass({
     componentWillMount: function() {
-        this.props.dispatch(actions.fetchFaculties());
+        if (! this.props.faculties) {
+            this.props.dispatch(actions.fetchFaculties());
+        }
     },
 
     render: function() {
