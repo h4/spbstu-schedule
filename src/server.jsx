@@ -15,7 +15,10 @@ import {Provider} from 'react-redux';
 import qs from 'query-string';
 import { routes, pathEnum } from './js/routes';
 
-import { callApi } from './js/midleware/api';
+import { callApiFactory } from './js/midleware/api';
+
+const apiRoot = process.env.API_ROOT;
+const callApi = callApiFactory(apiRoot);
 
 const app = new Express();
 
