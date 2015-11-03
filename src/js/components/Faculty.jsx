@@ -6,13 +6,11 @@ var Groups = require('./Groups.jsx');
 
 var Faculty = React.createClass({
     componentWillMount: function () {
-        var id = this.props.params.facultyId;
+        var facultyId = this.props.params.facultyId;
 
-        if (!this.props.faculties) {
-            this.props.dispatch(actions.fetchFaculties());
+        if (! this.props.groups || ! this.props.groups[ facultyId ]) {
+            this.props.dispatch(actions.fetchGroups(facultyId));
         }
-
-        this.props.dispatch(actions.fetchGroups(id));
     },
 
     getGroupPart: function (group, part) {
@@ -27,15 +25,23 @@ var Faculty = React.createClass({
         return this.getGroupPart(group, 1);
     },
 
-    render: function () {
-        var facultyId = parseInt(this.props.params.facultyId, 10);
-        var faculty = _.find(this.props.faculties, 'id', facultyId);
-        var groups = this.props.groups && this.props.groups[ facultyId ];
-        var levels = groups && _.chain(groups)
+    groupGroupsByLevel: function(groups) {
+        if (groups) {
+            return _.chain(groups)
                 .sortBy('level')
                 .sortByOrder([ this.getGroupNum, this.getSubgroupNum ])
                 .groupBy('level')
                 .value();
+        } else {
+            return null;
+        }
+    },
+
+    render: function () {
+        var facultyId = parseInt(this.props.params.facultyId, 10);
+        var faculty = this.props.faculty;
+        var groups = this.props.groups && this.props.groups[ facultyId ];
+        var levels = this.groupGroupsByLevel(groups);
 
         if (this.props.isFetching && faculty) {
             return (
@@ -87,7 +93,7 @@ Faculty.propTypes = {
 function mapStateToProps(state) {
     return {
         isFetching: state.groups.isFetching,
-        faculties: state.faculties.data,
+        faculty: state.groups.faculty,
         groups: state.groups.data
     }
 }

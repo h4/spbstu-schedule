@@ -10,7 +10,6 @@ gulp.task('app-js', function() {
         .transform(babelify)
         .transform(reactify, {"es6": true})
         .transform(envify)
-        .add('node_modules/es6-shim/es6-shim.js')
         .add('src/js/app.js')
         .bundle()
         .pipe(source('bundle.js'))

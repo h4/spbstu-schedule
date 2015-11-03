@@ -12,6 +12,8 @@ function callApi(endpoint) {
         });
 }
 
+export {callApi as callApi};
+
 export default store => next => action => {
     if (action.callApi === undefined) {
         return next(action);

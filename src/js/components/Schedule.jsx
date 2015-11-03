@@ -11,17 +11,11 @@ var Schedule = React.createClass({
         var facultyId = this.props.params.facultyId;
         var groupId = this.props.params.groupId;
 
-        if (!this.props.faculties) {
-            this.props.dispatch(actions.fetchFaculties());
-        }
-
-        if (!this.props.groups) {
-            this.props.dispatch(actions.fetchGroups(facultyId));
-        }
-
         this.date = this.props.query && this.props.query.date;
 
-        this.props.dispatch(actions.fetchLessons(facultyId, groupId, this.date));
+        if (! this.props.lessons) {
+            this.props.dispatch(actions.fetchLessons(facultyId, groupId, this.date));
+        }
     },
 
     componentDidUpdate: function() {
@@ -37,15 +31,18 @@ var Schedule = React.createClass({
     },
 
     isCurrentGroup(groupId) {
-        return (this.props.group && this.props.group.id === groupId);
+        if (this.props.group) {
+            return (this.props.group.id === groupId);
+        } else {
+            return true;
+        }
     },
 
     render: function() {
         var groupId = parseInt(this.props.params.groupId, 10);
         var facultyId = parseInt(this.props.params.facultyId, 10);
-        var faculty = _.find(this.props.faculties, 'id', facultyId);
-        var groups = this.props.groups || {};
-        var group = _.find(groups[facultyId], 'id', groupId);
+        var group = this.props.group;
+        var faculty = group && group.faculty;
         var lessons = this.props.lessons && this.props.lessons[groupId];
         var week = this.props.week;
         var pagerLink = `/faculty/${facultyId}/groups/${groupId}`;
@@ -93,8 +90,6 @@ Schedule.propTypes = {
 function mapStateToProps(state) {
     return {
         isFetching: state.lessons.isFetching,
-        groups: state.groups.data,
-        faculties: state.faculties.data,
         group: state.lessons.group,
         lessons: state.lessons.data,
         week: state.lessons.week

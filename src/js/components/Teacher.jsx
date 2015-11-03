@@ -9,11 +9,13 @@ var LessonsList = require('./Schedule/LessonsList.jsx');
 
 var Teacher = React.createClass({
     componentWillMount: function () {
-        var teacherId = this.props.params.teacherId;
+        var teacherId = parseInt(this.props.params.teacherId, 10);
         var location = this.props.location;
         this.date = location.query && location.query.date;
 
-        this.props.dispatch(actions.fetchTeacher(teacherId, this.date));
+        if (! this.props.teacher || this.props.teacher.id !== teacherId) {
+            this.props.dispatch(actions.fetchTeacher(teacherId, this.date));
+        }
     },
 
     componentDidUpdate: function() {

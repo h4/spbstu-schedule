@@ -1,6 +1,6 @@
 'use strict';
 var React = require('react');
-var ReactRouter = require('react-router');
+import { pushState } from 'redux-router'
 var Redux = require('react-redux');
 
 var App = React.createClass({
@@ -13,7 +13,7 @@ var App = React.createClass({
         const { children } = this.props;
 
         return (
-            <div>
+            <div className="app">
                 { children }
             </div>
         )
@@ -21,7 +21,9 @@ var App = React.createClass({
 });
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        routerState: state.router
+    };
 }
 
-module.exports = Redux.connect(mapStateToProps, {pushState: ReactRouter.pushState})(App);
+module.exports = Redux.connect(mapStateToProps, { pushState })(App);
