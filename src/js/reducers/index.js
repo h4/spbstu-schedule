@@ -31,6 +31,7 @@ function groups(state, action) {
     var baseState = {
         isFetching: false,
         data: null,
+        faculty: null,
         errors: null
     };
     state = Object.assign(baseState, state);
@@ -39,10 +40,12 @@ function groups(state, action) {
         case 'REQUEST_GROUPS':
             state.isFetching = true;
             return state;
+            break;
         case 'FETCH_GROUPS':
+            state.isFetching = false;
             state.data = state.data || {};
             state.data[action.response.faculty.id] = action.response.groups;
-            state.isFetching = false;
+            state.faculty = action.response.faculty;
             return state;
         case 'FAIL_GROUPS':
             state.errors = action.errors;
