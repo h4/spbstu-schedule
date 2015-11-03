@@ -76,6 +76,11 @@ function handleRender(req, res) {
                     actionType = 'FETCH_PLACE';
 
                     break;
+                case pathEnum.search:
+                    endpoint = 'teachers';
+                    actionType = 'FETCH_TEACHERS_LIST';
+
+                    break;
                 default:
                     res.status(404);
                     res.end('404');
@@ -88,16 +93,21 @@ function handleRender(req, res) {
                         response
                     });
 
-                    const html = renderToString(
-                        <Root store={store} />
-                    );
+                    try {
+                        const html = renderToString(
+                            <Root store={store}/>
+                        );
 
-                    // Grab the initial state from our Redux store
-                    const finalState = store.getState();
+                        // Grab the initial state from our Redux store
+                        const finalState = store.getState();
 
-                    // Send the rendered page back to the client
-                    res.send(renderFullPage(html, finalState));
-                    res.end('');
+                        // Send the rendered page back to the client
+                        res.send(renderFullPage(html, finalState));
+                        res.end('');
+                    } catch (e) {
+                        res.status(500);
+                        res.end(e.message);
+                    }
                 });
         }
     }));
