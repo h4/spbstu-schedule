@@ -1,5 +1,6 @@
 'use strict';
 var redux = require('redux');
+var _ = require('lodash');
 import { routerStateReducer } from 'redux-router';
 
 function faculties(state, action) {
@@ -116,6 +117,36 @@ function teachers(state, action) {
     }
 }
 
+function search(state, action) {
+    var baseState = {
+            isFetching: false,
+            data: null,
+            errors: null
+        };
+    state = Object.assign(baseState, state);
+
+    switch (action.type) {
+        case 'REQUEST_TEACHERS_LIST':
+            state.isFetching = true;
+            return state;
+        case 'FETCH_TEACHERS_LIST':
+            state.data = _.chain(action.response.teachers)
+                .sortBy('full_name')
+                .filter(function(teacher) {
+                    return teacher.full_name !== "00"
+                })
+                .value();
+            state.isFetching = false;
+            return state;
+        case 'FAIL_TEACHERS_LIST':
+            state.errors = action.errors;
+            state.isFetching = false;
+            return state;
+        default :
+            return state;
+    }
+}
+
 function places(state, action) {
     var baseState = {
             isFetching: false,
@@ -146,12 +177,13 @@ function places(state, action) {
     }
 }
 const rootReducer = redux.combineReducers({
-        faculties,
-        groups,
-        lessons,
-        teachers,
-        places,
-        router: routerStateReducer
-    });
+    faculties,
+    groups,
+    lessons,
+    teachers,
+    places,
+    search,
+    router: routerStateReducer
+});
 
 export default rootReducer;
