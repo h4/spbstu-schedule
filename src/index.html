@@ -16,7 +16,7 @@
 
     <h1 class="page__headline">Расписание занятий</h1>
 </header>
-<div id="rootPageContainer" class="page__container"></div>
+<div id="rootPageContainer" class="page__container">${html}</div>
 <footer class="page__footer footer">
     <p class="footer__item">
         &copy; Санкт-Петербургский политехнический университет Петра Великого,
@@ -27,6 +27,9 @@
         О любых ошибках и неточностях в расписании сообщайте, пожалуйста, по адресу <a href="mailto:ruz@spbstu.ru">ruz@spbstu.ru</a>
     </p>
 </footer>
+<script>
+    window.__INITIAL_STATE__ = ${initialState};
+</script>
 <script src="/assets/bundle.js"></script>
 </body>
 </html>

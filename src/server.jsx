@@ -20,7 +20,7 @@ import { callApi } from './js/midleware/api';
 const app = new Express();
 
 var fs = require('fs');
-var html = fs.readFileSync('./index.html');
+var template = fs.readFileSync('./index.html', {encoding: 'utf-8'});
 
 app.use('/assets', Express.static('assets'));
 app.use('/img', Express.static('img'));
@@ -100,48 +100,10 @@ function handleRender(req, res) {
     }));
 }
 
-function apiSuccessHandler(store, eventType, response) {
-
-}
-
 function renderFullPage(html, initialState) {
-    return `
-    <!DOCTYPE html>
-    <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <title>Расписание занятий</title>
-        <link href="http://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="/assets/bundle.css">
-    </head>
-    <body class="page">
-    <header class="page__header">
-        <a href="/" class="logo page__logo">
-            <img src="/img/logo.svg"
-                 alt="Политехнический университет Петра Великого"
-                 class="logo__img">
-        </a>
-
-        <h1 class="page__headline">Расписание занятий</h1>
-    </header>
-    <div id="rootPageContainer" class="page__container">${html}</div>
-    <script>
-      window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
-    </script>
-    <footer class="page__footer footer">
-        <p class="footer__item">
-            &copy; Санкт-Петербургский политехнический университет Петра Великого,
-            <a href="http://www.spbstu.ru/">www.spbstu.ru</a>
-        </p>
-
-        <p class="footer__item">
-            О любых ошибках и неточностях в расписании сообщайте, пожалуйста, по адресу <a href="mailto:ruz@spbstu.ru">ruz@spbstu.ru</a>
-        </p>
-    </footer>
-    <script src="/assets/bundle.js"></script>
-    </body>
-    </html>
-`;
+    return template
+        .replace('${html}', html)
+        .replace('${initialState}', JSON.stringify(initialState));
 }
 
 module.exports = app;
