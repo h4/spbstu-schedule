@@ -7,7 +7,6 @@ import createHistory from 'history/lib/createBrowserHistory';
 
 import { createMainStore } from './store/mainStore';
 
-require('es6-shim');
 require('es6-promise').polyfill();
 
 const initialState = window['__INITIAL_STATE__'];

@@ -9,7 +9,7 @@ function faculties(state, action) {
         data: null,
         errors: null
     };
-    state = Object.assign(baseState, state);
+    state = _.extend(baseState, state);
 
     switch (action.type) {
         case 'REQUEST_FACULTIES':
@@ -35,7 +35,7 @@ function groups(state, action) {
         faculty: null,
         errors: null
     };
-    state = Object.assign(baseState, state);
+    state = _.extend(baseState, state);
 
     switch (action.type) {
         case 'REQUEST_GROUPS':
@@ -65,7 +65,7 @@ function lessons(state, action) {
         week: null,
         errors: null
     };
-    state = Object.assign(baseState, state);
+    state = _.extend(baseState, state);
 
     switch (action.type) {
         case 'REQUEST_LESSONS':
@@ -95,7 +95,7 @@ function teachers(state, action) {
             week: null,
             errors: null
         };
-    state = Object.assign(baseState, state);
+    state = _.extend(baseState, state);
 
     switch (action.type) {
         case 'REQUEST_TEACHER':
@@ -123,7 +123,7 @@ function search(state, action) {
             data: null,
             errors: null
         };
-    state = Object.assign(baseState, state);
+    state = _.extend(baseState, state);
 
     switch (action.type) {
         case 'REQUEST_TEACHERS_LIST':
@@ -155,7 +155,7 @@ function places(state, action) {
             week: null,
             errors: null
         };
-    state = Object.assign(baseState, state);
+    state = _.extend(baseState, state);
 
     switch (action.type) {
         case 'REQUEST_PLACE':
