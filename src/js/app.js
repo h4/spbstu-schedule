@@ -1,3 +1,5 @@
+require('es6-shim');
+
 var React = require('react'),
     render = require('react-dom').render,
     Root = require('./containers/Root');
