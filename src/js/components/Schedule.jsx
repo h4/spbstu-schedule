@@ -13,7 +13,7 @@ var Schedule = React.createClass({
 
         this.date = this.props.query && this.props.query.date;
 
-        if (! this.props.lessons) {
+        if (! this.props.lessons || ! this.isCurrentGroup(groupId)) {
             this.props.dispatch(actions.fetchLessons(facultyId, groupId, this.date));
         }
     },
@@ -48,13 +48,23 @@ var Schedule = React.createClass({
         var pagerLink = `/faculty/${facultyId}/groups/${groupId}`;
 
         if (this.props.isFetching && faculty && group) {
-            return (
-                <div className="schedule-page">
-                    {faculty.name && <h2 className="page__h2">{faculty.name}</h2>}
-                    {group.name && <h3 className="page__h3">Группа № {group.name}</h3>}
-                    <div>Данные загружаются...</div>
-                </div>
-            )
+            if (this.isCurrentGroup(groupId)) {
+                return (
+                    <div className="schedule-page">
+                        {faculty.name && <h2 className="page__h2">{faculty.name}</h2>}
+                        {group.name && <h3 className="page__h3">Группа № {group.name}</h3>}
+                        <div>Данные загружаются...</div>
+                    </div>
+                )
+            } else {
+                return (
+                    <div className="schedule-page">
+                        {faculty.name && <h2 className="page__h2">{faculty.name}</h2>}
+                        <div>Данные загружаются...</div>
+                    </div>
+                )
+            }
+
         }
 
         if (!faculty || !group || !week) {
