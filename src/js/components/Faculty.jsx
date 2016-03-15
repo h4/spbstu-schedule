@@ -27,7 +27,12 @@ var Faculty = React.createClass({
 
     groupGroupsByLevel: function(groups) {
         if (groups) {
+            var type = 'all'
+            if (this.props.location.query && this.props.location.query.type) {
+                type = this.props.location.query.type;
+            }
             return _.chain(groups)
+                .filter(x => type === 'all' || x.type === type)
                 .sortBy('level')
                 .sortByOrder([ this.getGroupNum, this.getSubgroupNum ])
                 .groupBy('level')

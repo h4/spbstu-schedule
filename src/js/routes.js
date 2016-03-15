@@ -13,7 +13,7 @@ var React = require('react'),
 
 const pathEnum = {
         faculties: '/',
-        groups: '/faculty/:facultyId/groups',
+        groups: '/faculty/:facultyId/groups(?type=:groupType)',
         groupScheduleDefault: '/faculty/:facultyId/groups/:groupId',
         groupSchedule: '/faculty/:facultyId/groups/:groupId?date=:date',
         teacherScheduleDefault: '/teachers/:teacherId',

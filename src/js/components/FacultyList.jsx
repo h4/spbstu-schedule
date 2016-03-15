@@ -2,6 +2,8 @@ var React = require('react');
 var reactRedux = require('react-redux');
 var actions = require('../actions/FacultyActions');
 var Faculties = require('./Faculties.jsx');
+var TabbedArea = require('./Common/Tabs.jsx').TabbedArea;
+var TabPane = require('./Common/Tabs.jsx').TabPane;
 
 var FacultyList = React.createClass({
     componentWillMount: function() {
@@ -21,7 +23,17 @@ var FacultyList = React.createClass({
             <div>{
                 this.props.faculties &&
                 <div className="faculty-list">
-                    <Faculties faculties={this.props.faculties} />
+                    <TabbedArea>
+                        <TabPane display='Очное'>
+                            <Faculties faculties={this.props.faculties} groupType='common' />
+                        </TabPane>
+                        <TabPane display='Очно-заочное'>
+                            <Faculties faculties={this.props.faculties} groupType='evening' />
+                        </TabPane>
+                        <TabPane display='Заочное'>
+                            <Faculties faculties={this.props.faculties} groupType='distance' />
+                        </TabPane>
+                    </TabbedArea>
                 </div>
             }</div>
         )
