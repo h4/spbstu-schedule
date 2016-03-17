@@ -1,3 +1,6 @@
+require("babel-register")({
+  presets: ["es2015", "react"],
+});
 var server = require('./server.jsx');
 var port = process.env.PORT || 3000;
 
