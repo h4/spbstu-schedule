@@ -4,7 +4,6 @@ var reactRedux = require('react-redux');
 var actions = require('../actions/FacultyActions');
 
 const groupTypes = {
-    all: "Все",
     common: "Очная",
     evening: "Очно-заочная",
     distance: "Заочная"
