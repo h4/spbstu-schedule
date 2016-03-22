@@ -7,7 +7,7 @@ const groupTypes = {
     all: "Все",
     common: "Очная",
     evening: "Очно-заочная",
-    distant: "Заочная"
+    distance: "Заочная"
 }
 
 var GroupTypeLink = React.createClass({
