@@ -176,6 +176,22 @@ function places(state, action) {
             return state;
     }
 }
+
+function groupTypeFilter(state, action) {
+    var baseState = {
+        filter: 'all'
+    };
+    state = _.extend(baseState, state);
+
+    switch (action.type) {
+        case 'SET_GROUPTYPE_FILTER':
+            state.filter = action.filter;
+            return state;
+        default :
+            return state;
+    }
+}
+
 const rootReducer = redux.combineReducers({
     faculties,
     groups,
@@ -183,6 +199,7 @@ const rootReducer = redux.combineReducers({
     teachers,
     places,
     search,
+    groupTypeFilter,
     router: routerStateReducer
 });
 

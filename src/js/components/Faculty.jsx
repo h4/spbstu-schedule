@@ -3,6 +3,7 @@ var _ = require('lodash');
 var reactRedux = require('react-redux');
 var actions = require('../actions/FacultyActions');
 var Groups = require('./Groups.jsx');
+var GroupTypes = require('./GroupTypes.jsx');
 
 var Faculty = React.createClass({
     componentWillMount: function () {
@@ -27,12 +28,8 @@ var Faculty = React.createClass({
 
     groupGroupsByLevel: function(groups) {
         if (groups) {
-            var type = 'all'
-            if (this.props.location.query && this.props.location.query.type) {
-                type = this.props.location.query.type;
-            }
             return _.chain(groups)
-                .filter(x => type === 'all' || x.type === type)
+                .filter(x => this.props.filter === 'all' || x.type === this.props.filter)
                 .sortBy('level')
                 .sortByOrder([ this.getGroupNum, this.getSubgroupNum ])
                 .groupBy('level')
@@ -68,38 +65,51 @@ var Faculty = React.createClass({
         return (
             <div className="faculty">
                 <h2 className="page__h2">{faculty.name}</h2>
-                {
-                    levels &&
-                    <div className="faculty__levels">
-                        {
-                            Object.keys(levels)
-                                .map(function(level, i) {
-                                return (
-                                <div key={i} className="faculty__level">
-                                    <h3 className="page__h3">{level} курс</h3>
-                                    <Groups groups={levels[level]} facultyId={facultyId}/>
+                <div className="tabs-area">
+                    <GroupTypes faculty={this.props.facultyId} />
+                    <div className="tabbed-area__pane">
+                        <div className="faculty__levels">
+                            {
+                                (levels && Object.keys(levels).length > 0) ?
+                                this.renderLevels(facultyId, levels) :
+                                <div className="faculty__level">
+                                    <h3 className="body__h3">Группы не найдены</h3>
                                 </div>
-                                    );
-                                }
-                                )
                             }
+                        </div>
                     </div>
-                    }
+                </div>
             </div>
         )
+    },
+
+    renderLevels: function(facultyId, levels) {
+        return Object.keys(levels)
+            .map(function(level, i) {
+                return (
+                        <div key={i} className="faculty__level">
+                            <h3 className="page__h3">{level} курс</h3>
+                            <Groups groups={levels[level]} facultyId={facultyId}/>
+                        </div>
+                    );
+            }
+        )
     }
+
 });
 
 Faculty.propTypes = {
     dispatch: React.PropTypes.func.isRequired,
-    isFetching: React.PropTypes.bool.isRequired
+    isFetching: React.PropTypes.bool.isRequired,
+    filter: React.PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
     return {
         isFetching: state.groups.isFetching,
         faculty: state.groups.faculty,
-        groups: state.groups.data
+        groups: state.groups.data,
+        filter: state.groupTypeFilter.filter
     }
 }
 

@@ -18,8 +18,8 @@ function fetchFaculties() {
     }
 }
 
-function fetchGroups(groupId) {
-    let endpoint = `faculties/${groupId}/groups`;
+function fetchGroups(groupId, type) {
+    let endpoint = `faculties/${groupId}/groups?type=${type}`;
 
     return {
         callApi: {
@@ -44,6 +44,13 @@ function fetchLessons(groupId, date) {
     }
 }
 
+function setGroupTypeFilter(filter) {
+    return {
+        type: 'SET_GROUPTYPE_FILTER',
+        filter
+    }
+}
+
 module.exports = {
     fetchFaculties: function () {
         return function(dispatch) {
@@ -51,15 +58,21 @@ module.exports = {
         };
     },
 
-    fetchGroups: function(groupId) {
+    fetchGroups: function(groupId, type) {
         return function(dispatch) {
-            return dispatch(fetchGroups(groupId));
+            return dispatch(fetchGroups(groupId, type));
         };
     },
 
     fetchLessons: function(facultyId, groupId, date) {
         return function(dispatch) {
             return dispatch(fetchLessons(groupId, date));
+        };
+    },
+
+    setGroupTypeFilter: function(filter) {
+        return function(dispatch) {
+            return dispatch(setGroupTypeFilter(filter));
         };
     }
 };
