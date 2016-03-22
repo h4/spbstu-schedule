@@ -34,7 +34,7 @@ GroupTypeLink.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        active: ownProps.filter === state.groupTypeFilter.filter
+        active: ownProps.filter === state.persist.groupTypeFilter
     }
 }
 
@@ -69,7 +69,7 @@ GroupTypes.propTypes = {
 
 GroupTypes = reactRedux.connect(
     (state, ownProps) => ({
-        filter: state.groupTypeFilter.filter
+        filter: state.persist.groupTypeFilter
     })
 )(GroupTypes);
 

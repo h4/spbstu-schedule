@@ -179,13 +179,13 @@ function places(state, action) {
 
 function groupTypeFilter(state, action) {
     var baseState = {
-        filter: 'all'
+        groupTypeFilter: 'all'
     };
     state = _.extend(baseState, state);
 
     switch (action.type) {
         case 'SET_GROUPTYPE_FILTER':
-            state.filter = action.filter;
+            state.groupTypeFilter = action.filter;
             return state;
         default :
             return state;
@@ -199,7 +199,7 @@ const rootReducer = redux.combineReducers({
     teachers,
     places,
     search,
-    groupTypeFilter,
+    persist: groupTypeFilter,
     router: routerStateReducer
 });
 

@@ -18,8 +18,8 @@ function fetchFaculties() {
     }
 }
 
-function fetchGroups(groupId, type) {
-    let endpoint = `faculties/${groupId}/groups?type=${type}`;
+function fetchGroups(groupId) {
+    let endpoint = `faculties/${groupId}/groups`;
 
     return {
         callApi: {
@@ -58,9 +58,9 @@ module.exports = {
         };
     },
 
-    fetchGroups: function(groupId, type) {
+    fetchGroups: function(groupId) {
         return function(dispatch) {
-            return dispatch(fetchGroups(groupId, type));
+            return dispatch(fetchGroups(groupId));
         };
     },
 

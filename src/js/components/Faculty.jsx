@@ -109,7 +109,7 @@ function mapStateToProps(state) {
         isFetching: state.groups.isFetching,
         faculty: state.groups.faculty,
         groups: state.groups.data,
-        filter: state.groupTypeFilter.filter
+        filter: state.persist.groupTypeFilter
     }
 }
 
