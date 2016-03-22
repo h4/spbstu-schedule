@@ -19,7 +19,7 @@ var GroupTypeLink = React.createClass({
 
     render: function() {
         return (
-            <a href="" className={this.props.active ? 'active' : '' } onClick={() => this.props.onClick(this.props.filter)} >
+            <a href="javascript:;" className={this.props.active ? 'active' : '' } onClick={() => this.props.onClick(this.props.filter)} >
                 {this.props.displayName}
             </a>
         );

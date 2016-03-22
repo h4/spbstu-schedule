@@ -179,7 +179,7 @@ function places(state, action) {
 
 function groupTypeFilter(state, action) {
     var baseState = {
-        groupTypeFilter: 'all'
+        groupTypeFilter: 'common'
     };
     state = _.extend(baseState, state);
 
