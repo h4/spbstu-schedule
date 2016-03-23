@@ -3,6 +3,7 @@ var _ = require('lodash');
 var reactRedux = require('react-redux');
 var actions = require('../actions/SearchActions');
 var TeachersList = require('./Search/TeachersList.jsx');
+var SearchInput = require('./Search/SearchInput.jsx');
 
 var Search = React.createClass({
     componentWillMount: function () {
@@ -15,8 +16,8 @@ var Search = React.createClass({
         return {filter: ''};
     },
 
-    handleFilter: function(event) {
-        this.setState({filter: event.target.value});
+    handleFilter: function(newFilter) {
+        this.setState({filter: newFilter});
     },
 
 
@@ -49,8 +50,7 @@ var Search = React.createClass({
 
         return (
             <div className="schedule-page">
-                <span className="icon"><i className="fa fa-search"></i></span>
-                <input type="text" value={this.state.filter} onChange={this.handleFilter} />
+                <SearchInput onChange={this.handleFilter} placeholder="Введите фамилию" />
                 <TeachersList teachers={teachers} />
             </div>
         )
