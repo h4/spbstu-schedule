@@ -11,9 +11,14 @@ var Search = React.createClass({
         }
     },
 
-    componentDidUpdate: function() {
-
+    getInitialState: function() {
+        return {filter: ''};
     },
+
+    handleFilter: function(event) {
+        this.setState({filter: event.target.value});
+    },
+
 
     render: function() {
         let teachers = this.props.teachers;
@@ -34,8 +39,18 @@ var Search = React.createClass({
             )
         }
 
+        if (this.state.filter.length > 0) {
+            let filter = this.state.filter.toLowerCase()
+            teachers = teachers.filter(teacher =>
+                // its very strange indeed, but first_name is actualy surname
+                teacher.first_name.toLowerCase().indexOf(filter) == 0
+            )
+        }
+
         return (
             <div className="schedule-page">
+                <span className="icon"><i className="fa fa-search"></i></span>
+                <input type="text" value={this.state.filter} onChange={this.handleFilter} />
                 <TeachersList teachers={teachers} />
             </div>
         )
@@ -44,7 +59,7 @@ var Search = React.createClass({
 
 Search.propTypes = {
     dispatch: React.PropTypes.func.isRequired,
-    isFetching: React.PropTypes.bool.isRequired
+    isFetching: React.PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {

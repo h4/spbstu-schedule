@@ -1,47 +1,22 @@
 var React = require('react');
 var Teacher = require('./Teacher.jsx');
-var LettersNav = require('./LettersNav.jsx');
+var Pager = require('./Pager.jsx');
 var _ = require('lodash');
 
 var TeachersList = React.createClass({
     render: function () {
         let teachers = this.props.teachers;
-        let groups = _.groupBy(teachers, (teacher) => { return teacher.full_name[0] });
-        let letters = Object.keys(groups);
 
-        if (! teachers) {
-            return <div></div>;
-        }
-
-        if (teachers.length) {
+        if (teachers && teachers.length > 0) {
             return (
-            <div>
-                <LettersNav letters={letters} />
-                {
-                    letters.map((letter, i) => {
-                        return (
-                        <div id={letter} key={i}>
-                            <h2>{letter}</h2>
-
-                            <ul className="search-result">
-                            {groups[letter].map((teacher, i) => {
-                                return <Teacher teacher={teacher} key={i} />
-                            })}
-                            </ul>
-                        </div>
-                        );
-                    }
-                )}
-            </div>
+                <Pager itemsPerPage={5} >
+                    {teachers.map(teacher => 
+                        <Teacher teacher={teacher} key={teacher.id} />
+                    )}
+                </Pager>
             )
         } else {
-            return (
-                <ul>
-                    <li>
-                        Ничено не найдено
-                    </li>
-                </ul>
-            )
+            return <h3>Ничего не найдено</h3>
         }
     }
 });
