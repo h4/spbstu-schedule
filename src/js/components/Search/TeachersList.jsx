@@ -9,7 +9,7 @@ var TeachersList = React.createClass({
 
         if (teachers && teachers.length > 0) {
             return (
-                <Pager itemsPerPage={5} >
+                <Pager itemsPerPage={15} >
                     {teachers.map(teacher => 
                         <Teacher teacher={teacher} key={teacher.id} />
                     )}

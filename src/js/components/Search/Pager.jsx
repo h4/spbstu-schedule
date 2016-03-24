@@ -30,10 +30,14 @@ var PagerNav = React.createClass({
         if (total <= 1) return;
 
         return (
-            <div>
-                <button type='button' disabled={page == 0} onClick={this.handlePrevBtn}>prev</button>
-                <span>{page + 1} / {total}</span>
-                <button type='button' disabled={page == total - 1} onClick={this.handleNextBtn}>next</button>
+            <div className="pager">
+                <button type='button' disabled={page == 0} onClick={this.handlePrevBtn}>
+                    <i className="fa fa-arrow-circle-left"></i>
+                </button>
+                <span className="pager__text">{(page + 1) + ' / ' + total}</span>
+                <button type='button' disabled={page == total - 1} onClick={this.handleNextBtn}>
+                    <i className="fa fa-arrow-circle-right"></i>
+                </button>
             </div>
         );
     }
