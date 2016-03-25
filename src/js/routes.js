@@ -8,7 +8,7 @@ var React = require('react'),
     Faculty = require('./components/Faculty.jsx'),
     Schedule = require('./components/Schedule.jsx'),
     Teacher = require('./components/Teacher.jsx'),
-    Search = require('./components/Search.jsx'),
+    TeacherListSearch = require('./components/TeacherListSearch.jsx'),
     Place = require('./components/Place.jsx');
 
 const pathEnum = {
@@ -20,7 +20,7 @@ const pathEnum = {
         teacherSchedule: '/teachers/:teacherId?date=:date',
         placeScheduleDefault: '/places/:buildingId/:placeId',
         placeSchedule: '/places/:buildingId/:placeId?date=:date',
-        search: '/teachers'
+        searchTeacher: '/teachers'
 };
 
 var routes = (
@@ -33,7 +33,7 @@ var routes = (
         <Route path={pathEnum.teacherSchedule} component={Teacher} />
         <Route path={pathEnum.placeScheduleDefault} component={Place} />
         <Route path={pathEnum.placeSchedule} component={Place} />
-        <Route path={pathEnum.search} component={Search} />
+        <Route path={pathEnum.searchTeacher} component={TeacherListSearch} />
     </Route>
 );
 

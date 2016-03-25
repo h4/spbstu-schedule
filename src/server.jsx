@@ -76,7 +76,7 @@ function handleRender(req, res) {
                     actionType = 'FETCH_PLACE';
 
                     break;
-                case pathEnum.search:
+                case pathEnum.searchTeacher:
                     endpoint = 'teachers';
                     actionType = 'FETCH_TEACHERS_LIST';
 

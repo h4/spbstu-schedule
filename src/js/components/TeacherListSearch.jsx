@@ -5,7 +5,7 @@ var actions = require('../actions/SearchActions');
 var TeachersList = require('./Search/TeachersList.jsx');
 var SearchInput = require('./Search/SearchInput.jsx');
 
-var Search = React.createClass({
+var TeacherListSearch = React.createClass({
     componentWillMount: function () {
         if (! this.props.teachers) {
             this.props.dispatch(actions.fetchTeachersList());
@@ -57,7 +57,7 @@ var Search = React.createClass({
     }
 });
 
-Search.propTypes = {
+TeacherListSearch.propTypes = {
     dispatch: React.PropTypes.func.isRequired,
     isFetching: React.PropTypes.bool.isRequired,
 };
@@ -69,4 +69,4 @@ function mapStateToProps(state) {
     }
 }
 
-module.exports = reactRedux.connect(mapStateToProps)(Search);
+module.exports = reactRedux.connect(mapStateToProps)(TeacherListSearch);
