@@ -77,8 +77,13 @@ function handleRender(req, res) {
 
                     break;
                 case pathEnum.searchTeacher:
-                    endpoint = 'teachers';
+                    endpoint = `teachers`;
                     actionType = 'FETCH_TEACHERS_LIST';
+
+                    break;
+                case pathEnum.searchGroup:
+                    endpoint = `search/groups?q=${encodeURIComponent(location.query.q)}`;
+                    actionType = 'FETCH_GROUPS_LIST';
 
                     break;
                 default:

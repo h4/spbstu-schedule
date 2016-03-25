@@ -117,7 +117,7 @@ function teachers(state, action) {
     }
 }
 
-function search(state, action) {
+function searchTeacher(state, action) {
     var baseState = {
             isFetching: false,
             data: null,
@@ -192,13 +192,42 @@ function groupTypeFilter(state, action) {
     }
 }
 
+function searchGroup(state, action) {
+    var baseState = {
+            isFetching: false,
+            data: null,
+            errors: null
+        };
+    state = _.extend(baseState, state);
+
+    switch (action.type) {
+        case 'REQUEST_GROUPS_LIST':
+            state.isFetching = true;
+            return state;
+        case 'FETCH_GROUPS_LIST':
+            state.data = _.chain(action.response.groups)
+                .sortBy('name')
+                .value();
+            state.isFetching = false;
+            return state;
+        case 'FAIL_GROUPS_LIST':
+            state.errors = action.errors;
+            state.isFetching = false;
+            return state;
+        default :
+            return state;
+    }
+}
+
+
 const rootReducer = redux.combineReducers({
     faculties,
     groups,
     lessons,
     teachers,
     places,
-    search,
+    searchTeacher,
+    searchGroup,
     persist: groupTypeFilter,
     router: routerStateReducer
 });

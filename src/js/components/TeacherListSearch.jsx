@@ -64,8 +64,8 @@ TeacherListSearch.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        isFetching: state.search.isFetching,
-        teachers: state.search.data
+        isFetching: state.searchTeacher.isFetching,
+        teachers: state.searchTeacher.data
     }
 }
 
