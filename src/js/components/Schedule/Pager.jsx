@@ -18,7 +18,11 @@ var Day = React.createClass({
                           className="switcher__link"
                           activeClassName="switcher__link_active">Предыдущая неделя</Link>
                 </div>
-                <h3>{dateUtils.humanDate(week.date_start) + ' — ' + dateUtils.humanDate(week.date_end)}</h3>
+                <div className="switcher__item">
+                    <Link to={link}
+                          className="switcher__link"
+                          activeClassName="switcher__link_active">Текущая неделя</Link>
+                </div>
                 <div className="switcher__item">
                     <Link to={link}
                           query={{date: nextDate}}
