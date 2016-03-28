@@ -14,7 +14,7 @@ var Teacher = React.createClass({
         this.date = location.query && location.query.date;
 
         if (! this.props.teacher || this.props.teacher.id !== teacherId) {
-            this.props.dispatch(actions.fetchTeacher(teacherId, this.date));
+            this.props.dispatch(actions.fetchTeacherSchedule(teacherId, this.date));
         }
     },
 
@@ -25,7 +25,7 @@ var Teacher = React.createClass({
 
         if (this.date !== date) {
             this.date = date;
-            this.props.dispatch(actions.fetchTeacher(teacherId, this.date));
+            this.props.dispatch(actions.fetchTeacherSchedule(teacherId, this.date));
         }
     },
 
@@ -75,10 +75,10 @@ Teacher.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        isFetching: state.teachers.isFetching,
-        teacher: state.teachers.teacher,
-        lessons: state.teachers.data,
-        week: state.teachers.week
+        isFetching: state.teacherSchedule.isFetching,
+        teacher: state.teacherSchedule.teacher,
+        lessons: state.teacherSchedule.data,
+        week: state.teacherSchedule.week
     }
 }
 

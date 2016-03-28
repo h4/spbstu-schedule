@@ -1,9 +1,9 @@
 var api = require('../midleware/api');
-var REQUEST_TEACHER = 'REQUEST_TEACHER';
-var FETCH_TEACHER = 'FETCH_TEACHER';
-var FAIL_TEACHER = 'FAIL_TEACHER';
+var REQUEST_TEACHER_SCHEDULE = 'REQUEST_TEACHER_SCHEDULE';
+var FETCH_TEACHER_SCHEDULE = 'FETCH_TEACHER_SCHEDULE';
+var FAIL_TEACHER_SCHEDULE = 'FAIL_TEACHER_SCHEDULE';
 
-function fetchTeacher(teacherId, date) {
+function fetchTeacherSchedule(teacherId, date) {
     let endpoint = `teachers/${teacherId}/scheduler`;
     if (date) {
         endpoint = `${endpoint}?date=${date}`;
@@ -11,16 +11,16 @@ function fetchTeacher(teacherId, date) {
 
     return {
         callApi: {
-            types: [REQUEST_TEACHER, FETCH_TEACHER, FAIL_TEACHER],
+            types: [REQUEST_TEACHER_SCHEDULE, FETCH_TEACHER_SCHEDULE, FAIL_TEACHER_SCHEDULE],
             endpoint
         }
     }
 }
 
 module.exports = {
-    fetchTeacher: function(teacherId, date) {
+    fetchTeacherSchedule: function(teacherId, date) {
         return function(dispatch) {
-            return dispatch(fetchTeacher(teacherId, date));
+            return dispatch(fetchTeacherSchedule(teacherId, date));
         };
     }
 };

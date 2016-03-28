@@ -5,12 +5,21 @@ var actions = require('../actions/SearchActions');
 var TeachersList = require('./Search/TeachersList.jsx');
 var SearchInput = require('./Search/SearchInput.jsx');
 
-var TeacherListSearch = React.createClass({
+var TeacherListFilter = React.createClass({
     componentWillMount: function () {
         if (! this.props.teachers) {
-            this.props.dispatch(actions.searchTeachers(this.props.location.query.q));
+            this.props.dispatch(actions.fetchTeachersList());
         }
     },
+
+    getInitialState: function() {
+        return {filter: ''};
+    },
+
+    handleFilter: function(newFilter) {
+        this.setState({filter: newFilter});
+    },
+
 
     render: function() {
         let teachers = this.props.teachers;
@@ -23,32 +32,41 @@ var TeacherListSearch = React.createClass({
             )
         }
 
-        if (!teachers || teachers.length == 0) {
+        if (! this.props.teachers) {
             return (
                 <div className="schedule-page">
-                    <h3>Преподаватели не найдены</h3>
+                    <div>Данные загружаются...</div>
                 </div>
+            )
+        }
+
+        if (this.state.filter.length > 0) {
+            let filter = this.state.filter.toLowerCase()
+            teachers = teachers.filter(teacher =>
+                // its very strange indeed, but first_name is actualy surname
+                teacher.first_name.toLowerCase().indexOf(filter) == 0
             )
         }
 
         return (
             <div className="schedule-page">
+                <SearchInput onChange={this.handleFilter} placeholder="Введите фамилию" />
                 <TeachersList teachers={teachers} />
             </div>
         )
     }
 });
 
-TeacherListSearch.propTypes = {
+TeacherListFilter.propTypes = {
     dispatch: React.PropTypes.func.isRequired,
     isFetching: React.PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {
     return {
-        isFetching: state.searchTeacher.isFetching,
-        teachers: state.searchTeacher.data
+        isFetching: state.teachers.isFetching,
+        teachers: state.teachers.data
     }
 }
 
-module.exports = reactRedux.connect(mapStateToProps)(TeacherListSearch);
+module.exports = reactRedux.connect(mapStateToProps)(TeacherListFilter);

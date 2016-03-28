@@ -87,7 +87,7 @@ function lessons(state, action) {
     }
 }
 
-function teachers(state, action) {
+function teacherSchedule(state, action) {
     var baseState = {
             isFetching: false,
             teacher: null,
@@ -98,17 +98,17 @@ function teachers(state, action) {
     state = _.extend(baseState, state);
 
     switch (action.type) {
-        case 'REQUEST_TEACHER':
+        case 'REQUEST_TEACHER_SCHEDULE':
             state.isFetching = true;
             return state;
-        case 'FETCH_TEACHER':
+        case 'FETCH_TEACHER_SCHEDULE':
             state.data = state.data || {};
             state.data[action.response.teacher.id] = action.response.days;
             state.teacher = action.response.teacher;
             state.week = action.response.week;
             state.isFetching = false;
             return state;
-        case 'FAIL_TEACHER':
+        case 'FAIL_TEACHER_SCHEDULE':
             state.errors = action.errors;
             state.isFetching = false;
             return state;
@@ -117,7 +117,7 @@ function teachers(state, action) {
     }
 }
 
-function searchTeacher(state, action) {
+function teachers(state, action) {
     var baseState = {
             isFetching: false,
             data: null,
@@ -201,16 +201,43 @@ function searchGroup(state, action) {
     state = _.extend(baseState, state);
 
     switch (action.type) {
-        case 'REQUEST_GROUPS_LIST':
+        case 'REQUEST_GROUP_SEARCH':
             state.isFetching = true;
             return state;
-        case 'FETCH_GROUPS_LIST':
+        case 'FETCH_GROUP_SEARCH':
             state.data = _.chain(action.response.groups)
                 .sortBy('name')
                 .value();
             state.isFetching = false;
             return state;
-        case 'FAIL_GROUPS_LIST':
+        case 'FAIL_GROUP_SEARCH':
+            state.errors = action.errors;
+            state.isFetching = false;
+            return state;
+        default :
+            return state;
+    }
+}
+
+function searchTeacher(state, action) {
+    var baseState = {
+            isFetching: false,
+            data: null,
+            errors: null
+        };
+    state = _.extend(baseState, state);
+
+    switch (action.type) {
+        case 'REQUEST_TEACHER_SEARCH':
+            state.isFetching = true;
+            return state;
+        case 'FETCH_TEACHER_SEARCH':
+            state.data = _.chain(action.response.groups)
+                .sortBy('first_name')
+                .value();
+            state.isFetching = false;
+            return state;
+        case 'FAIL_TEACHER_SEARCH':
             state.errors = action.errors;
             state.isFetching = false;
             return state;
@@ -224,10 +251,11 @@ const rootReducer = redux.combineReducers({
     faculties,
     groups,
     lessons,
-    teachers,
+    teacherSchedule,
     places,
-    searchTeacher,
+    teachers,
     searchGroup,
+    searchTeacher,
     persist: groupTypeFilter,
     router: routerStateReducer
 });

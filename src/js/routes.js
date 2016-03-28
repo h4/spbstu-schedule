@@ -8,6 +8,7 @@ var React = require('react'),
     Faculty = require('./components/Faculty.jsx'),
     Schedule = require('./components/Schedule.jsx'),
     Teacher = require('./components/Teacher.jsx'),
+    TeacherListFilter = require('./components/TeacherListFilter.jsx'),
     TeacherListSearch = require('./components/TeacherListSearch.jsx'),
     GroupListSearch = require('./components/GroupListSearch.jsx'),
     Place = require('./components/Place.jsx');
@@ -17,11 +18,12 @@ const pathEnum = {
         groups: '/faculty/:facultyId/groups',
         groupScheduleDefault: '/faculty/:facultyId/groups/:groupId',
         groupSchedule: '/faculty/:facultyId/groups/:groupId?date=:date',
-        searchTeacher: '/teachers',
+        teacherList: '/teachers',
         teacherScheduleDefault: '/teachers/:teacherId',
         teacherSchedule: '/teachers/:teacherId?date=:date',
         placeScheduleDefault: '/places/:buildingId/:placeId',
         placeSchedule: '/places/:buildingId/:placeId?date=:date',
+        searchTeacher: '/search/teacher(?q=:q)',
         searchGroup: '/search/groups(?q=:q)'
 };
 
@@ -35,6 +37,7 @@ var routes = (
         <Route path={pathEnum.teacherSchedule} component={Teacher} />
         <Route path={pathEnum.placeScheduleDefault} component={Place} />
         <Route path={pathEnum.placeSchedule} component={Place} />
+        <Route path={pathEnum.teacherList} component={TeacherListFilter} />
         <Route path={pathEnum.searchTeacher} component={TeacherListSearch} />
         <Route path={pathEnum.searchGroup} component={GroupListSearch} />
     </Route>

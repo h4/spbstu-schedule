@@ -68,7 +68,7 @@ function handleRender(req, res) {
                     break;
                 case pathEnum.teacherScheduleDefault:
                     endpoint = `teachers/${params.teacherId}/scheduler${location.search}`;
-                    actionType = 'FETCH_TEACHER';
+                    actionType = 'FETCH_TEACHER_SCHEDULE';
 
                     break;
                 case pathEnum.placeScheduleDefault:
@@ -76,14 +76,19 @@ function handleRender(req, res) {
                     actionType = 'FETCH_PLACE';
 
                     break;
-                case pathEnum.searchTeacher:
+                case pathEnum.teacherList:
                     endpoint = `teachers`;
                     actionType = 'FETCH_TEACHERS_LIST';
 
                     break;
+                case pathEnum.searchTeacher:
+                    endpoint = `search/teachers?q=${encodeURIComponent(location.query.q)}`;
+                    actionType = 'FETCH_TEACHER_SEARCH';
+
+                    break;
                 case pathEnum.searchGroup:
                     endpoint = `search/groups?q=${encodeURIComponent(location.query.q)}`;
-                    actionType = 'FETCH_GROUPS_LIST';
+                    actionType = 'FETCH_GROUP_SEARCH';
 
                     break;
                 default:

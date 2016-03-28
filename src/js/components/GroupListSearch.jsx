@@ -7,18 +7,9 @@ var Link = require('react-router').Link;
 var GroupListSearch = React.createClass({
     componentWillMount: function () {
         if (! this.props.groups) {
-            this.props.dispatch(actions.fetchGroupsList(this.props.location.query.q));
+            this.props.dispatch(actions.searchGroups(this.props.location.query.q));
         }
     },
-
-    getInitialState: function() {
-        return {filter: ''};
-    },
-
-    handleFilter: function(newFilter) {
-        this.setState({filter: newFilter});
-    },
-
 
     render: function() {
         let groups = this.props.groups;
