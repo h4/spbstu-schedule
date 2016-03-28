@@ -23,7 +23,7 @@ var TeacherListSearch = React.createClass({
             )
         }
 
-        if (!teachers || teachers.length == 0) {
+        if (!teachers || teachers.length === 0) {
             return (
                 <div className="schedule-page">
                     <h3>Преподаватели не найдены</h3>

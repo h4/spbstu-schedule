@@ -232,7 +232,7 @@ function searchTeacher(state, action) {
             state.isFetching = true;
             return state;
         case 'FETCH_TEACHER_SEARCH':
-            state.data = _.chain(action.response.groups)
+            state.data = _.chain(action.response.teachers)
                 .sortBy('first_name')
                 .value();
             state.isFetching = false;
