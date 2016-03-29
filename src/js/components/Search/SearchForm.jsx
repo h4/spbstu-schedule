@@ -1,8 +1,7 @@
 'use strict';
 var React = require('react');
-var SearchInput = require('./Search/SearchInput.jsx');
 
-var Search = React.createClass({
+var SearchForm = React.createClass({
 
     handleSearch: function(e) {
         let searchString = this.state.searchString
@@ -44,4 +43,4 @@ var Search = React.createClass({
     }
 });
 
-module.exports = Search;
+module.exports = SearchForm;
