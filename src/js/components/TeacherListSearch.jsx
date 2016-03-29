@@ -1,11 +1,15 @@
 var React = require('react');
-var _ = require('lodash');
 var reactRedux = require('react-redux');
 var actions = require('../actions/SearchActions');
 var TeachersList = require('./Search/TeachersList.jsx');
-var SearchInput = require('./Search/SearchInput.jsx');
+var SearchForm = require('./Search/SearchForm.jsx');
 
 var TeacherListSearch = React.createClass({
+    propTypes: {
+        dispatch: React.PropTypes.func.isRequired,
+        isFetching: React.PropTypes.bool.isRequired
+    },
+
     componentWillMount: function () {
         if (! this.props.teachers) {
             this.props.dispatch(actions.searchTeachers(this.props.location.query.q));
@@ -14,35 +18,27 @@ var TeacherListSearch = React.createClass({
 
     render: function() {
         let teachers = this.props.teachers;
+        let searchResult = ''
 
         if (this.props.isFetching) {
-            return (
-                <div className="schedule-page">
-                    <div>Данные загружаются...</div>
-                </div>
-            )
-        }
-
-        if (!teachers || teachers.length === 0) {
-            return (
-                <div className="schedule-page">
-                    <h3>Преподаватели не найдены</h3>
-                </div>
-            )
+            searchResult = <div>Данные загружаются...</div>
+        } else {
+            if (!teachers || teachers.length === 0) {
+                searchResult = <h3>Преподаватели не найдены</h3>
+            } else {
+                searchResult = <TeachersList teachers={teachers} />
+            }
         }
 
         return (
             <div className="schedule-page">
-                <TeachersList teachers={teachers} />
+                <SearchForm init_searchString={this.props.location.query.q} init_searchType='teacher' />
+                <h3>Результат поиска:</h3>
+                {searchResult}
             </div>
         )
     }
 });
-
-TeacherListSearch.propTypes = {
-    dispatch: React.PropTypes.func.isRequired,
-    isFetching: React.PropTypes.bool.isRequired,
-};
 
 function mapStateToProps(state) {
     return {

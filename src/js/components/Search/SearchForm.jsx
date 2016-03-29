@@ -1,8 +1,6 @@
-'use strict';
 var React = require('react');
 
 var SearchForm = React.createClass({
-
     handleSearch: function(e) {
         let searchString = this.state.searchString
         if (searchString.length == 0) return;
@@ -17,8 +15,8 @@ var SearchForm = React.createClass({
 
     getInitialState: function() {
         return {
-            searchType: 'group',
-            searchString: ''
+            searchType: this.props.init_searchType || 'group',
+            searchString: this.props.init_searchString || ''
         }
     },
 
