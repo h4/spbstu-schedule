@@ -8,7 +8,13 @@ gulp.task('styles', function() {
         .pipe(stylus({
             errors: true
         }))
+        .on('error', handleError)
         .pipe(autoprefixer())
         .pipe(rename('bundle.css'))
         .pipe(gulp.dest('src/assets'));
 });
+
+function handleError(err) {
+    console.log(err.toString());
+    this.emit('end');
+}
