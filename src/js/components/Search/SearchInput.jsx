@@ -32,15 +32,11 @@ var SearchInput = React.createClass({
 
     render: function() {
         return (
-            <form className='search-input' onSubmit={this.handleSubmit}>
-                <span className="icon"><i className="fa fa-search"></i></span>
-                <span className="field">
-                    <input type="text"
-                           value={this.state.value}
-                           onChange={this.handleInput}
-                           placeholder={this.props.placeholder}
-                    />
-                </span>
+            <form className='search-area' onSubmit={this.handleSubmit}>
+                <span className='search-area__title'>Поиск:</span>
+                <input className='search-area__input' type="text" value={this.state.value} onChange={this.handleInput} placeholder={this.props.placeholder} />
+                <button className='search-area__button' type='submit' ><i className="fa fa-search" /></button>
+                <div className='search-type'></div>
             </form>
         )
     }
