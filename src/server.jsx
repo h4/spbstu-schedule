@@ -9,6 +9,8 @@ import Root from './js/containers/Root';
 import { fetchFaculties } from './js/actions/FacultyActions';
 
 import {ReduxRouter} from 'redux-router';
+import { formatPattern } from 'react-router/lib/PatternUtils';
+
 import createHistory from 'history/lib/createMemoryHistory';
 import {reduxReactRouter, match} from 'redux-router/server';
 import {Provider} from 'react-redux';
@@ -16,6 +18,10 @@ import qs from 'query-string';
 import { routes, pathEnum } from './js/routes';
 
 import { callApiFactory } from './js/midleware/api';
+import _ from 'lodash'
+import childProcess from 'child_process'
+import phantomjs from 'phantomjs-prebuilt'
+import temp from 'temp'
 
 const apiRoot = process.env.API_ROOT;
 const callApi = callApiFactory(apiRoot);
@@ -46,10 +52,16 @@ function handleRender(req, res) {
             res.end(500);
         } else {
             let params = routerState.params;
-            let path = routerState.routes[1].path || routerState.routes[0].path;
+            let route = _.last(routerState.routes);
+            let path = route.path;
             let location = routerState.location;
             let endpoint;
             let actionType;
+
+            if (route.renderPdf) {
+                // Send pdf file
+                return renderPdf(req, res, routerState)
+            }
 
             switch (path) {
                 case pathEnum.faculties:
@@ -62,6 +74,7 @@ function handleRender(req, res) {
 
                     break;
                 case pathEnum.groupScheduleDefault:
+                case pathEnum.groupSchedulePrint:
                     endpoint = `scheduler/${params.groupId}${location.search}`;
                     actionType = 'FETCH_LESSONS';
 
@@ -127,6 +140,30 @@ function renderFullPage(html, initialState) {
     return template
         .replace('${html}', html)
         .replace('${initialState}', JSON.stringify(initialState));
+}
+
+function renderPdf(req, res, routerState) {
+    let params = routerState.params;
+    let route = _.last(routerState.routes);
+
+    var pageSize = route.renderPdf.pageSize || 'A4'
+    var fileName = route.renderPdf.fileName || 'ruz.pdf'
+    var tempName = temp.path({suffix: '.pdf'});
+
+    var redirectUrl = req.protocol + '://' + req.get('host') + formatPattern(route.renderPdf.redirect, params)
+
+    try {
+        childProcess.execFile(phantomjs.path, ['pdf.js', redirectUrl, tempName, pageSize])
+        .on('exit', function() {
+            res.sendFile(tempName, fileName, function(err) {
+                fs.unlink(tempName)
+            });
+        })
+    } catch(e) {
+        fs.unlink(tempName);
+        res.status(500);
+        res.end(e.message);
+    }
 }
 
 module.exports = app;

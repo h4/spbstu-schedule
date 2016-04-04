@@ -11,6 +11,7 @@ var React = require('react'),
     TeacherListFilter = require('./components/TeacherListFilter.jsx'),
     TeacherListSearch = require('./components/TeacherListSearch.jsx'),
     GroupListSearch = require('./components/GroupListSearch.jsx'),
+    SchedulePdf = require('./components/Print/SchedulePdf.jsx'),
     Place = require('./components/Place.jsx');
 
 const pathEnum = {
@@ -18,6 +19,8 @@ const pathEnum = {
         groups: '/faculty/:facultyId/groups',
         groupScheduleDefault: '/faculty/:facultyId/groups/:groupId',
         groupSchedule: '/faculty/:facultyId/groups/:groupId?date=:date',
+        groupSchedulePdf: '/faculty/:facultyId/groups/:groupId/pdf',
+        groupSchedulePrint: '/faculty/:facultyId/groups/:groupId/print',
         teacherList: '/teachers',
         teacherScheduleDefault: '/teachers/:teacherId',
         teacherSchedule: '/teachers/:teacherId?date=:date',
@@ -27,12 +30,23 @@ const pathEnum = {
         searchGroup: '/search/groups(?q=:q)'
 };
 
+
+// renderPdf: custom params for server side pdf rendering
+/* renderPdf = {
+    redirect: route-pattern, link to url which will be rendered to pdf
+    pageSize: string, for possible values see pdf.js
+    fileName: name for resulting pdf
+}
+*/
+
 var routes = (
     <Route path={pathEnum.faculties} component={App}>
         <IndexRoute component={FacultyList} />
         <Route path={pathEnum.groups} component={Faculty} />
         <Route path={pathEnum.groupScheduleDefault} component={Schedule} />
         <Route path={pathEnum.groupSchedule} component={Schedule} />
+        <Route path={pathEnum.groupSchedulePrint} component={SchedulePdf} />
+        <Route path={pathEnum.groupSchedulePdf} renderPdf={{redirect: pathEnum.groupSchedulePrint, pageSize: '297mm*210mm'}} />
         <Route path={pathEnum.teacherScheduleDefault} component={Teacher} />
         <Route path={pathEnum.teacherSchedule} component={Teacher} />
         <Route path={pathEnum.placeScheduleDefault} component={Place} />
