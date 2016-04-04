@@ -32,6 +32,7 @@ const pathEnum = {
 
 
 // renderPdf: custom params for server side pdf rendering
+// clean: use clean page for rendering (pdf.html template)
 /* renderPdf = {
     redirect: route-pattern, link to url which will be rendered to pdf
     pageSize: string, for possible values see pdf.js
@@ -45,7 +46,7 @@ var routes = (
         <Route path={pathEnum.groups} component={Faculty} />
         <Route path={pathEnum.groupScheduleDefault} component={Schedule} />
         <Route path={pathEnum.groupSchedule} component={Schedule} />
-        <Route path={pathEnum.groupSchedulePrint} component={SchedulePdf} />
+        <Route path={pathEnum.groupSchedulePrint} component={SchedulePdf} clean />
         <Route path={pathEnum.groupSchedulePdf} renderPdf={{redirect: pathEnum.groupSchedulePrint, pageSize: '297mm*210mm'}} />
         <Route path={pathEnum.teacherScheduleDefault} component={Teacher} />
         <Route path={pathEnum.teacherSchedule} component={Teacher} />

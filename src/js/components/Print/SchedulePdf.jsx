@@ -2,30 +2,18 @@ var React = require('react');
 var _ = require('lodash');
 var reactRedux = require('react-redux');
 var actions = require('../../actions/FacultyActions');
-var Week = require('../Schedule/Week.jsx');
-var LessonsList = require('../Schedule/LessonsList.jsx');
+var LessonsTablePdf = require('../Print/LessonsTablePdf.jsx');
 
 var SchedulePdf = React.createClass({
     componentWillMount: function () {
         var facultyId = this.props.params.facultyId;
         var groupId = this.props.params.groupId;
 
+
         this.date = this.props.query && this.props.query.date;
 
         if (! this.props.lessons || ! this.isCurrentGroup(groupId)) {
             this.props.dispatch(actions.fetchLessons(facultyId, groupId, this.date));
-        }
-    },
-
-    componentDidUpdate: function() {
-        var facultyId = this.props.params.facultyId;
-        var groupId = parseInt(this.props.params.groupId, 10);
-        var location = this.props.location;
-        var date = location.query && location.query.date;
-
-        if (this.date !== date || ! this.isCurrentGroup(groupId)) {
-            this.date = date;
-            this.props.dispatch(actions.fetchLessons(facultyId, groupId, date));
         }
     },
 
@@ -37,13 +25,22 @@ var SchedulePdf = React.createClass({
         }
     },
 
+    resortLessons: function(lessons) {
+        var all = _.flatMap(this.props.lessons.days, day =>
+            _.map(day.lessons, lesson =>
+                lesson.weekday = day.weekday
+            )
+        )
+        console.log(all)
+    },
+
     render: function() {
         var groupId = parseInt(this.props.params.groupId, 10);
         var facultyId = parseInt(this.props.params.facultyId, 10);
         var group = this.props.group;
         var faculty = group && group.faculty;
         var lessons = this.props.lessons && this.props.lessons[groupId];
-        var week = this.props.week;
+        lessons = this.resortLessons(lessons)
 
         if (this.props.isFetching && faculty && group) {
             if (this.isCurrentGroup(groupId)) {
@@ -65,7 +62,7 @@ var SchedulePdf = React.createClass({
 
         }
 
-        if (!faculty || !group || !week) {
+        if (!faculty || !group) {
             return (
                 <div className="schedule-page">
                     <div>Данные загружаются...</div>
@@ -75,13 +72,8 @@ var SchedulePdf = React.createClass({
 
         return (
             <div className="schedule-page">
-                <h2 className="page__h2">{faculty.name}</h2>
-                <h3 className="page__h3">Группа № {group.name}</h3>
-
-                <Week week={week} />
-
-                <LessonsList lessons={lessons} />
-
+                <h3 className="page__h3">{faculty.abbr} Группа № {group.name}</h3>
+                <LessonsTablePdf lessons={lessons} />
             </div>
         )
     },
@@ -96,8 +88,7 @@ function mapStateToProps(state) {
     return {
         isFetching: state.lessons.isFetching,
         group: state.lessons.group,
-        lessons: state.lessons.data,
-        week: state.lessons.week
+        lessons: state.lessons.data
     }
 }
 

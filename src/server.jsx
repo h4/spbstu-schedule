@@ -30,6 +30,7 @@ const app = new Express();
 
 var fs = require('fs');
 var template = fs.readFileSync('./index.html', {encoding: 'utf-8'});
+var cleanTemplate = fs.readFileSync('./pdf.html', {encoding: 'utf-8'});
 
 app.use('/assets', Express.static('assets'));
 app.use('/img', Express.static('img'));
@@ -60,7 +61,7 @@ function handleRender(req, res) {
 
             if (route.renderPdf) {
                 // Send pdf file
-                return renderPdf(req, res, routerState)
+                return sendPdf(req, res, routerState)
             }
 
             switch (path) {
@@ -125,7 +126,11 @@ function handleRender(req, res) {
                         const finalState = store.getState();
 
                         // Send the rendered page back to the client
-                        res.send(renderFullPage(html, finalState));
+                        if(route.clean) {
+                            res.send(renderCleanPage(html, finalState));
+                        } else {
+                            res.send(renderFullPage(html, finalState));
+                        }
                         res.end('');
                     } catch (e) {
                         res.status(500);
@@ -142,7 +147,13 @@ function renderFullPage(html, initialState) {
         .replace('${initialState}', JSON.stringify(initialState));
 }
 
-function renderPdf(req, res, routerState) {
+function renderCleanPage(html, initialState) {
+    return cleanTemplate
+        .replace('${html}', html)
+        .replace('${initialState}', JSON.stringify(initialState));
+}
+
+function sendPdf(req, res, routerState) {
     let params = routerState.params;
     let route = _.last(routerState.routes);
 
