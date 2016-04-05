@@ -1,5 +1,6 @@
 var React = require('react');
 var ScheduleTableRow = require('./ScheduleTableRow.jsx');
+var _ = require('lodash');
 
 var LessonsTablePdf = React.createClass({
     render: function () {
@@ -12,16 +13,18 @@ var LessonsTablePdf = React.createClass({
         return (
             <table className="schedule-printable">
             <thead>
-                <th>&nbsp;</th>
-                <th>Пн</th>
-                <th>Вт</th>
-                <th>Ср</th>
-                <th>Чт</th>
-                <th>Пт</th>
-                <th>Сб</th>
+                <tr>
+                    <th className="time_th">время</th>
+                    <th>понедельник</th>
+                    <th>вторник</th>
+                    <th>среда</th>
+                    <th>четверг</th>
+                    <th>пятница</th>
+                    <th>суббота</th>
+                </tr>
             </thead>
             <tbody>
-                {lessons.map(row => <ScheduleTableRow key={row.startTime} lessons={row} />)}
+                {_.map(lessons, (row) => <ScheduleTableRow time={row[0].time_start} key={row[0].time_start} lessons={row} />)}
             </tbody>
             </table>
         )

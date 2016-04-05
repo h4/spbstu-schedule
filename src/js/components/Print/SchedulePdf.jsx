@@ -26,12 +26,15 @@ var SchedulePdf = React.createClass({
     },
 
     resortLessons: function(lessons) {
-        var all = _.flatMap(this.props.lessons.days, day =>
-            _.map(day.lessons, lesson =>
-                lesson.weekday = day.weekday
+        return _.chain(lessons)
+            .flatMap(day =>
+                _.map(day.lessons, lesson => {lesson.weekday = day.weekday; return lesson} )
             )
-        )
-        console.log(all)
+            .orderBy(lesson => lesson.weekday)
+            .groupBy(lesson => lesson.time_start)
+            .sortBy(lesson => lesson[0].time_start)
+            .value()
+
     },
 
     render: function() {

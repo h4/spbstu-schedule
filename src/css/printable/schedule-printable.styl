@@ -1,5 +1,50 @@
 .schedule-printable
-    border: none;
+    border-collapse: collapse;
+    border: black solid 1px;
     
     th
-        width: 14%;
+        border: #ccc solid 1px;
+        width: 16%;
+        font-size: 12pt
+        padding 10px 0
+        background #eee
+        
+    .time_th
+        width: 4%;
+        
+    .time_td
+        color: #777;
+        font-size: 24pt;
+        padding: 10px
+        text-align: right;
+        
+    td
+        border: #ccc solid 1px;
+        padding: 5px;
+        vertical-align: top;
+        position: relative;
+
+    .cell
+        display: flex;
+        flex-direction: column
+
+    .subject
+        font-size 18px
+        line-height 24px
+        margin-bottom 5px
+        color #325A46
+    .type
+        font-size: 12pt
+        font-style: italic
+        color: #888
+    .teacher
+        font-size: 12pt
+        color: #888
+        margin-top 5px
+        margin-bottom 20px
+    .place
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+
+            

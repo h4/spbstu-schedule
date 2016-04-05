@@ -54,7 +54,7 @@ function handleRender(req, res) {
         } else {
             let params = routerState.params;
             let route = _.last(routerState.routes);
-            let path = route.path;
+            let path = route.path || '/';
             let location = routerState.location;
             let endpoint;
             let actionType;

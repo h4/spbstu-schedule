@@ -31,7 +31,7 @@ var Faculty = React.createClass({
             return _.chain(groups)
                 .filter(x => this.props.filter === 'all' || x.type === this.props.filter)
                 .sortBy('level')
-                .sortByOrder([ this.getGroupNum, this.getSubgroupNum ])
+                .orderBy([ this.getGroupNum, this.getSubgroupNum ])
                 .groupBy('level')
                 .value();
         } else {
