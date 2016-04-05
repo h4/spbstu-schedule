@@ -5,6 +5,7 @@ var actions = require('../actions/FacultyActions');
 var Week = require('./Schedule/Week.jsx');
 var Pager = require('./Schedule/Pager.jsx');
 var LessonsList = require('./Schedule/LessonsList.jsx');
+var Link = require('react-router').Link;
 
 var Schedule = React.createClass({
     componentWillMount: function () {
@@ -77,6 +78,9 @@ var Schedule = React.createClass({
 
         return (
             <div className="schedule-page">
+                <a href={`/faculty/${faculty.id}/groups/${group.id}/pdf`} className="printBtn">
+                    <i className="fa fa-print" /> Печать
+                </a>
                 <h2 className="page__h2">{faculty.name}</h2>
                 <h3 className="page__h3">Группа № {group.name}</h3>
 
