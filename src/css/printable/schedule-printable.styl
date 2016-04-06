@@ -1,5 +1,6 @@
 .schedule-printable
     border-collapse: collapse;
+    height: 100%
     border: black solid 1px;
     
     th
@@ -20,13 +21,17 @@
         
     td
         border: #ccc solid 1px;
-        padding: 5px;
         vertical-align: top;
-        position: relative;
+        margin 0
+        padding 0
 
     .cell
         display: flex;
         flex-direction: column
+        position: relative
+        margin 0
+        padding: 5px;
+        height: 100%
 
     .subject
         font-size 18px
@@ -40,12 +45,17 @@
     .teacher
         font-size: 12pt
         color: #888
-        margin-top 5px
-        margin-bottom 20px
+        margin 5px 0 20px 0
+        padding 0
+        list-style-type none
+        font-size 11pt
     .place
-        position: absolute;
-        bottom: 5px;
-        right: 5px;
+        position: absolute
+        bottom: 5px
+        right: 5px
+        margin 0
+        padding 0
+        list-style-type none
 
 
 $btn-color = #46c765

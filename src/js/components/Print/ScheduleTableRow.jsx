@@ -13,9 +13,8 @@ var ScheduleTableRow = React.createClass({
         let lessons = this.props.lessons;
         let time = this.props.time;
 
-        var days = _.fill([], null, 0, 5)
-        _.forEach(lessons, l => days[l.weekday - 1] = l)
-        var cells = _.times(6, i => <Cell key={i} lesson={days[i]} />)
+        var days = _.groupBy(lessons, 'weekday')
+        var cells = _.times(6, i => <Cell key={i} lessons={days[i + 1]} />)
         
         return (
             <tr>
