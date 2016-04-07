@@ -54,7 +54,7 @@ var Lesson = React.createClass({
         var lesson = this.props.lesson
         return <div className='cell'>
             <div className='subject'>{lesson.subject_short}</div>
-            <div className='type'>{lesson.typeObj.name}</div>
+            <div className='type'>{lesson.typeObj.abbr}</div>
             <Teachers value={lesson.teachers} />
             <Place value={lesson.auditories} />
         </div>
@@ -64,6 +64,7 @@ var Lesson = React.createClass({
 var Cell = React.createClass({
     mergeSubgroups: function(a, b) {
         a.teachers = _.unionBy(a.teachers, b.teachers, 'id')
+        a.auditories = _.unionBy(a.auditories, b.auditories, 'id')
         return a
     },
 
@@ -72,11 +73,7 @@ var Cell = React.createClass({
 
         var canMerge = _.every(lessons, a => {
             var b = lessons[0]
-            return a.subject === b.subject &&
-                a.typeObj.name === b.typeObj.name &&
-                ((a.auditories.length === 1 && b.auditories.length === 1 && a.auditories[0].id === b.auditories[0].id) ||
-                    (a.auditories.length === 0 && b.auditories.length === 0)
-                )
+            return a.subject === b.subject && a.typeObj.name === b.typeObj.name
         })
         if (canMerge) {
             return [_.reduce(lessons, this.mergeSubgroups)]
