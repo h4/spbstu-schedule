@@ -42,12 +42,26 @@ var Place = React.createClass({
         return result
     },
 
+    sizeClass: function(placeName) {
+        if (placeName.length > 16) {
+            return 'small'
+        } else {
+            return null
+        }
+    },
+
     render: function() {
         var places = this.props.value
         if(!places || places.length == 0) return <div className='place' />;
 
         return <ul className='place'>
-            {_.map(places, p => <li key={this.placeName(p)}>{this.placeName(p)}</li>)}
+            {_.map(places, p => {
+                var placeName = this.placeName(p)
+                var sizeClass = this.sizeClass(placeName)
+                return <li className={sizeClass} key={placeName}>
+                    {placeName}
+                </li>
+            })}
         </ul>
     }
 })
