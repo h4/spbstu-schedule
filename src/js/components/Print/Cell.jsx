@@ -12,7 +12,10 @@ var subgroupName = function(subgroup) {
 
 var Teachers = React.createClass({
     teacherName: function(teacher) {
-        var result = teacher.first_name + ' ' + _.first(teacher.middle_name) + '. ' + _.first(teacher.last_name) + '.'
+        var result = teacher.first_name + ' ' + _.first(teacher.middle_name) + '.'
+        if(teacher.last_name && teacher.last_name.length > 0) {
+            result = result + ' ' + _.first(teacher.last_name) + '.'
+        }
         if(teacher.subgroup) {
             result = result + ' (' + subgroupName(teacher.subgroup) + ')'
         }
@@ -54,8 +57,8 @@ var Lesson = React.createClass({
         var lesson = this.props.lesson
         return <div className='cell'>
             <div className='subject'>{lesson.subject_short}</div>
-            <div className='type'>{lesson.typeObj.abbr}</div>
             <Teachers value={lesson.teachers} />
+            <div className='type'>{lesson.typeObj.abbr}</div>
             <Place value={lesson.auditories} />
         </div>
     }
