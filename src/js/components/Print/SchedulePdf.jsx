@@ -3,15 +3,24 @@ var _ = require('lodash');
 var reactRedux = require('react-redux');
 var actions = require('../../actions/FacultyActions');
 var LessonsTablePdf = require('../Print/LessonsTablePdf.jsx');
-var dateUtils = require('../../utils/date')
+var du = require('../../utils/date')
 
 var SchedulePdf = React.createClass({
     componentWillMount: function () {
+        if (this.props.data) return;
         var groupId = this.props.params.groupId;
+        
+        var w = this.weeks()
+        this.props.dispatch(actions.fetchWeeks(groupId, [du.qString(w.current), du.qString(w.next)]));
+    },
 
-        if (!this.props.data) {
-            this.props.dispatch(actions.fetchWeeks(groupId, ['2016-4-4', '2016-4-11']));
-        }
+    weeks: function() {
+        var location = this.props.location;
+        var currentWeekString = location.query && location.query.date;
+        var currentWeek = du.getWeek(currentWeekString)
+        var nextWeek = currentWeek.clone().add(1, 'weeks')
+
+        return {current: currentWeek, next: nextWeek}
     },
 
     resortLessons: function(lessons) {
@@ -31,9 +40,10 @@ var SchedulePdf = React.createClass({
         var groupId = parseInt(this.props.params.groupId, 10);
         var group = _.get(this.props.data, [groupId, 'group']);
         var faculty = group && group.faculty;
+        var dateString = du.dString(date)
 
-        var week = _.get(this.props, ['data', groupId, 'weeks', date, 'week']);
-        var lessons = this.lessonsByDate(groupId, date)
+        var week = _.get(this.props, ['data', groupId, 'weeks', dateString, 'week']);
+        var lessons = this.lessonsByDate(groupId, dateString)
         
         if(faculty && group && lessons && week) {
             return {
@@ -55,8 +65,10 @@ var SchedulePdf = React.createClass({
     },
 
     render: function() {
-        var data1 = this.extract('2016.04.04')
-        var data2 = this.extract('2016.04.11')
+        var w = this.weeks()
+
+        var data1 = this.extract(w.current)
+        var data2 = this.extract(w.next)
         
         var data = _.merge(data1, data2)
 

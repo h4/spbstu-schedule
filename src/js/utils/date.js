@@ -48,12 +48,21 @@ function humanDate(date) {
     return moment(date, "YYYY.MM.DD").format("DD MMMM");
 }
 
-function getDateString(qString) {
-    if (qString) {
-        return moment(qString, 'YYYY-M-D').format('YYYY.MM.DD')
+
+function getWeek(qString) {
+    if(qString) {
+        return moment(qString, 'YYYY-M-D')
     } else {
-        return moment().day("Понедельник").format('YYYY.MM.DD')
+        return moment().startOf('week')
     }
+}
+
+function qString(m) {
+    return m.format('YYYY-M-D')
+}
+
+function dString(m) {
+    return m.format('YYYY.MM.DD')
 }
 
 module.exports = {
@@ -62,5 +71,7 @@ module.exports = {
     getPrevWeekStart: getPrevWeekStart,
     getPrevWeekStartString: getPrevWeekStartString,
     humanDate: humanDate,
-    getDateString
+    getWeek,
+    qString,
+    dString
 };
