@@ -8,6 +8,9 @@ var FAIL_GROUPS = 'FETCH_GROUPS';
 var REQUEST_LESSONS = 'REQUEST_LESSONS';
 var FETCH_LESSONS = 'FETCH_LESSONS';
 var FAIL_LESSONS = 'FETCH_LESSONS';
+var REQUEST_WEEK = 'REQUEST_WEEK';
+var FETCH_WEEK = 'FETCH_WEEK';
+var FAIL_WEEK = 'FETCH_WEEK';
 
 function fetchFaculties() {
     return {
@@ -44,6 +47,18 @@ function fetchLessons(groupId, date) {
     }
 }
 
+function fetchWeek(groupId, date) {
+    var endpoint = `scheduler/${groupId}?date=${date}`;
+
+    return {
+        callApi: {
+            types: [REQUEST_WEEK, FETCH_WEEK, FAIL_WEEK],
+            endpoint
+        }
+    }
+}
+
+
 function setGroupTypeFilter(filter) {
     return {
         type: 'SET_GROUPTYPE_FILTER',
@@ -74,5 +89,12 @@ module.exports = {
         return function(dispatch) {
             return dispatch(setGroupTypeFilter(filter));
         };
+    },
+
+    fetchWeeks: function(groupId, weeks) {
+        return function(dispatch) {
+            var promises = weeks.map(w => dispatch(fetchWeek(groupId, w)))
+            return Promise.all(promises)
+        }
     }
 };

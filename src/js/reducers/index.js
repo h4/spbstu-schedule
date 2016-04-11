@@ -87,6 +87,37 @@ function lessons(state, action) {
     }
 }
 
+function weeks(state, action) {
+    var baseState =  {
+        isFetching: false,
+        data: null,
+        errors: null
+    };
+    state = _.extend(baseState, state);
+
+    switch (action.type) {
+        case 'REQUEST_WEEK':
+            state.isFetching = true;
+            return state;
+        case 'FETCH_WEEK':
+            state.data = _.cloneDeep(state.data)
+            _.setWith(state, ['data', action.response.group.id, 'weeks', action.response.week.date_start], {
+                week: action.response.week,
+                days: action.response.days
+            }, Object)
+            _.set(state, ['data', action.response.group.id, 'group'], action.response.group)
+
+            state.isFetching = false;
+            return state;
+        case 'FAIL_WEEK':
+            state.errors = action.errors;
+            state.isFetching = false;
+            return state;
+        default :
+            return state;
+    }
+}
+
 function teacherSchedule(state, action) {
     var baseState = {
             isFetching: false,
@@ -251,6 +282,7 @@ const rootReducer = redux.combineReducers({
     faculties,
     groups,
     lessons,
+    weeks,
     teacherSchedule,
     places,
     teachers,

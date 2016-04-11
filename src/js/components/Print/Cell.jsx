@@ -79,34 +79,20 @@ var Lesson = React.createClass({
 })
 
 var Cell = React.createClass({
-    mergeSubgroups: function(a, b) {
-        a.teachers = _.unionBy(a.teachers, b.teachers, 'id')
-        a.auditories = _.unionBy(a.auditories, b.auditories, 'id')
-        return a
-    },
 
-    mergeSubgroupsIfPossible: function(lessons) {
-        if (lessons.length < 2) return lessons;
-
-        var canMerge = _.every(lessons, a => {
-            var b = lessons[0]
-            return a.subject === b.subject && a.typeObj.name === b.typeObj.name
-        })
-        if (canMerge) {
-            return [_.reduce(lessons, this.mergeSubgroups)]
-        } else {
-            return lessons
+    weekClass: function() {
+        if(this.props.odd) {
+            return 'odd_week'
         }
+        return null
     },
 
     render: function () {
         var lessons = this.props.lessons
-        if(!lessons || lessons.length == 0) return <td>&nbsp;</td>;
+        if(!lessons || lessons.length == 0) return <td rowSpan={this.props.merge ? '2' : null}>&nbsp;</td>;
 
-        lessons = this.mergeSubgroupsIfPossible(lessons)
-
-        return <td>
-            {_.map(lessons, l => <Lesson lesson={l} />)}
+        return <td className={this.weekClass()} rowSpan={this.props.merge ? '2' : null}>
+            {_.map(lessons, l => <Lesson key={l} lesson={l} />)} 
         </td>
     }
 });

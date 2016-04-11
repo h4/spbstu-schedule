@@ -1,17 +1,19 @@
 .schedule-printable
-    border-collapse: collapse;
     height: 100%
-    border: black solid 1px;
+    border: #ccc solid 1px;
+    border-spacing: 0;
     
     th
-        border: #ccc solid 1px;
         width: 16%;
         font-size: 12pt
         padding 10px 0
         background #eee
+        border: #ddd solid 1px;
         
     .time_th
         width: 4%;
+    .week_th
+        width: 2%;
         
     .time_td
         color: #777;
@@ -19,8 +21,15 @@
         padding: 5px
         text-align: center;
         
+    .week_td
+        min-height: 1em;
+        font-size: 14pt;
+        vertical-align: middle;
+        text-align: center;
+        padding: 0.5em 0
+
     td
-        border: #ccc solid 1px;
+        border: #ddd solid 1px;
         vertical-align: top;
         margin 0
         padding 0
@@ -30,6 +39,8 @@
         margin 0
         padding: 5px;
         height: 100%
+    .odd_week
+        background: #eee
 
     .subject
         font-size 18px
@@ -52,7 +63,6 @@
         left: 5px
     .small
         font-size: 10pt
-            
     .place
         font-size: 12pt
         position: absolute

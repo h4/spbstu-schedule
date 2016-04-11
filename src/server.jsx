@@ -75,10 +75,11 @@ function handleRender(req, res) {
 
                     break;
                 case pathEnum.groupScheduleDefault:
-                case pathEnum.groupSchedulePrint:
                     endpoint = `scheduler/${params.groupId}${location.search}`;
                     actionType = 'FETCH_LESSONS';
 
+                    break;
+                case pathEnum.groupSchedulePrint:
                     break;
                 case pathEnum.teacherScheduleDefault:
                     endpoint = `teachers/${params.teacherId}/scheduler${location.search}`;
@@ -110,35 +111,42 @@ function handleRender(req, res) {
                     res.end('404');
             }
 
-            callApi(endpoint)
-                .then((response) => {
-                    store.dispatch({
-                        type: actionType,
-                        response
-                    });
+            if (endpoint) {
+                callApi(endpoint)
+                    .then((response) => {
+                        store.dispatch({
+                            type: actionType,
+                            response
+                        });
 
-                    try {
-                        const html = renderToString(
-                            <Root store={store}/>
-                        );
-
-                        // Grab the initial state from our Redux store
-                        const finalState = store.getState();
-
-                        // Send the rendered page back to the client
-                        if(route.clean) {
-                            res.send(renderCleanPage(html, finalState));
-                        } else {
-                            res.send(renderFullPage(html, finalState));
-                        }
-                        res.end('');
-                    } catch (e) {
-                        res.status(500);
-                        res.end(e.message);
-                    }
+                        render(store, route, res)
                 });
+            } else {
+                render(store, route, res)
+            }
+    }}));
+}
+
+function render(store, route, res) {
+    try {
+        const html = renderToString(
+            <Root store={store}/>
+        );
+
+        // Grab the initial state from our Redux store
+        const finalState = store.getState();
+
+        // Send the rendered page back to the client
+        if(route.clean) {
+            res.send(renderCleanPage(html, finalState));
+        } else {
+            res.send(renderFullPage(html, finalState));
         }
-    }));
+        res.end('');
+    } catch (e) {
+        res.status(500);
+        res.end(e.message);
+    }
 }
 
 function renderFullPage(html, initialState) {
