@@ -94,7 +94,7 @@ module.exports = {
     fetchWeeks: function(groupId, weeks) {
         return function(dispatch) {
             var promises = weeks.map(w => dispatch(fetchWeek(groupId, w)))
-            return Promise.all(promises)
+            return Promise.all(promises).then(() => dispatch({type: 'STOP_WEEK_FETCHING'}))
         }
     }
 };

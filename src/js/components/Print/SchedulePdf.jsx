@@ -76,6 +76,13 @@ var SchedulePdf = React.createClass({
         )
     },
 
+    componentDidUpdate: function() {
+        if(!this.props.isFetching) {
+            //mark page as ready for rendering, readed by phantomjs pdf.js script
+            window.readyForPdfRendering = true
+        }
+    },
+
     propTypes: {
         dispatch: React.PropTypes.func.isRequired,
         isFetching: React.PropTypes.bool.isRequired,

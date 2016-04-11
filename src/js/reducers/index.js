@@ -107,10 +107,12 @@ function weeks(state, action) {
             }, Object)
             _.set(state, ['data', action.response.group.id, 'group'], action.response.group)
 
-            state.isFetching = false;
             return state;
         case 'FAIL_WEEK':
             state.errors = action.errors;
+            state.isFetching = false;
+            return state;
+        case 'STOP_WEEK_FETCHING':
             state.isFetching = false;
             return state;
         default :
