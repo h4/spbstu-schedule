@@ -66,7 +66,7 @@ var ScheduleTeacherTable = React.createClass({
         return (
             <div className="schedule-page">
                 <h3 className="page__h3">{data.teacher.full_name}, расписание с {du.humanDate(this.props.currentWeek)} по {du.humanDate(this.props.nextWeek.clone().add(6, 'days'))}</h3>
-                <LessonsTablePdf ref='table' lessons={data.weeks}  />
+                <LessonsTablePdf ref='table' lessons={data.weeks} showGroups />
             </div>
         )
     },

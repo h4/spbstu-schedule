@@ -16,7 +16,7 @@ var LessonsTablePdf = React.createClass({
         odd = _.mapKeys(odd, e => e[0].time_start)
 
         var rows = _.map(hours, (hour) => {
-            return getRows(even[hour], odd[hour], hour)
+            return getRows(even[hour], odd[hour], hour, this.props.showGroups)
         })
         rows = _.flatten(rows)
         return (

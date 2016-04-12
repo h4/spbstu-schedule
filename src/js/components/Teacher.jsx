@@ -54,6 +54,10 @@ var Teacher = React.createClass({
 
         return (
             <div className="schedule-page">
+                <a href={`/teachers/${teacher.id}/pdf`} className="printBtn">
+                    <i className="fa fa-print" /> Печать
+                </a>
+
                 <h2 className="page__h2">{teacher.full_name}</h2>
 
                 <Week week={week} />

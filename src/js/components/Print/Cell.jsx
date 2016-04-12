@@ -32,6 +32,17 @@ var Teachers = React.createClass({
     }
 })
 
+var Groups = React.createClass({
+    render: function() {
+        var groups = this.props.value
+        if(!groups || groups.length == 0) return <div className='teacher' />;
+
+        return <ul className='teacher'>
+            {_.map(groups, g => <li key={g.name}>{g.name}</li>)}
+        </ul>
+    }
+})
+
 var Place = React.createClass({
     placeName: function(place) {
         var building = place.building.abbr || ''
@@ -71,7 +82,7 @@ var Lesson = React.createClass({
         var lesson = this.props.lesson
         return <div className='cell'>
             <div className='subject'>{lesson.subject_short}</div>
-            <Teachers value={lesson.teachers} />
+            {this.props.showGroups ? <Groups value={lesson.groups} /> : <Teachers value={lesson.teachers} />}
             <div className='type'>{lesson.typeObj.abbr}</div>
             <Place value={lesson.auditories} />
         </div>
@@ -92,7 +103,7 @@ var Cell = React.createClass({
         if(!lessons || lessons.length == 0) return <td rowSpan={this.props.merge ? '2' : null}>&nbsp;</td>;
 
         return <td className={this.weekClass()} rowSpan={this.props.merge ? '2' : null}>
-            {_.map(lessons, (l, i) => <Lesson key={i} lesson={l} />)} 
+            {_.map(lessons, (l, i) => <Lesson key={i} lesson={l} showGroups={this.props.showGroups} />)} 
         </td>
     }
 });

@@ -45,7 +45,7 @@ function mergeSubgroups (a, b) {
 }
 
 
-function getRows(lessonsEven, lessonsOdd, time) {
+function getRows(lessonsEven, lessonsOdd, time, showGroups) {
     lessonsEven = lessonsEven || []
     lessonsOdd = lessonsOdd || []
 
@@ -55,12 +55,12 @@ function getRows(lessonsEven, lessonsOdd, time) {
     lessonsEven = _.mapValues(lessonsEven, x => mergeSubgroupsIfPossible(x))
     lessonsOdd = _.mapValues(lessonsOdd, x => mergeSubgroupsIfPossible(x))
 
-    var even_cells = _.times(6, i => <Cell key={i} lessons={lessonsEven[i + 1]} merge={canMerge(lessonsEven[i + 1], lessonsOdd[i + 1])} />)
+    var even_cells = _.times(6, i => <Cell key={i} lessons={lessonsEven[i + 1]} merge={canMerge(lessonsEven[i + 1], lessonsOdd[i + 1])} showGroups={showGroups} />)
     var odd_cells = _.map(even_cells, (c, i) => {
         if (c.props.merge) {
             return null
         } else {
-            return <Cell key={7 + i} lessons={lessonsOdd[i + 1]} odd />
+            return <Cell key={7 + i} lessons={lessonsOdd[i + 1]} odd showGroups={showGroups} />
         }
     })
     odd_cells = _.filter(odd_cells, _.isObject)
