@@ -22,7 +22,7 @@ const pathEnum = {
         groupSchedule: '/faculty/:facultyId/groups/:groupId?date=:date',
         groupSchedulePdf: '/faculty/:facultyId/groups/:groupId/pdf',
         groupSchedulePrint: '/faculty/:facultyId/groups/:groupId/print',
-        teacherList: '/teachers',
+        //teacherList: '/teachers',
         teacherScheduleDefault: '/teachers/:teacherId',
         teacherSchedule: '/teachers/:teacherId?date=:date',
         teacherSchedulePrint: '/teachers/:teacherId/print',
@@ -57,7 +57,7 @@ var routes = (
         <Route path={pathEnum.teacherSchedule} component={Teacher} />
         <Route path={pathEnum.placeScheduleDefault} component={Place} />
         <Route path={pathEnum.placeSchedule} component={Place} />
-        <Route path={pathEnum.teacherList} component={TeacherListFilter} />
+        {/*<Route path={pathEnum.teacherList} component={TeacherListFilter} />*/}
         <Route path={pathEnum.searchTeacher} component={TeacherListSearch} />
         <Route path={pathEnum.searchGroup} component={GroupListSearch} />
     </Route>

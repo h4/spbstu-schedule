@@ -92,11 +92,11 @@ function handleRender(req, res) {
                     actionType = 'FETCH_PLACE';
 
                     break;
-                case pathEnum.teacherList:
+                /*case pathEnum.teacherList:
                     endpoint = `teachers`;
                     actionType = 'FETCH_TEACHERS_LIST';
 
-                    break;
+                    break;*/
                 case pathEnum.searchTeacher:
                     endpoint = `search/teachers?q=${encodeURIComponent(location.query.q)}`;
                     actionType = 'FETCH_TEACHER_SEARCH';
