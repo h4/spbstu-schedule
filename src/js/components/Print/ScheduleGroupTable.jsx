@@ -51,6 +51,29 @@ var ScheduleGroupTable = React.createClass({
         return lessons
     },
 
+    from: function() {
+        var cw = this.props.currentWeek
+        var dateString = du.dString(cw)
+        var week = _.get(this.props, ['data', 'groups', this.props.groupId, 'weeks', dateString, 'week']);
+        var result = du.humanDate(cw)
+        if(week) {
+            result += ' ' + (week.is_odd ? '(нечётная неделя)' : '(чётная неделя)')
+        }
+        return result
+    },
+    to: function() {
+        var nw = this.props.nextWeek
+        
+        var dateString = du.dString(nw)
+        var week = _.get(this.props, ['data', 'groups', this.props.groupId, 'weeks', dateString, 'week']);
+        var result = du.humanDate(nw.clone().add(6, 'days'))
+        if(week) {
+            result += ' ' + (week.is_odd ? '(нечётная неделя)' : '(чётная неделя)')
+        }
+        return result
+
+    },
+
     render: function() {
         var data1 = this.extract(this.props.currentWeek)
         var data2 = this.extract(this.props.nextWeek)
@@ -67,7 +90,7 @@ var ScheduleGroupTable = React.createClass({
 
         return (
             <div className="schedule-page">
-                <h3 className="page__h3">{data.faculty.abbr} Группа № {data.group.name} расписание с {du.humanDate(this.props.currentWeek)} по {du.humanDate(this.props.nextWeek.clone().add(6, 'days'))}</h3>
+                <h3 className="page__h3">{data.faculty.abbr} Группа № {data.group.name} расписание с {this.from()} по {this.to()}</h3>
                 <LessonsTablePdf ref='table' lessons={data.weeks}  />
             </div>
         )
