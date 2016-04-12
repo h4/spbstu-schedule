@@ -8,9 +8,6 @@ var FAIL_GROUPS = 'FETCH_GROUPS';
 var REQUEST_LESSONS = 'REQUEST_LESSONS';
 var FETCH_LESSONS = 'FETCH_LESSONS';
 var FAIL_LESSONS = 'FETCH_LESSONS';
-var REQUEST_WEEK = 'REQUEST_WEEK';
-var FETCH_WEEK = 'FETCH_WEEK';
-var FAIL_WEEK = 'FETCH_WEEK';
 
 function fetchFaculties() {
     return {
@@ -47,17 +44,27 @@ function fetchLessons(groupId, date) {
     }
 }
 
-function fetchWeek(groupId, date) {
+function fetchGroupWeek(groupId, date) {
     var endpoint = `scheduler/${groupId}?date=${date}`;
 
     return {
         callApi: {
-            types: [REQUEST_WEEK, FETCH_WEEK, FAIL_WEEK],
+            types: ['REQUEST_GROUP_WEEK', 'FETCH_GROUP_WEEK', 'FAIL_GROUP_WEEK'],
             endpoint
         }
     }
 }
 
+function fetchTeacherWeek(teacherId, date) {
+    var endpoint = `teachers/${teacherId}/scheduler?date=${date}`;
+
+    return {
+        callApi: {
+            types: ['REQUEST_TEACHER_WEEK', 'FETCH_TEACHER_WEEK', 'FAIL_TEACHER_WEEK'],
+            endpoint
+        }
+    }
+}
 
 function setGroupTypeFilter(filter) {
     return {
@@ -91,10 +98,17 @@ module.exports = {
         };
     },
 
-    fetchWeeks: function(groupId, weeks) {
+    fetchGroupWeeks: function(groupId, weeks) {
         return function(dispatch) {
-            var promises = weeks.map(w => dispatch(fetchWeek(groupId, w)))
-            return Promise.all(promises).then(() => dispatch({type: 'STOP_WEEK_FETCHING'}))
+            var promises = weeks.map(w => dispatch(fetchGroupWeek(groupId, w)))
+            return Promise.all(promises).then(() => dispatch({type: 'STOP_GROUP_WEEK_FETCHING'}))
+        }
+    },
+
+    fetchTeacherWeeks: function(teacherId, weeks) {
+        return function(dispatch) {
+            var promises = weeks.map(w => dispatch(fetchTeacherWeek(teacherId, w)))
+            return Promise.all(promises).then(() => dispatch({type: 'STOP_TEACHER_WEEK_FETCHING'}))
         }
     }
 };

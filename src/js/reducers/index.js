@@ -96,23 +96,35 @@ function weeks(state, action) {
     state = _.extend(baseState, state);
 
     switch (action.type) {
-        case 'REQUEST_WEEK':
+        case 'REQUEST_GROUP_WEEK':
+        case 'REQUEST_TEACHER_WEEK':
             state.isFetching = true;
             return state;
-        case 'FETCH_WEEK':
+        case 'FETCH_GROUP_WEEK':
             state.data = _.cloneDeep(state.data)
-            _.setWith(state, ['data', action.response.group.id, 'weeks', action.response.week.date_start], {
+            _.setWith(state, ['data', 'groups', action.response.group.id, 'weeks', action.response.week.date_start], {
                 week: action.response.week,
                 days: action.response.days
             }, Object)
-            _.set(state, ['data', action.response.group.id, 'group'], action.response.group)
+            _.set(state, ['data', 'groups', action.response.group.id, 'group'], action.response.group)
 
             return state;
-        case 'FAIL_WEEK':
+        case 'FETCH_TEACHER_WEEK':
+            state.data = _.cloneDeep(state.data)
+            _.setWith(state, ['data', 'teachers', action.response.teacher.id, 'weeks', action.response.week.date_start], {
+                week: action.response.week,
+                days: action.response.days
+            }, Object)
+            _.set(state, ['data', 'teachers', action.response.teacher.id, 'teacher'], action.response.teacher)
+
+            return state;
+        case 'FAIL_GROUP_WEEK':
+        case 'FAIL_TEACHER_WEEK':
             state.errors = action.errors;
             state.isFetching = false;
             return state;
-        case 'STOP_WEEK_FETCHING':
+        case 'STOP_GROUP_WEEK_FETCHING':
+        case 'STOP_TEACHER_WEEK_FETCHING':
             state.isFetching = false;
             return state;
         default :

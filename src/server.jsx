@@ -80,6 +80,7 @@ function handleRender(req, res) {
 
                     break;
                 case pathEnum.groupSchedulePrint:
+                case pathEnum.teacherSchedulePrint:
                     break;
                 case pathEnum.teacherScheduleDefault:
                     endpoint = `teachers/${params.teacherId}/scheduler${location.search}`;

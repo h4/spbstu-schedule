@@ -6,11 +6,11 @@ var actions = require('../../actions/FacultyActions');
 var LessonsTablePdf = require('../Print/LessonsTablePdf.jsx');
 var du = require('../../utils/date')
 
-var ScheduleGroupTable = React.createClass({
+var ScheduleTeacherTable = React.createClass({
     componentWillMount: function () {
         if (this.props.data) return;
         
-        this.props.dispatch(actions.fetchGroupWeeks(this.props.groupId, [du.qString(this.props.currentWeek), du.qString(this.props.nextWeek)]));
+        this.props.dispatch(actions.fetchTeacherWeeks(this.props.teacherId, [du.qString(this.props.currentWeek), du.qString(this.props.nextWeek)]));
     },
 
     resortLessons: function(lessons) {
@@ -25,17 +25,15 @@ var ScheduleGroupTable = React.createClass({
     },
 
     extract: function(date) {
-        var group = _.get(this.props.data, ['groups', this.props.groupId, 'group']);
-        var faculty = group && group.faculty;
+        var teacher = _.get(this.props.data, ['teachers', this.props.teacherId, 'teacher']);
         var dateString = du.dString(date)
 
-        var week = _.get(this.props, ['data', 'groups', this.props.groupId, 'weeks', dateString, 'week']);
-        var lessons = this.lessonsByDate(this.props.groupId, dateString)
+        var week = _.get(this.props, ['data', 'teachers', this.props.teacherId, 'weeks', dateString, 'week']);
+        var lessons = this.lessonsByDate(this.props.teacherId, dateString)
         
-        if(faculty && group && lessons && week) {
+        if(teacher && lessons && week) {
             return {
-                faculty,
-                group,
+                teacher,
                 weeks: {
                     [week.is_odd ? 'odd' : 'even']: lessons
                 }
@@ -45,8 +43,8 @@ var ScheduleGroupTable = React.createClass({
         }
     },
 
-    lessonsByDate: function(groupId, date) {
-        var lessons = _.get(this.props, ['data', 'groups', groupId, 'weeks', date, 'days'])
+    lessonsByDate: function(teacherId, date) {
+        var lessons = _.get(this.props, ['data', 'teachers', teacherId, 'weeks', date, 'days'])
         lessons = this.resortLessons(lessons)
         return lessons
     },
@@ -67,7 +65,7 @@ var ScheduleGroupTable = React.createClass({
 
         return (
             <div className="schedule-page">
-                <h3 className="page__h3">{data.faculty.abbr} Группа № {data.group.name} расписание с {du.humanDate(this.props.currentWeek)} по {du.humanDate(this.props.nextWeek.clone().add(6, 'days'))}</h3>
+                <h3 className="page__h3">{data.teacher.full_name}, расписание с {du.humanDate(this.props.currentWeek)} по {du.humanDate(this.props.nextWeek.clone().add(6, 'days'))}</h3>
                 <LessonsTablePdf ref='table' lessons={data.weeks}  />
             </div>
         )
@@ -78,7 +76,6 @@ var ScheduleGroupTable = React.createClass({
         if(!node) return;
 
         var limit = 1000
-
         if(node.offsetHeight > limit * 1.25) {
             node.className += ' scale_to_fit_big'
         } else if(node.offsetHeight > limit) {
@@ -96,7 +93,7 @@ var ScheduleGroupTable = React.createClass({
         isFetching: React.PropTypes.bool.isRequired,
         data: React.PropTypes.object,
 
-        groupId: React.PropTypes.number.isRequired,
+        teacherId: React.PropTypes.number.isRequired,
         currentWeek: React.PropTypes.object.isRequired,
         nextWeek: React.PropTypes.object.isRequired
     }
@@ -109,7 +106,7 @@ function mapStateToProps(state) {
     }
 }
 
-ScheduleGroupTable = reactRedux.connect(mapStateToProps)(ScheduleGroupTable)
+ScheduleTeacherTable = reactRedux.connect(mapStateToProps)(ScheduleTeacherTable)
 
 var RouterWrapper = React.createClass({
     render: function() {
@@ -117,10 +114,10 @@ var RouterWrapper = React.createClass({
         var currentWeekString = location.query && location.query.date;
         var currentWeek = du.getWeek(currentWeekString)
         var nextWeek = currentWeek.clone().add(1, 'weeks')
-        var groupId = parseInt(this.props.params.groupId, 10);
+        var teacherId = parseInt(this.props.params.teacherId, 10);
 
-        return <ScheduleGroupTable groupId={groupId} currentWeek={currentWeek} nextWeek={nextWeek} />
+        return <ScheduleTeacherTable teacherId={teacherId} currentWeek={currentWeek} nextWeek={nextWeek} />
     }
 })
 
-module.exports = {component: ScheduleGroupTable, routerWrapper: RouterWrapper};
+module.exports = {component: ScheduleTeacherTable, routerWrapper: RouterWrapper};
