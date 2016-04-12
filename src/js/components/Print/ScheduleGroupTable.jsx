@@ -9,19 +9,8 @@ var du = require('../../utils/date')
 var ScheduleGroupTable = React.createClass({
     componentWillMount: function () {
         if (this.props.data) return;
-        var groupId = this.props.params.groupId;
         
-        var w = this.weeks()
-        this.props.dispatch(actions.fetchWeeks(groupId, [du.qString(w.current), du.qString(w.next)]));
-    },
-
-    weeks: function() {
-        var location = this.props.location;
-        var currentWeekString = location.query && location.query.date;
-        var currentWeek = du.getWeek(currentWeekString)
-        var nextWeek = currentWeek.clone().add(1, 'weeks')
-
-        return {current: currentWeek, next: nextWeek}
+        this.props.dispatch(actions.fetchWeeks(this.props.groupId, [du.qString(this.props.currentWeek), du.qString(this.props.nextWeek)]));
     },
 
     resortLessons: function(lessons) {
@@ -33,18 +22,15 @@ var ScheduleGroupTable = React.createClass({
             .groupBy(lesson => lesson.time_start)
             .sortBy(lesson => lesson[0].time_start)
             .value()
-
     },
 
-
     extract: function(date) {
-        var groupId = parseInt(this.props.params.groupId, 10);
-        var group = _.get(this.props.data, [groupId, 'group']);
+        var group = _.get(this.props.data, [this.props.groupId, 'group']);
         var faculty = group && group.faculty;
         var dateString = du.dString(date)
 
-        var week = _.get(this.props, ['data', groupId, 'weeks', dateString, 'week']);
-        var lessons = this.lessonsByDate(groupId, dateString)
+        var week = _.get(this.props, ['data', this.props.groupId, 'weeks', dateString, 'week']);
+        var lessons = this.lessonsByDate(this.props.groupId, dateString)
         
         if(faculty && group && lessons && week) {
             return {
@@ -66,10 +52,8 @@ var ScheduleGroupTable = React.createClass({
     },
 
     render: function() {
-        var w = this.weeks()
-
-        var data1 = this.extract(w.current)
-        var data2 = this.extract(w.next)
+        var data1 = this.extract(this.props.currentWeek)
+        var data2 = this.extract(this.props.nextWeek)
         
         var data = _.merge(data1, data2)
 
@@ -83,7 +67,7 @@ var ScheduleGroupTable = React.createClass({
 
         return (
             <div className="schedule-page">
-                <h3 className="page__h3">{data.faculty.abbr} Группа № {data.group.name} расписание с {du.humanDate(w.current)} по {du.humanDate(w.next.add(6, 'days'))}</h3>
+                <h3 className="page__h3">{data.faculty.abbr} Группа № {data.group.name} расписание с {du.humanDate(this.props.currentWeek)} по {du.humanDate(this.props.nextWeek.clone().add(6, 'days'))}</h3>
                 <LessonsTablePdf ref='table' lessons={data.weeks}  />
             </div>
         )
@@ -109,7 +93,11 @@ var ScheduleGroupTable = React.createClass({
     propTypes: {
         dispatch: React.PropTypes.func.isRequired,
         isFetching: React.PropTypes.bool.isRequired,
-        data: React.PropTypes.object
+        data: React.PropTypes.object,
+
+        groupId: React.PropTypes.number.isRequired,
+        currentWeek: React.PropTypes.object.isRequired,
+        nextWeek: React.PropTypes.object.isRequired
     }
 });
 
@@ -120,4 +108,18 @@ function mapStateToProps(state) {
     }
 }
 
-module.exports = reactRedux.connect(mapStateToProps)(ScheduleGroupTable);
+ScheduleGroupTable = reactRedux.connect(mapStateToProps)(ScheduleGroupTable)
+
+var RouterWrapper = React.createClass({
+    render: function() {
+        var location = this.props.location;
+        var currentWeekString = location.query && location.query.date;
+        var currentWeek = du.getWeek(currentWeekString)
+        var nextWeek = currentWeek.clone().add(1, 'weeks')
+        var groupId = parseInt(this.props.params.groupId, 10);
+
+        return <ScheduleGroupTable groupId={groupId} currentWeek={currentWeek} nextWeek={nextWeek} />
+    }
+})
+
+module.exports = {component: ScheduleGroupTable, routerWrapper: RouterWrapper};

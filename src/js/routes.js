@@ -11,7 +11,7 @@ var React = require('react'),
     TeacherListFilter = require('./components/TeacherListFilter.jsx'),
     TeacherListSearch = require('./components/TeacherListSearch.jsx'),
     GroupListSearch = require('./components/GroupListSearch.jsx'),
-    ScheduleGroupTable = require('./components/Print/ScheduleGroupTable.jsx'),
+    ScheduleGroupTable = require('./components/Print/ScheduleGroupTable.jsx').routerWrapper,
     Place = require('./components/Place.jsx');
 
 const pathEnum = {
