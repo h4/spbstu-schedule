@@ -14,7 +14,9 @@ function canMerge(a, b) {
     if(a.length != b.length) return false
 
     return _.isEqualWith(a, b, function(a_lessons, b_lessons) {
-        return _.every(_.map(a_lessons, (xx, i) => _.isEqualWith(a_lessons[i], b_lessons[i], canMergeLesson)))
+        var sortedALessons = _.sortBy(a_lessons, 'subject')
+        var sortedBLessons = _.sortBy(b_lessons, 'subject')
+        return _.every(_.map(sortedALessons, (xx, i) => _.isEqualWith(sortedALessons[i], sortedBLessons[i], canMergeLesson)))
     })
 }
 
