@@ -1,5 +1,6 @@
 var React = require('react');
 var _ = require('lodash');
+var moment = require('moment');
 
 var subgroupName = function(subgroup) {
     var commonMatch = subgroup.match(/[пП]\/[гГ]\s*\d+/g)
@@ -77,11 +78,28 @@ var Place = React.createClass({
     }
 })
 
+var Time = React.createClass({
+    commonTime: function() {
+        var startCommon = _.includes(['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'], this.props.startTime)
+        var endCommon =  moment(this.props.startTime, 'HH:mm').add(90, 'minutes').format('HH:mm') === this.props.endTime
+        return startCommon && endCommon
+    },
+
+    render: function() {
+        if(this.commonTime()) {
+            return null
+        } else {
+            return <div className='uncommon_time'>с {this.props.startTime} по {this.props.endTime}</div>
+        }
+    }
+})
+
 var Lesson = React.createClass({
     render: function() {
         var lesson = this.props.lesson
         return <div className='cell'>
             <div className='subject'>{lesson.subject_short}</div>
+            <Time startTime={lesson.time_start} endTime={lesson.time_end} />
             {this.props.showGroups ? <Groups value={lesson.groups} /> : <Teachers value={lesson.teachers} />}
             <div className='type'>{lesson.typeObj.abbr}</div>
             <Place value={lesson.auditories} />
