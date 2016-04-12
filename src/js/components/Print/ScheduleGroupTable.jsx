@@ -120,3 +120,4 @@ function mapStateToProps(state) {
     }
 }
 
+module.exports = reactRedux.connect(mapStateToProps)(ScheduleGroupTable);
