@@ -1,6 +1,7 @@
 var React = require('react');
 var _ = require('lodash');
 var moment = require('moment');
+var du = require('../../utils/date')
 
 var subgroupName = function(subgroup) {
     var commonMatch = subgroup.match(/[пП]\/[гГ]\s*\d+/g)
@@ -79,17 +80,13 @@ var Place = React.createClass({
 })
 
 var Time = React.createClass({
-    commonTime: function() {
-        var startCommon = _.includes(['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'], this.props.startTime)
-        var endCommon =  moment(this.props.startTime, 'HH:mm').add(90, 'minutes').format('HH:mm') === this.props.endTime
-        return startCommon && endCommon
-    },
-
     render: function() {
-        if(this.commonTime()) {
+        var start = this.props.startTime
+        var end = this.props.endTime
+        if(du.startCommon(start) && du.endCommon(start, end)) {
             return null
         } else {
-            return <div className='uncommon_time'>с {this.props.startTime} по {this.props.endTime}</div>
+            return <div className='uncommon_time'>с {start} по {end}</div>
         }
     }
 })

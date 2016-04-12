@@ -13,14 +13,25 @@ var ScheduleTeacherTable = React.createClass({
         this.props.dispatch(actions.fetchTeacherWeeks(this.props.teacherId, [du.qString(this.props.currentWeek), du.qString(this.props.nextWeek)]));
     },
 
+    /*
+    Все лекции группируются по стандартной временной сетке 8-00 10-00 ... 20-00
+    если лекция начинается в нестадартное время, то она перемещается по сетке в ближайшую более позднюю стандартную ячейку и
+    помечается текстом "идёт с хх по уу"
+    Странно, но таково требование свыше
+    */
+    commonTimeStart: function(lesson) {
+        lesson.commonTime = du.nearestCommonTime(lesson.time_start)
+        return lesson.commonTime
+    },
+
     resortLessons: function(lessons) {
         return _.chain(lessons)
             .flatMap(day =>
                 _.map(day.lessons, lesson => {lesson.weekday = day.weekday; return lesson} )
             )
             .orderBy(lesson => lesson.weekday)
-            .groupBy(lesson => lesson.time_start)
-            .sortBy(lesson => lesson[0].time_start)
+            .groupBy(this.commonTimeStart)
+            .sortBy(lesson => lesson.commonTime)
             .value()
     },
 
