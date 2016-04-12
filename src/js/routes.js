@@ -11,7 +11,7 @@ var React = require('react'),
     TeacherListFilter = require('./components/TeacherListFilter.jsx'),
     TeacherListSearch = require('./components/TeacherListSearch.jsx'),
     GroupListSearch = require('./components/GroupListSearch.jsx'),
-    SchedulePdf = require('./components/Print/SchedulePdf.jsx'),
+    ScheduleGroupTable = require('./components/Print/ScheduleGroupTable.jsx'),
     Place = require('./components/Place.jsx');
 
 const pathEnum = {
@@ -46,7 +46,7 @@ var routes = (
         <Route path={pathEnum.groups} component={Faculty} />
         <Route path={pathEnum.groupScheduleDefault} component={Schedule} />
         <Route path={pathEnum.groupSchedule} component={Schedule} />
-        <Route path={pathEnum.groupSchedulePrint} component={SchedulePdf} clean />
+        <Route path={pathEnum.groupSchedulePrint} component={ScheduleGroupTable} clean />
         <Route path={pathEnum.groupSchedulePdf} renderPdf={{redirect: pathEnum.groupSchedulePrint, pageSize: '297mm*210mm'}} />
         <Route path={pathEnum.teacherScheduleDefault} component={Teacher} />
         <Route path={pathEnum.teacherSchedule} component={Teacher} />

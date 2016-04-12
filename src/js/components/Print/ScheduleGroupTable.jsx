@@ -6,7 +6,7 @@ var actions = require('../../actions/FacultyActions');
 var LessonsTablePdf = require('../Print/LessonsTablePdf.jsx');
 var du = require('../../utils/date')
 
-var SchedulePdf = React.createClass({
+var ScheduleGroupTable = React.createClass({
     componentWillMount: function () {
         if (this.props.data) return;
         var groupId = this.props.params.groupId;
@@ -83,7 +83,7 @@ var SchedulePdf = React.createClass({
 
         return (
             <div className="schedule-page">
-                <h3 className="page__h3">{data.faculty.abbr} Группа № {data.group.name}</h3>
+                <h3 className="page__h3">{data.faculty.abbr} Группа № {data.group.name} расписание с {du.humanDate(w.current)} по {du.humanDate(w.next.add(6, 'days'))}</h3>
                 <LessonsTablePdf ref='table' lessons={data.weeks}  />
             </div>
         )
@@ -120,4 +120,3 @@ function mapStateToProps(state) {
     }
 }
 
-module.exports = reactRedux.connect(mapStateToProps)(SchedulePdf);
