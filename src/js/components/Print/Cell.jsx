@@ -92,7 +92,7 @@ var Cell = React.createClass({
         if(!lessons || lessons.length == 0) return <td rowSpan={this.props.merge ? '2' : null}>&nbsp;</td>;
 
         return <td className={this.weekClass()} rowSpan={this.props.merge ? '2' : null}>
-            {_.map(lessons, l => <Lesson key={l} lesson={l} />)} 
+            {_.map(lessons, (l, i) => <Lesson key={i} lesson={l} />)} 
         </td>
     }
 });

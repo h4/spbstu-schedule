@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom')
 var _ = require('lodash');
 var reactRedux = require('react-redux');
 var actions = require('../../actions/FacultyActions');
@@ -83,12 +84,22 @@ var SchedulePdf = React.createClass({
         return (
             <div className="schedule-page">
                 <h3 className="page__h3">{data.faculty.abbr} Группа № {data.group.name}</h3>
-                <LessonsTablePdf lessons={data.weeks}  />
+                <LessonsTablePdf ref='table' lessons={data.weeks}  />
             </div>
         )
     },
 
     componentDidUpdate: function() {
+        var node = ReactDOM.findDOMNode(this.refs.table)
+
+        var limit = 1000
+
+        if(node.offsetHeight > limit * 1.25) {
+            node.className += ' scale_to_fit_big'
+        } else if(node.offsetHeight > limit) {
+            node.className += ' scale_to_fit_small'
+        }
+
         if(!this.props.isFetching) {
             //mark page as ready for rendering, readed by phantomjs pdf.js script
             window.readyForPdfRendering = true
