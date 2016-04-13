@@ -11,7 +11,7 @@ var LessonsTablePdf = React.createClass({
             <h3>Нет занятий</h3>
         }
 
-        var hours = _.union(_.map(even, x => x[0].commonTime), _.map(odd, x => x[0].commonTime))
+        var hours = _.sortBy(_.union(_.map(even, x => x[0].commonTime), _.map(odd, x => x[0].commonTime)))
         even = _.mapKeys(even, e => e[0].commonTime)
         odd = _.mapKeys(odd, e => e[0].commonTime)
 
