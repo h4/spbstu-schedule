@@ -39,6 +39,9 @@ var Groups = React.createClass({
         var groups = this.props.value
         if(!groups || groups.length == 0) return <div className='teacher' />;
 
+        if(this.props.additional == "Поток") {
+            return <div className='teacher'>Поток</div>
+        }
         return <ul className='teacher'>
             {_.map(groups, g => <li key={g.name}>{g.name}</li>)}
         </ul>
@@ -97,7 +100,7 @@ var Lesson = React.createClass({
         return <div className='cell'>
             <div className='subject'>{lesson.subject_short}</div>
             <Time startTime={lesson.time_start} endTime={lesson.time_end} />
-            {this.props.showGroups ? <Groups value={lesson.groups} /> : <Teachers value={lesson.teachers} />}
+            {this.props.showGroups ? <Groups value={lesson.groups} additional={lesson.additional_info} /> : <Teachers value={lesson.teachers} />}
             <div className='type'>{lesson.typeObj.abbr}</div>
             <Place value={lesson.auditories} />
         </div>
