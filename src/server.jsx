@@ -45,12 +45,10 @@ function handleRender(req, res) {
         if (redirectLocation) {
             res.redirect(redirectLocation.pathname + redirectLocation.search);
         } else if (err) {
-            console.error('ROUTER ERROR:', (error));
-            res.status(500);
-            res.end(500);
+            console.error('ROUTER ERROR: ', (err));
+            return send404(res);
         } else if (!routerState) {
-            res.status(500);
-            res.end(500);
+            return send404(res);
         } else {
             let params = routerState.params;
             let route = _.last(routerState.routes);
@@ -108,8 +106,7 @@ function handleRender(req, res) {
 
                     break;
                 default:
-                    res.status(404);
-                    res.end('404');
+                    return send404(res);
             }
 
             if (endpoint) {
@@ -184,6 +181,11 @@ function sendPdf(req, res, routerState) {
         res.status(500);
         res.end(e.message);
     }
+}
+
+function send404(res) {
+    res.status(404);
+    res.sendFile(path.join(__dirname, '404.html'));
 }
 
 module.exports = app;
