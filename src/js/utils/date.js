@@ -1,8 +1,12 @@
 'use strict';
 var moment = require('moment');
+var _ = require('lodash');
+
 require('moment/locale/ru');
 
 moment.locale('ru');
+
+const commonTime = ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00']
 
 function getPrevWeekStart(week) {
     if (! week) {
@@ -48,10 +52,48 @@ function humanDate(date) {
     return moment(date, "YYYY.MM.DD").format("DD MMMM");
 }
 
+
+function getWeek(qString) {
+    if(qString) {
+        return moment(qString, 'YYYY-M-D')
+    } else {
+        return moment().startOf('week')
+    }
+}
+
+function qString(m) {
+    return m.format('YYYY-M-D')
+}
+
+function dString(m) {
+    return m.format('YYYY.MM.DD')
+}
+
+function startCommon(string) {
+    return _.includes(commonTime, string)
+}
+
+function endCommon(startString, endString) {
+    return moment(startString, 'HH:mm').add(90, 'minutes').format('HH:mm') === endString
+}
+
+function nearestCommonTime(string) {
+    var startTime = moment(string, 'HH:mm')
+    var result = _.find(commonTime, x => moment(x, 'HH:mm').isSameOrAfter(startTime))
+    
+    return result
+}
+
 module.exports = {
     getNextWeekStart: getNextWeekStart,
     getNextWeekStartString: getNextWeekStartString,
     getPrevWeekStart: getPrevWeekStart,
     getPrevWeekStartString: getPrevWeekStartString,
-    humanDate: humanDate
+    humanDate: humanDate,
+    getWeek,
+    qString,
+    dString,
+    startCommon,
+    endCommon,
+    nearestCommonTime
 };

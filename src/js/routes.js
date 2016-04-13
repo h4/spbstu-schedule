@@ -11,6 +11,8 @@ var React = require('react'),
     TeacherListFilter = require('./components/TeacherListFilter.jsx'),
     TeacherListSearch = require('./components/TeacherListSearch.jsx'),
     GroupListSearch = require('./components/GroupListSearch.jsx'),
+    ScheduleGroupTable = require('./components/Print/ScheduleGroupTable.jsx').routerWrapper,
+    ScheduleTeacherTable = require('./components/Print/ScheduleTeacherTable.jsx').routerWrapper,
     Place = require('./components/Place.jsx');
 
 const pathEnum = {
@@ -18,14 +20,28 @@ const pathEnum = {
         groups: '/faculty/:facultyId/groups',
         groupScheduleDefault: '/faculty/:facultyId/groups/:groupId',
         groupSchedule: '/faculty/:facultyId/groups/:groupId?date=:date',
-        teacherList: '/teachers',
+        groupSchedulePdf: '/faculty/:facultyId/groups/:groupId/pdf',
+        groupSchedulePrint: '/faculty/:facultyId/groups/:groupId/print',
+        //teacherList: '/teachers',
         teacherScheduleDefault: '/teachers/:teacherId',
         teacherSchedule: '/teachers/:teacherId?date=:date',
+        teacherSchedulePrint: '/teachers/:teacherId/print',
+        teacherSchedulePdf: '/teachers/:teacherId/pdf',
         placeScheduleDefault: '/places/:buildingId/:placeId',
         placeSchedule: '/places/:buildingId/:placeId?date=:date',
         searchTeacher: '/search/teacher(?q=:q)',
         searchGroup: '/search/groups(?q=:q)'
 };
+
+
+// renderPdf: custom params for server side pdf rendering
+// clean: use clean page for rendering (pdf.html template)
+/* renderPdf = {
+    redirect: route-pattern, link to url which will be rendered to pdf
+    pageSize: string, for possible values see pdf.js
+    fileName: name for resulting pdf
+}
+*/
 
 var routes = (
     <Route path={pathEnum.faculties} component={App}>
@@ -33,11 +49,15 @@ var routes = (
         <Route path={pathEnum.groups} component={Faculty} />
         <Route path={pathEnum.groupScheduleDefault} component={Schedule} />
         <Route path={pathEnum.groupSchedule} component={Schedule} />
+        <Route path={pathEnum.groupSchedulePrint} component={ScheduleGroupTable} clean />
+        <Route path={pathEnum.groupSchedulePdf} renderPdf={{redirect: pathEnum.groupSchedulePrint, pageSize: '297mm*210mm'}} />
+        <Route path={pathEnum.teacherSchedulePrint} component={ScheduleTeacherTable} clean />
+        <Route path={pathEnum.teacherSchedulePdf} renderPdf={{redirect: pathEnum.teacherSchedulePrint, pageSize: '297mm*210mm'}} />
         <Route path={pathEnum.teacherScheduleDefault} component={Teacher} />
         <Route path={pathEnum.teacherSchedule} component={Teacher} />
         <Route path={pathEnum.placeScheduleDefault} component={Place} />
         <Route path={pathEnum.placeSchedule} component={Place} />
-        <Route path={pathEnum.teacherList} component={TeacherListFilter} />
+        {/*<Route path={pathEnum.teacherList} component={TeacherListFilter} />*/}
         <Route path={pathEnum.searchTeacher} component={TeacherListSearch} />
         <Route path={pathEnum.searchGroup} component={GroupListSearch} />
     </Route>

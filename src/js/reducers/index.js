@@ -87,6 +87,51 @@ function lessons(state, action) {
     }
 }
 
+function weeks(state, action) {
+    var baseState =  {
+        isFetching: false,
+        data: null,
+        errors: null
+    };
+    state = _.extend(baseState, state);
+
+    switch (action.type) {
+        case 'REQUEST_GROUP_WEEK':
+        case 'REQUEST_TEACHER_WEEK':
+            state.isFetching = true;
+            return state;
+        case 'FETCH_GROUP_WEEK':
+            state.data = _.cloneDeep(state.data)
+            _.setWith(state, ['data', 'groups', action.response.group.id, 'weeks', action.response.week.date_start], {
+                week: action.response.week,
+                days: action.response.days
+            }, Object)
+            _.set(state, ['data', 'groups', action.response.group.id, 'group'], action.response.group)
+
+            return state;
+        case 'FETCH_TEACHER_WEEK':
+            state.data = _.cloneDeep(state.data)
+            _.setWith(state, ['data', 'teachers', action.response.teacher.id, 'weeks', action.response.week.date_start], {
+                week: action.response.week,
+                days: action.response.days
+            }, Object)
+            _.set(state, ['data', 'teachers', action.response.teacher.id, 'teacher'], action.response.teacher)
+
+            return state;
+        case 'FAIL_GROUP_WEEK':
+        case 'FAIL_TEACHER_WEEK':
+            state.errors = action.errors;
+            state.isFetching = false;
+            return state;
+        case 'STOP_GROUP_WEEK_FETCHING':
+        case 'STOP_TEACHER_WEEK_FETCHING':
+            state.isFetching = false;
+            return state;
+        default :
+            return state;
+    }
+}
+
 function teacherSchedule(state, action) {
     var baseState = {
             isFetching: false,
@@ -251,6 +296,7 @@ const rootReducer = redux.combineReducers({
     faculties,
     groups,
     lessons,
+    weeks,
     teacherSchedule,
     places,
     teachers,

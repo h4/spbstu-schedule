@@ -44,6 +44,28 @@ function fetchLessons(groupId, date) {
     }
 }
 
+function fetchGroupWeek(groupId, date) {
+    var endpoint = `scheduler/${groupId}?date=${date}`;
+
+    return {
+        callApi: {
+            types: ['REQUEST_GROUP_WEEK', 'FETCH_GROUP_WEEK', 'FAIL_GROUP_WEEK'],
+            endpoint
+        }
+    }
+}
+
+function fetchTeacherWeek(teacherId, date) {
+    var endpoint = `teachers/${teacherId}/scheduler?date=${date}`;
+
+    return {
+        callApi: {
+            types: ['REQUEST_TEACHER_WEEK', 'FETCH_TEACHER_WEEK', 'FAIL_TEACHER_WEEK'],
+            endpoint
+        }
+    }
+}
+
 function setGroupTypeFilter(filter) {
     return {
         type: 'SET_GROUPTYPE_FILTER',
@@ -74,5 +96,19 @@ module.exports = {
         return function(dispatch) {
             return dispatch(setGroupTypeFilter(filter));
         };
+    },
+
+    fetchGroupWeeks: function(groupId, weeks) {
+        return function(dispatch) {
+            var promises = weeks.map(w => dispatch(fetchGroupWeek(groupId, w)))
+            return Promise.all(promises).then(() => dispatch({type: 'STOP_GROUP_WEEK_FETCHING'}))
+        }
+    },
+
+    fetchTeacherWeeks: function(teacherId, weeks) {
+        return function(dispatch) {
+            var promises = weeks.map(w => dispatch(fetchTeacherWeek(teacherId, w)))
+            return Promise.all(promises).then(() => dispatch({type: 'STOP_TEACHER_WEEK_FETCHING'}))
+        }
     }
 };

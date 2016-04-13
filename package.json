@@ -9,7 +9,7 @@
     "express": "^4.13.3",
     "history": "^1.12.6",
     "isomorphic-fetch": "^2.1.1",
-    "lodash": "^3.10.1",
+    "lodash": "^4.7.0",
     "moment": "^2.10.6",
     "normalizr": "^1.0.0",
     "query-string": "^3.0.0",
@@ -21,7 +21,9 @@
     "redux": "^3.0.0",
     "redux-router": "^1.0.0-beta3",
     "redux-thunk": "^1.0.0",
-    "redux-localstorage": "^0.4.0"
+    "redux-localstorage": "^0.4.0",
+    "phantomjs-prebuilt": "^2.1.7",
+    "temp": "^0.8.3"
   },
   "devDependencies": {
     "babelify": "^6.3.0",
