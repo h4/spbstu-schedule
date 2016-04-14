@@ -34,13 +34,16 @@ function mergeSubgroupsIfPossible(lessons) {
     if (lessons.length > 1 && canMerge) {
         return [_.reduce(lessons, mergeSubgroups)]
     } else {
-        markTeachersWithSubgroup(lessons)
+        markTeachersAndGroupsWithSubgroup(lessons)
         return lessons
     }
 }
 
-function markTeachersWithSubgroup(lessons) {
-    _.forEach(lessons, l => _.forEach(l.teachers, t => t.subgroup = l.additional_info))
+function markTeachersAndGroupsWithSubgroup(lessons) {
+    _.forEach(lessons, l => {
+        _.forEach(l.teachers, t => t.subgroup = l.additional_info)
+        _.forEach(l.groups, g => g.subgroup = l.additional_info)
+    })
 }
 
 function mergeSubgroups (a, b) {

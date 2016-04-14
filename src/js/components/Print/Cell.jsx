@@ -38,6 +38,14 @@ var Teachers = React.createClass({
 })
 
 var Groups = React.createClass({
+    groupName: function(group) {
+        var result = group.name
+        if(group.subgroup && subgroupName(group.subgroup)) {
+            result = result + ' (' + subgroupName(group.subgroup) + ')'
+        }
+        return result
+    },
+
     render: function() {
         var groups = this.props.value
         if(!groups || groups.length == 0) return <div className='teacher' />;
@@ -46,7 +54,9 @@ var Groups = React.createClass({
             return <div className='teacher'>Поток</div>
         }
         return <ul className='teacher'>
-            {_.map(groups, g => <li key={g.name}>{g.name}</li>)}
+            {_.map(groups, (g, i) => <li key={i}>
+                {this.groupName(g)}
+            </li>)}
         </ul>
     }
 })
@@ -55,9 +65,6 @@ var Place = React.createClass({
     placeName: function(place) {
         var building = place.building.abbr || ''
         var result = building + ' ' + place.name
-        if(place.subgroup) {
-            result = result + ' (' + subgroupName(place.subgroup) + ')'
-        }
         return result
     },
 
