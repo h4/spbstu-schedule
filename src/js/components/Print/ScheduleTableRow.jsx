@@ -27,17 +27,20 @@ function canMergeLesson(x, y) {
 }
 
 function mergeSubgroupsIfPossible(lessons) {
-    if (lessons.length < 2) return lessons;
-
     var canMerge = _.every(lessons, a => {
         var b = lessons[0]
         return a.subject === b.subject && a.typeObj.name === b.typeObj.name
     })
-    if (canMerge) {
+    if (lessons.length > 1 && canMerge) {
         return [_.reduce(lessons, mergeSubgroups)]
     } else {
+        markTeachersWithSubgroup(lessons)
         return lessons
     }
+}
+
+function markTeachersWithSubgroup(lessons) {
+    _.forEach(lessons, l => _.forEach(l.teachers, t => t.subgroup = l.additional_info))
 }
 
 function mergeSubgroups (a, b) {

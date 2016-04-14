@@ -5,8 +5,11 @@ var du = require('../../utils/date')
 
 var subgroupName = function(subgroup) {
     var commonMatch = subgroup.match(/[пП]\/[гГ]\s*\d+/g)
+    if(commonMatch == 'Поток') {
+        debugger;
+    }
     if (commonMatch === null) {
-        return subgroup
+        return null
     } else {
         return commonMatch[0]
     }
@@ -18,7 +21,7 @@ var Teachers = React.createClass({
         if(teacher.last_name && teacher.last_name.length > 0) {
             result = result + ' ' + _.first(teacher.last_name) + '.'
         }
-        if(teacher.subgroup) {
+        if(teacher.subgroup && subgroupName(teacher.subgroup)) {
             result = result + ' (' + subgroupName(teacher.subgroup) + ')'
         }
         return result
