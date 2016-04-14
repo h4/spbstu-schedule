@@ -12,7 +12,7 @@
     "lodash": "^4.7.0",
     "moment": "^2.10.6",
     "normalizr": "^1.0.0",
-    "query-string": "^3.0.0",
+    "query-string": "^3.0.1",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
     "react-redux": "^4.0.0",
