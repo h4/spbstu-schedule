@@ -160,20 +160,20 @@ function renderCleanPage(html, initialState) {
 }
 
 function sendPdf(req, res, routerState) {
-    let params = routerState.params;
     let route = _.last(routerState.routes);
 
     var pageSize = route.renderPdf.pageSize || 'A4'
     var fileName = route.renderPdf.fileName || 'ruz.pdf'
     var tempName = temp.path({suffix: '.pdf'});
 
-    var redirectUrl = req.protocol + '://' + req.get('host') + formatPattern(route.renderPdf.redirect, params)
-
+    var params = _.assign(routerState.params, routerState.location.query)
+    var redirectUrl = req.protocol + '://' + req.get('host') + formatPattern(route.renderPdf.redirect, params) + routerState.location.search
+    
     try {
         childProcess.execFile(phantomjs.path, ['pdf.js', redirectUrl, tempName, pageSize])
         .on('exit', function() {
             res.sendFile(tempName, fileName, function(err) {
-                fs.unlink(tempName)
+                try { fs.unlink(tempName) } catch(e) {}
             });
         })
     } catch(e) {

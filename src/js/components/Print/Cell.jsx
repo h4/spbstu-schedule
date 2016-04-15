@@ -5,9 +5,6 @@ var du = require('../../utils/date')
 
 var subgroupName = function(subgroup) {
     var commonMatch = subgroup.match(/[пП]\/[гГ]\s*\d+/g)
-    if(commonMatch == 'Поток') {
-        debugger;
-    }
     if (commonMatch === null) {
         return null
     } else {
