@@ -111,7 +111,7 @@ var ScheduleGroupTable = React.createClass({
         var node = ReactDOM.findDOMNode(this.refs.table)
         if(!node) return;
 
-        var limit = 1000
+        var limit = 1024
 
         if(node.offsetHeight > limit * 1.25) {
             node.className += ' scale_to_fit_big'
