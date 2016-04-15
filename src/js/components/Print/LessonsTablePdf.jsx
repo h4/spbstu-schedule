@@ -7,7 +7,7 @@ var LessonsTablePdf = React.createClass({
         let even = this.props.lessons.even;
         let odd = this.props.lessons.odd;
 
-        if (! even || even.length === 0) {
+        if ((!even || even.length === 0) && (!odd || odd.length === 0)) {
             <h3>Нет занятий</h3>
         }
 

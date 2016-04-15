@@ -120,8 +120,8 @@ var Lesson = React.createClass({
 var Cell = React.createClass({
 
     weekClass: function() {
-        if(this.props.odd) {
-            return 'odd_week'
+        if(this.props.even) {
+            return 'even_week'
         }
         return null
     },
