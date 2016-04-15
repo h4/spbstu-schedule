@@ -173,7 +173,10 @@ function sendPdf(req, res, routerState) {
         childProcess.execFile(phantomjs.path, ['pdf.js', redirectUrl, tempName, pageSize])
         .on('exit', function() {
             res.sendFile(tempName, fileName, function(err) {
-                fs.unlink(tempName, function(err) {})
+                fs.unlink(tempName, function(err) {
+                    res.status(408)
+                    res.end('')
+                })
             });
         })
     } catch(e) {
