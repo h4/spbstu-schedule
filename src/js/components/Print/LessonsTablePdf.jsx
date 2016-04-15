@@ -20,23 +20,25 @@ var LessonsTablePdf = React.createClass({
         })
         rows = _.flatten(rows)
         return (
-            <table className="schedule-printable">
-            <thead>
-                <tr>
-                    <th className="time_th">время</th>
-                    <th className="week_th">&nbsp;</th>
-                    <th>понедельник</th>
-                    <th>вторник</th>
-                    <th>среда</th>
-                    <th>четверг</th>
-                    <th>пятница</th>
-                    <th>суббота</th>
-                </tr>
-            </thead>
-            <tbody>
-                {rows}
-            </tbody>
-            </table>
+            <div>
+                <table className="schedule-printable">
+                <thead>
+                    <tr>
+                        <th className="time_th">время</th>
+                        <th className="week_th">&nbsp;</th>
+                        <th>понедельник</th>
+                        <th>вторник</th>
+                        <th>среда</th>
+                        <th>четверг</th>
+                        <th>пятница</th>
+                        <th>суббота</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows}
+                </tbody>
+                </table>
+            </div>
         )
     }
 });

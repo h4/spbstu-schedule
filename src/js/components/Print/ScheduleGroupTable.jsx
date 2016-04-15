@@ -86,19 +86,27 @@ var ScheduleGroupTable = React.createClass({
     },
 
     render: function() {
-        var data1 = this.extract(this.props.currentWeek)
-        var data2 = this.extract(this.props.nextWeek)
-        
-        var data = _.merge(data1, data2)
-
-        if (!data.weeks) {
+        if (this.props.isFetching) {
             return (
                 <div className="schedule-page">
                     <div>Данные загружаются...</div>
                 </div>
             )
         }
+        
+        var data1 = this.extract(this.props.currentWeek)
+        var data2 = this.extract(this.props.nextWeek)
 
+        var data = _.merge(data1, data2)
+
+        if(_.isEmpty(data.weeks) || (_.isEmpty(data.weeks.even) && _.isEmpty(data.weeks.odd)) ) {
+            return (
+                <div className="schedule-page">
+                    <h3 className="page__h3">Занятий нет</h3>
+                </div>
+            )
+        }
+        
         return (
             <div className="schedule-page">
                 <h3 className="page__h3">{data.faculty.abbr} Группа № {data.group.name} расписание с {this.from()} по {this.to()}</h3>
@@ -111,12 +119,19 @@ var ScheduleGroupTable = React.createClass({
         var node = ReactDOM.findDOMNode(this.refs.table)
         if(!node) return;
 
-        var limit = 1024
+        const limit = 950
+        
+        var height = node.getBoundingClientRect().height
+        var width = node.getBoundingClientRect().width
+        if(height > limit) {
+            var scale = limit / height
+            node.style.transformOrigin = '0 0';
+            node.style.webkitTransformOrigin = '0 0';
+            node.style.transform = 'scale(' + scale + ')';
+            node.style.webkitTransform = 'scale(' + scale + ')';
 
-        if(node.offsetHeight > limit * 1.25) {
-            node.className += ' scale_to_fit_big'
-        } else if(node.offsetHeight > limit) {
-            node.className += ' scale_to_fit_small'
+            node.style.width = ((1.0 / scale) * 100) + '%';
+            node.parentNode.style.height = height * scale + 'px'
         }
 
         if(!this.props.isFetching) {

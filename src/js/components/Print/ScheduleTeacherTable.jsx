@@ -108,11 +108,19 @@ var ScheduleTeacherTable = React.createClass({
         var node = ReactDOM.findDOMNode(this.refs.table)
         if(!node) return;
 
-        var limit = 1000
-        if(node.offsetHeight > limit * 1.25) {
-            node.className += ' scale_to_fit_big'
-        } else if(node.offsetHeight > limit) {
-            node.className += ' scale_to_fit_small'
+        const limit = 950
+        
+        var height = node.getBoundingClientRect().height
+        var width = node.getBoundingClientRect().width
+        if(height > limit) {
+            var scale = limit / height
+            node.style.transformOrigin = '0 0';
+            node.style.webkitTransformOrigin = '0 0';
+            node.style.transform = 'scale(' + scale + ')';
+            node.style.webkitTransform = 'scale(' + scale + ')';
+
+            node.style.width = ((1.0 / scale) * 100) + '%';
+            node.parentNode.style.height = height * scale + 'px'
         }
 
         if(!this.props.isFetching) {
