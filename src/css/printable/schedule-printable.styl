@@ -1,3 +1,11 @@
+@media print {
+    // fix box-shadow bug in chrome
+    // https://bugs.chromium.org/p/chromium/issues/detail?id=174583
+    * {
+        box-shadow: none !important
+    }
+}
+
 .schedule-printable
     border: #ccc solid 1px;
     border-spacing: 0;
