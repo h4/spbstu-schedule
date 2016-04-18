@@ -22,6 +22,7 @@ const pathEnum = {
         groupSchedule: '/faculty/:facultyId/groups/:groupId?date=:date',
         groupSchedulePdf: '/faculty/:facultyId/groups/:groupId/pdf',
         groupSchedulePrint: '/faculty/:facultyId/groups/:groupId/print',
+        groupScheduleCal: '/faculty/:facultyId/groups/:groupId/ical',
         //teacherList: '/teachers',
         teacherScheduleDefault: '/teachers/:teacherId',
         teacherSchedule: '/teachers/:teacherId?date=:date',
@@ -47,16 +48,21 @@ var routes = (
     <Route path={pathEnum.faculties} component={App}>
         <IndexRoute component={FacultyList} />
         <Route path={pathEnum.groups} component={Faculty} />
+        
         <Route path={pathEnum.groupScheduleDefault} component={Schedule} />
         <Route path={pathEnum.groupSchedule} component={Schedule} />
         <Route path={pathEnum.groupSchedulePrint} component={ScheduleGroupTable} clean />
         <Route path={pathEnum.groupSchedulePdf} renderPdf={{redirect: pathEnum.groupSchedulePrint, pageSize: '297mm*210mm'}} />
+        <Route path={pathEnum.groupScheduleCal} renderCal />
+        
         <Route path={pathEnum.teacherSchedulePrint} component={ScheduleTeacherTable} clean />
         <Route path={pathEnum.teacherSchedulePdf} renderPdf={{redirect: pathEnum.teacherSchedulePrint, pageSize: '297mm*210mm'}} />
         <Route path={pathEnum.teacherScheduleDefault} component={Teacher} />
         <Route path={pathEnum.teacherSchedule} component={Teacher} />
+        
         <Route path={pathEnum.placeScheduleDefault} component={Place} />
         <Route path={pathEnum.placeSchedule} component={Place} />
+        
         {/*<Route path={pathEnum.teacherList} component={TeacherListFilter} />*/}
         <Route path={pathEnum.searchTeacher} component={TeacherListSearch} />
         <Route path={pathEnum.searchGroup} component={GroupListSearch} />

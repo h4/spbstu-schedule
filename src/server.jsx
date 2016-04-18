@@ -22,6 +22,7 @@ import _ from 'lodash'
 import childProcess from 'child_process'
 import phantomjs from 'phantomjs-prebuilt'
 import temp from 'temp'
+import generateCal from './js/server/ical'
 
 const apiRoot = process.env.API_ROOT;
 const callApi = callApiFactory(apiRoot);
@@ -60,6 +61,9 @@ function handleRender(req, res) {
             if (route.renderPdf) {
                 // Send pdf file
                 return sendPdf(req, res, routerState)
+            } else if (route.renderCal) {
+                // Send schedule in ical format
+                return sendCal(req, res, routerState)
             }
 
             switch (path) {
@@ -184,6 +188,25 @@ function sendPdf(req, res, routerState) {
         res.status(500);
         res.end(e.message);
     }
+}
+
+function sendCal(req, res, routerState) {
+    var endpoint = `scheduler/${routerState.params.groupId}${routerState.location.search}`;
+    var actionType = 'FETCH_LESSONS';
+
+    callApi(endpoint)
+        .then((response) => {
+            store.dispatch({
+                type: actionType,
+                response
+            });
+            res.send(generateCal(store))
+            res.end('')
+        })
+        .catch((e) => {
+            res.status(500)
+            res.end('')
+        })
 }
 
 function send404(res) {
