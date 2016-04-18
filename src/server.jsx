@@ -63,7 +63,7 @@ function handleRender(req, res) {
                 return sendPdf(req, res, routerState)
             } else if (route.renderCal) {
                 // Send schedule in ical format
-                return sendCal(req, res, routerState)
+                return sendCal(req, res, routerState, store)
             }
 
             switch (path) {
@@ -190,7 +190,7 @@ function sendPdf(req, res, routerState) {
     }
 }
 
-function sendCal(req, res, routerState) {
+function sendCal(req, res, routerState, store) {
     var endpoint = `scheduler/${routerState.params.groupId}${routerState.location.search}`;
     var actionType = 'FETCH_LESSONS';
 
@@ -204,6 +204,7 @@ function sendCal(req, res, routerState) {
             res.end('')
         })
         .catch((e) => {
+            console.error(e)
             res.status(500)
             res.end('')
         })
