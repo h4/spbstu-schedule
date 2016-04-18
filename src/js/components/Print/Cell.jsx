@@ -6,7 +6,7 @@ var du = require('../../utils/date')
 var subgroupName = function(subgroup) {
     var commonMatch = subgroup.match(/[пП]\/[гГ]\s*\d+/g)
     if (commonMatch === null) {
-        return subgroup
+        return null
     } else {
         return commonMatch[0]
     }
@@ -18,7 +18,7 @@ var Teachers = React.createClass({
         if(teacher.last_name && teacher.last_name.length > 0) {
             result = result + ' ' + _.first(teacher.last_name) + '.'
         }
-        if(teacher.subgroup) {
+        if(teacher.subgroup && subgroupName(teacher.subgroup)) {
             result = result + ' (' + subgroupName(teacher.subgroup) + ')'
         }
         return result
@@ -35,6 +35,14 @@ var Teachers = React.createClass({
 })
 
 var Groups = React.createClass({
+    groupName: function(group) {
+        var result = group.name
+        if(group.subgroup && subgroupName(group.subgroup)) {
+            result = result + ' (' + subgroupName(group.subgroup) + ')'
+        }
+        return result
+    },
+
     render: function() {
         var groups = this.props.value
         if(!groups || groups.length == 0) return <div className='teacher' />;
@@ -43,7 +51,9 @@ var Groups = React.createClass({
             return <div className='teacher'>Поток</div>
         }
         return <ul className='teacher'>
-            {_.map(groups, g => <li key={g.name}>{g.name}</li>)}
+            {_.map(groups, (g, i) => <li key={i}>
+                {this.groupName(g)}
+            </li>)}
         </ul>
     }
 })
@@ -52,9 +62,6 @@ var Place = React.createClass({
     placeName: function(place) {
         var building = place.building.abbr || ''
         var result = building + ' ' + place.name
-        if(place.subgroup) {
-            result = result + ' (' + subgroupName(place.subgroup) + ')'
-        }
         return result
     },
 
@@ -110,8 +117,8 @@ var Lesson = React.createClass({
 var Cell = React.createClass({
 
     weekClass: function() {
-        if(this.props.odd) {
-            return 'odd_week'
+        if(this.props.even) {
+            return 'even_week'
         }
         return null
     },

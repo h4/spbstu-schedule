@@ -53,9 +53,9 @@ function humanDate(date) {
 }
 
 
-function getWeek(qString) {
-    if(qString) {
-        return moment(qString, 'YYYY-M-D')
+function getWeek(str) {
+    if(str) {
+        return moment(str, ['YYYY-M-D', 'YYYY.MM.DD'])
     } else {
         return moment().startOf('week')
     }

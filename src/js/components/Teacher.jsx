@@ -6,6 +6,7 @@ var Day = require('./Schedule/Day.jsx');
 var Week = require('./Schedule/Week.jsx');
 var Pager = require('./Schedule/Pager.jsx');
 var LessonsList = require('./Schedule/LessonsList.jsx');
+var du = require('../utils/date')
 
 var Teacher = React.createClass({
     componentWillMount: function () {
@@ -54,7 +55,7 @@ var Teacher = React.createClass({
 
         return (
             <div className="schedule-page">
-                <a href={`/teachers/${teacher.id}/pdf`} className="printBtn">
+                <a href={`/teachers/${teacher.id}/pdf?date=${du.qString(du.getWeek(week.date_start))}`} className="printBtn">
                     <i className="fa fa-print" /> Печать
                 </a>
 

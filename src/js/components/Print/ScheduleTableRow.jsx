@@ -27,17 +27,23 @@ function canMergeLesson(x, y) {
 }
 
 function mergeSubgroupsIfPossible(lessons) {
-    if (lessons.length < 2) return lessons;
-
     var canMerge = _.every(lessons, a => {
         var b = lessons[0]
         return a.subject === b.subject && a.typeObj.name === b.typeObj.name
     })
-    if (canMerge) {
+    if (lessons.length > 1 && canMerge) {
         return [_.reduce(lessons, mergeSubgroups)]
     } else {
+        markTeachersAndGroupsWithSubgroup(lessons)
         return lessons
     }
+}
+
+function markTeachersAndGroupsWithSubgroup(lessons) {
+    _.forEach(lessons, l => {
+        _.forEach(l.teachers, t => t.subgroup = l.additional_info)
+        _.forEach(l.groups, g => g.subgroup = l.additional_info)
+    })
 }
 
 function mergeSubgroups (a, b) {
@@ -57,26 +63,26 @@ function getRows(lessonsEven, lessonsOdd, time, showGroups) {
     lessonsEven = _.mapValues(lessonsEven, x => mergeSubgroupsIfPossible(x))
     lessonsOdd = _.mapValues(lessonsOdd, x => mergeSubgroupsIfPossible(x))
 
-    var even_cells = _.times(6, i => <Cell key={i} lessons={lessonsEven[i + 1]} merge={canMerge(lessonsEven[i + 1], lessonsOdd[i + 1])} showGroups={showGroups} />)
-    var odd_cells = _.map(even_cells, (c, i) => {
+    var odd_cells = _.times(6, i => <Cell key={i} lessons={lessonsOdd[i + 1]} merge={canMerge(lessonsOdd[i + 1], lessonsEven[i + 1])} showGroups={showGroups} />)
+    var even_cells = _.map(odd_cells, (c, i) => {
         if (c.props.merge) {
             return null
         } else {
-            return <Cell key={7 + i} lessons={lessonsOdd[i + 1]} odd showGroups={showGroups} />
+            return <Cell key={7 + i} lessons={lessonsEven[i + 1]} even showGroups={showGroups} />
         }
     })
-    odd_cells = _.filter(odd_cells, _.isObject)
+    even_cells = _.filter(even_cells, _.isObject)
     
-    var even_row = <tr key={time + 'even'}>
+    var odd_row = <tr key={time + 'odd'}>
         <Time value={time} />
         <td className='week_td'>I</td>
-        {even_cells}
-    </tr>
-    var odd_row = <tr key={time + 'odd'}>
-        <td className='week_td odd_week'>II</td>
         {odd_cells}
     </tr>
-    return [even_row, odd_row]
+    var even_row = <tr key={time + 'even'}>
+        <td className='week_td even_week'>II</td>
+        {even_cells}
+    </tr>
+    return [odd_row, even_row]
 };
 
 module.exports = getRows;

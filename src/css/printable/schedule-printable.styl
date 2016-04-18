@@ -1,3 +1,11 @@
+@media print {
+    // fix box-shadow bug in chrome
+    // https://bugs.chromium.org/p/chromium/issues/detail?id=174583
+    * {
+        box-shadow: none !important
+    }
+}
+
 .schedule-printable
     border: #ccc solid 1px;
     border-spacing: 0;
@@ -39,7 +47,7 @@
         margin 0
         padding: 5px;
         height: 100%
-    .odd_week
+    .even_week
         background: #eee
 
     .subject
@@ -77,16 +85,6 @@
         margin-bottom: 5px
         padding: 5px
         background: #ffffe0
-
-
-.scale_to_fit_small
-    transform: scale(.8);
-    transform-origin: 0 0;
-
-.scale_to_fit_big
-    transform: scale(.6);
-    transform-origin: 0 0;
-
 
 $btn-color = #46c765
 .printBtn
