@@ -1,6 +1,6 @@
 'use strict';
 var fetch = require('isomorphic-fetch');
-var _ = require('lodash')
+var _ = require('lodash');
 
 function callApiFactory(root) {
     var API_ROOT =  root || 'http://ruz2.spbstu.ru/api/v1/ruz/';

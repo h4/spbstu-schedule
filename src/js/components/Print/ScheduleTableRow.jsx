@@ -23,7 +23,7 @@ function canMerge(a, b) {
 function canMergeLesson(x, y) {
     return x.short_name === y.short_name && x.type === y.type &&
         _.isEqual(_.sortBy(x.teachers, 'full_name'), _.sortBy(y.teachers, 'full_name')) &&
-        _.isEqual(x.auditories, y.auditories)
+        _.isEqual(_.sortBy(x.auditories, 'name'), _.sortBy(y.auditories, 'name'))
 }
 
 function mergeSubgroupsIfPossible(lessons) {
