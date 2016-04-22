@@ -1,5 +1,6 @@
 'use strict';
 var fetch = require('isomorphic-fetch');
+var _ = require('lodash')
 
 function callApiFactory(root) {
     var API_ROOT =  root || 'http://ruz2.spbstu.ru/api/v1/ruz/';
@@ -26,7 +27,7 @@ export default store => next => action => {
     const { types } = callAPI;
 
     function actionWith(data) {
-        const finalAction = Object.assign({}, action, data);
+        const finalAction = _.assign({}, action, data);
         delete finalAction['callApi'];
         return finalAction;
     }
