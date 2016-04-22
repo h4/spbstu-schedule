@@ -104,7 +104,7 @@ var Time = React.createClass({
 var Lesson = React.createClass({
     render: function() {
         var lesson = this.props.lesson
-        return <div className='cell'>
+        return <div className='cell' style={this.props.style}>
             <div className='subject'>{lesson.subject_short}</div>
             <Time startTime={lesson.time_start} endTime={lesson.time_end} />
             {this.props.showGroups ? <Groups value={lesson.groups} additional={lesson.additional_info} /> : <Teachers value={lesson.teachers} />}
@@ -115,7 +115,6 @@ var Lesson = React.createClass({
 })
 
 var Cell = React.createClass({
-
     weekClass: function() {
         if(this.props.even) {
             return 'even_week'
@@ -123,12 +122,20 @@ var Cell = React.createClass({
         return null
     },
 
+    style: function(len) {
+        if (len == 1) {
+            return {
+                height: '100%'
+            }
+        }
+    },
+
     render: function () {
         var lessons = this.props.lessons
         if(!lessons || lessons.length == 0) return <td rowSpan={this.props.merge ? '2' : null}>&nbsp;</td>;
 
         return <td className={this.weekClass()} rowSpan={this.props.merge ? '2' : null}>
-            {_.map(lessons, (l, i) => <Lesson key={i} lesson={l} showGroups={this.props.showGroups} />)} 
+            {_.map(lessons, (l, i) => <Lesson key={i} lesson={l} showGroups={this.props.showGroups} style={this.style(lessons.length)} />)}
         </td>
     }
 });

@@ -4,12 +4,19 @@
     * {
         box-shadow: none !important
     }
+    
+    // walkaround for phantomjs dpi bug
+    // https://github.com/ariya/phantomjs/issues/12685
+    body {
+        zoom: 0.68;
+    }
 }
 
 .schedule-printable
     border: #ccc solid 1px;
     border-spacing: 0;
     height: 100%;
+    table-layout: fixed;
     
     th
         width: 16%;
@@ -41,12 +48,12 @@
         vertical-align: top;
         margin 0
         padding 0
-
+        height: 100%
+        overflow: auto;
     .cell
         position: relative
         margin 0
         padding: 5px;
-        height: 100%
     .even_week
         background: #eee
 
