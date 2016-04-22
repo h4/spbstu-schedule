@@ -119,7 +119,7 @@ var ScheduleGroupTable = React.createClass({
         var node = ReactDOM.findDOMNode(this.refs.table)
         if(!node) return;
 
-        const limit = 825
+        const limit = 790
         
         var height = node.getBoundingClientRect().height
         var width = node.getBoundingClientRect().width
