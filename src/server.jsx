@@ -200,7 +200,7 @@ function sendCal(req, res, routerState, store) {
                 type: actionType,
                 response
             });
-            res.send(generateCal(store))
+            generateCal(req, res, store)
             res.end('')
         })
         .catch((e) => {
