@@ -67,7 +67,7 @@ var Place = React.createClass({
 
     sizeClass: function(placeName) {
         if (placeName.length > 16) {
-            return 'small'
+            return 'small_place'
         } else {
             return null
         }
@@ -101,15 +101,32 @@ var Time = React.createClass({
     }
 })
 
+var Subject = React.createClass({
+    className: function() {
+        if (this.props.name.length > 40) {
+            return 'subject small_subject'
+        } else {
+            return 'subject'
+        }
+    },
+
+    render: function() {
+        return <div className={this.className()} >{this.props.name}</div>
+    }
+})
+
+
 var Lesson = React.createClass({
     render: function() {
         var lesson = this.props.lesson
-        return <div className='cell' style={this.props.style}>
-            <div className='subject'>{lesson.subject_short}</div>
-            <Time startTime={lesson.time_start} endTime={lesson.time_end} />
-            {this.props.showGroups ? <Groups value={lesson.groups} additional={lesson.additional_info} /> : <Teachers value={lesson.teachers} />}
-            <div className='type'>{lesson.typeObj.abbr}</div>
-            <Place value={lesson.auditories} />
+        return <div className='row'>
+            <div className='cell' style={this.props.style}>
+                <Subject name={lesson.subject_short} />
+                <Time startTime={lesson.time_start} endTime={lesson.time_end} />
+                {this.props.showGroups ? <Groups value={lesson.groups} additional={lesson.additional_info} /> : <Teachers value={lesson.teachers} />}
+                <div className='type'>{lesson.typeObj.abbr}</div>
+                <Place value={lesson.auditories} />
+            </div>
         </div>
     }
 })
@@ -122,20 +139,14 @@ var Cell = React.createClass({
         return null
     },
 
-    style: function(len) {
-        if (len == 1) {
-            return {
-                height: '100%'
-            }
-        }
-    },
-
     render: function () {
         var lessons = this.props.lessons
         if(!lessons || lessons.length == 0) return <td rowSpan={this.props.merge ? '2' : null}>&nbsp;</td>;
 
         return <td className={this.weekClass()} rowSpan={this.props.merge ? '2' : null}>
-            {_.map(lessons, (l, i) => <Lesson key={i} lesson={l} showGroups={this.props.showGroups} style={this.style(lessons.length)} />)}
+            <div className='lessons'>
+                {_.map(lessons, (l, i) => <Lesson key={i} lesson={l} showGroups={this.props.showGroups} />)}
+            </div>
         </td>
     }
 });

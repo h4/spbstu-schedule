@@ -50,11 +50,11 @@ var routes = (
         
         <Route path={pathEnum.groupScheduleDefault} component={Schedule} />
         <Route path={pathEnum.groupSchedule} component={Schedule} />
-        <Route path={pathEnum.groupSchedulePrint} component={ScheduleGridView} clean />
+        <Route path={pathEnum.groupSchedulePrint} component={ScheduleGridView} />
         <Route path={pathEnum.groupSchedulePdf} renderPdf={{redirect: pathEnum.groupSchedulePrint, pageSize: '297mm*210mm'}} />
         <Route path={pathEnum.groupScheduleCal} renderCal />
         
-        <Route path={pathEnum.teacherSchedulePrint} component={ScheduleGridView} clean />
+        <Route path={pathEnum.teacherSchedulePrint} component={ScheduleGridView} />
         <Route path={pathEnum.teacherSchedulePdf} renderPdf={{redirect: pathEnum.teacherSchedulePrint, pageSize: '297mm*210mm'}} />
         <Route path={pathEnum.teacherScheduleDefault} component={Teacher} />
         <Route path={pathEnum.teacherSchedule} component={Teacher} />
