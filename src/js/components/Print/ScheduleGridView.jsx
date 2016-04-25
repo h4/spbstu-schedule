@@ -6,11 +6,14 @@ var actions = require('../../actions/FacultyActions');
 var LessonsTablePdf = require('../Print/LessonsTablePdf.jsx');
 var du = require('../../utils/date')
 
-var ScheduleGroupTable = React.createClass({
+var ScheduleGridView = React.createClass({
     componentWillMount: function () {
         if (this.props.data) return;
-        
-        this.props.dispatch(actions.fetchGroupWeeks(this.props.groupId, [du.qString(this.props.currentWeek), du.qString(this.props.nextWeek)]));
+        if (this.props.groupId) {
+            this.props.dispatch(actions.fetchGroupWeeks(this.props.groupId, [du.qString(this.props.currentWeek), du.qString(this.props.nextWeek)]));
+        } else if (this.props.teacherId) {
+            this.props.dispatch(actions.fetchTeacherWeeks(this.props.teacherId, [du.qString(this.props.currentWeek), du.qString(this.props.nextWeek)]));
+        }
     },
 
     /*
@@ -35,13 +38,13 @@ var ScheduleGroupTable = React.createClass({
             .value()
     },
 
-    extract: function(date) {
+    extractByGroup: function(date) {
         var group = _.get(this.props.data, ['groups', this.props.groupId, 'group']);
         var faculty = group && group.faculty;
         var dateString = du.dString(date)
 
-        var week = _.get(this.props, ['data', 'groups', this.props.groupId, 'weeks', dateString, 'week']);
-        var lessons = this.lessonsByDate(this.props.groupId, dateString)
+        var week = this.week(dateString)
+        var lessons = this.lessonsByDate(dateString)
         
         if(faculty && group && lessons && week) {
             return {
@@ -56,8 +59,32 @@ var ScheduleGroupTable = React.createClass({
         }
     },
 
-    lessonsByDate: function(groupId, date) {
-        var lessons = _.get(this.props, ['data', 'groups', groupId, 'weeks', date, 'days'])
+    extractByTeacher: function(date) {
+        var teacher = _.get(this.props.data, ['teachers', this.props.teacherId, 'teacher']);
+        var dateString = du.dString(date)
+
+        var week = this.week(dateString)
+        var lessons = this.lessonsByDate(dateString)
+        
+        if(teacher && lessons && week) {
+            return {
+                teacher,
+                weeks: {
+                    [week.is_odd ? 'odd' : 'even']: lessons
+                }
+            }
+        } else {
+            return null
+        }
+    },
+
+    lessonsByDate: function(date) {
+        var lessons
+        if (this.props.groupId) {
+            lessons = _.get(this.props, ['data', 'groups', this.props.groupId, 'weeks', date, 'days'])
+        } else if(this.props.teacherId) {
+            lessons = _.get(this.props, ['data', 'teachers', this.props.teacherId, 'weeks', date, 'days'])
+        }
         lessons = this.resortLessons(lessons)
         return lessons
     },
@@ -65,7 +92,7 @@ var ScheduleGroupTable = React.createClass({
     from: function() {
         var cw = this.props.currentWeek
         var dateString = du.dString(cw)
-        var week = _.get(this.props, ['data', 'groups', this.props.groupId, 'weeks', dateString, 'week']);
+        var week = this.week(dateString)
         var result = du.humanDate(cw)
         if(week) {
             result += ' ' + (week.is_odd ? '(нечётная неделя)' : '(чётная неделя)')
@@ -76,7 +103,7 @@ var ScheduleGroupTable = React.createClass({
         var nw = this.props.nextWeek
         
         var dateString = du.dString(nw)
-        var week = _.get(this.props, ['data', 'groups', this.props.groupId, 'weeks', dateString, 'week']);
+        var week = this.week(dateString)
         var result = du.humanDate(nw.clone().add(6, 'days'))
         if(week) {
             result += ' ' + (week.is_odd ? '(нечётная неделя)' : '(чётная неделя)')
@@ -84,7 +111,23 @@ var ScheduleGroupTable = React.createClass({
         return result
 
     },
-
+    
+    week: function(dateString) {
+        if (this.props.groupId) {
+            return _.get(this.props, ['data', 'groups', this.props.groupId, 'weeks', dateString, 'week']);
+        } else if(this.props.teacherId) {
+            return _.get(this.props, ['data', 'teachers', this.props.teacherId, 'weeks', dateString, 'week']);
+        }
+    },
+    
+    renderHeader: function(data) {
+        if (this.props.groupId) {
+            return <h3 className="page__h3">{data.faculty.abbr} Группа № {data.group.name} расписание с {this.from()} по {this.to()}</h3>
+        } else if(this.props.teacherId) {
+            return <h3 className="page__h3">{data.teacher.full_name}, расписание с {this.from()} по {this.to()}</h3>
+        }
+    },
+    
     render: function() {
         if (this.props.isFetching) {
             return (
@@ -94,8 +137,14 @@ var ScheduleGroupTable = React.createClass({
             )
         }
         
-        var data1 = this.extract(this.props.currentWeek)
-        var data2 = this.extract(this.props.nextWeek)
+        var extract
+        if (this.props.groupId) {
+            extract = this.extractByGroup
+        } else if(this.props.teacherId) {
+            extract = this.extractByTeacher
+        }
+        var data1 = extract(this.props.currentWeek)
+        var data2 = extract(this.props.nextWeek)
 
         var data = _.merge(data1, data2)
 
@@ -109,31 +158,13 @@ var ScheduleGroupTable = React.createClass({
         
         return (
             <div className="schedule-page">
-                <h3 className="page__h3">{data.faculty.abbr} Группа № {data.group.name} расписание с {this.from()} по {this.to()}</h3>
-                <LessonsTablePdf ref='table' lessons={data.weeks}  />
+                {this.renderHeader(data)}
+                <LessonsTablePdf lessons={data.weeks} showGroups={Boolean(this.props.teacherId)} />
             </div>
         )
     },
 
     componentDidUpdate: function() {
-        var node = ReactDOM.findDOMNode(this.refs.table)
-        if(!node) return;
-
-        const limit = 790
-        
-        var height = node.getBoundingClientRect().height
-        var width = node.getBoundingClientRect().width
-        if(height > limit) {
-            var scale = limit / height
-            node.style.transformOrigin = '0 0';
-            node.style.webkitTransformOrigin = '0 0';
-            node.style.transform = 'scale(' + scale + ')';
-            node.style.webkitTransform = 'scale(' + scale + ')';
-
-            node.style.width = ((1.0 / scale) * 100) + '%';
-            node.parentNode.style.height = height * scale + 'px'
-        }
-
         if(!this.props.isFetching) {
             //mark page as ready for rendering, readed by phantomjs pdf.js script
             window.readyForPdfRendering = true
@@ -145,7 +176,10 @@ var ScheduleGroupTable = React.createClass({
         isFetching: React.PropTypes.bool.isRequired,
         data: React.PropTypes.object,
 
-        groupId: React.PropTypes.number.isRequired,
+        // required one of these
+        groupId: React.PropTypes.number,
+        teacherId: React.PropTypes.number,
+        
         currentWeek: React.PropTypes.object.isRequired,
         nextWeek: React.PropTypes.object.isRequired
     }
@@ -158,7 +192,7 @@ function mapStateToProps(state) {
     }
 }
 
-ScheduleGroupTable = reactRedux.connect(mapStateToProps)(ScheduleGroupTable)
+ScheduleGridView = reactRedux.connect(mapStateToProps)(ScheduleGridView)
 
 var RouterWrapper = React.createClass({
     render: function() {
@@ -167,9 +201,14 @@ var RouterWrapper = React.createClass({
         var currentWeek = du.getWeek(currentWeekString)
         var nextWeek = currentWeek.clone().add(1, 'weeks')
         var groupId = parseInt(this.props.params.groupId, 10);
-
-        return <ScheduleGroupTable groupId={groupId} currentWeek={currentWeek} nextWeek={nextWeek} />
+        var teacherId = parseInt(this.props.params.teacherId, 10);
+        
+        if (groupId) {
+            return <ScheduleGridView groupId={groupId} currentWeek={currentWeek} nextWeek={nextWeek} />
+        } else if (teacherId) {
+            return <ScheduleGridView teacherId={teacherId} currentWeek={currentWeek} nextWeek={nextWeek} />
+        }
     }
 })
 
-module.exports = {component: ScheduleGroupTable, routerWrapper: RouterWrapper};
+module.exports = {component: ScheduleGridView, routerWrapper: RouterWrapper};
