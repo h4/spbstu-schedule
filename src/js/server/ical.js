@@ -8,11 +8,13 @@ function generateCal(req, res, store) {
 }
 
 function getCal(req, store) {
-    var lessons = getLessons(store.getState())
+    var state = store.getState()
+    var lessons = getLessons(state)
     var events = _.map(lessons, l => lessonEvent(l))
+    var group = _.get(state, ['lessons', 'group'])
     return ical({
         domain: req.get('host'),
-        name: 'Расписание учебных занятий',
+        name: 'Расписание группы ' + group.name,
         prodId: {company: 'spbstu.ru', product: 'ical', language: 'RU'},
         timezone: 'Europe/Moscow',
         url: req.protocol + '://' + req.get('host') + req.url,
