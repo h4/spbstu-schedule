@@ -14,7 +14,6 @@ import { formatPattern } from 'react-router/lib/PatternUtils';
 import createHistory from 'history/lib/createMemoryHistory';
 import {reduxReactRouter, match} from 'redux-router/server';
 import {Provider} from 'react-redux';
-import qs from 'query-string';
 import { routes, pathEnum } from './js/routes';
 
 import { callApiFactory } from './js/midleware/api';
