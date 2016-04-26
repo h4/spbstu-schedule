@@ -2,6 +2,7 @@ var React = require('react');
 var _ = require('lodash');
 var moment = require('moment');
 var du = require('../../utils/date')
+var Link = require('react-router').Link;
 
 var subgroupName = function(subgroup) {
     var commonMatch = subgroup.match(/[пП]\/[гГ]\s*\d+/g)
@@ -29,7 +30,11 @@ var Teachers = React.createClass({
         if(!teachers || teachers.length == 0) return <div className='teacher' />;
 
         return <ul className='teacher'>
-            {_.map(teachers, t => <li key={this.teacherName(t)}>{this.teacherName(t)}</li>)}
+            {_.map(teachers, t => <li key={this.teacherName(t)}>
+                <Link to={`/teachers/${t.id}/print`}>
+                    {this.teacherName(t)}
+                </Link>
+            </li>)}
         </ul>
     }
 })
@@ -52,7 +57,9 @@ var Groups = React.createClass({
         }
         return <ul className='teacher'>
             {_.map(groups, (g, i) => <li key={i}>
-                {this.groupName(g)}
+                <Link to={`/faculty/${g.faculty.id}/groups/${g.id}/print`}>
+                    {this.groupName(g)}
+                </Link>
             </li>)}
         </ul>
     }
@@ -82,7 +89,9 @@ var Place = React.createClass({
                 var placeName = this.placeName(p)
                 var sizeClass = this.sizeClass(placeName)
                 return <li className={sizeClass} key={placeName}>
-                    {placeName}
+                    <Link to={`/places/${p.building.id}/${p.id}`}>
+                        {placeName}
+                    </Link>
                 </li>
             })}
         </ul>

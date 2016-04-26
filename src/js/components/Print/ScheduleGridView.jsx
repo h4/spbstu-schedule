@@ -8,14 +8,23 @@ var du = require('../../utils/date')
 
 var ScheduleGridView = React.createClass({
     componentWillMount: function () {
-        if (this.props.data) return;
-        if (this.props.groupId) {
-            this.props.dispatch(actions.fetchGroupWeeks(this.props.groupId, [du.qString(this.props.currentWeek), du.qString(this.props.nextWeek)]));
-        } else if (this.props.teacherId) {
-            this.props.dispatch(actions.fetchTeacherWeeks(this.props.teacherId, [du.qString(this.props.currentWeek), du.qString(this.props.nextWeek)]));
+        this.update(this.props)
+    },
+    componentWillReceiveProps: function(newProps) {
+        if(newProps.groupId !== this.props.groupId ||
+           newProps.teacherId !== this.props.teacherId) {
+            this.update(newProps)
         }
     },
-
+    
+    update: function(props) {
+        if (props.groupId) {
+            this.props.dispatch(actions.fetchGroupWeeks(props.groupId, [du.qString(props.currentWeek), du.qString(props.nextWeek)]));
+        } else if (props.teacherId) {
+            this.props.dispatch(actions.fetchTeacherWeeks(props.teacherId, [du.qString(props.currentWeek), du.qString(props.nextWeek)]));
+        }
+    },
+    
     /*
     Все лекции группируются по стандартной временной сетке 8-00 10-00 ... 20-00
     если лекция начинается в нестадартное время, то она перемещается по сетке в ближайшую более позднюю стандартную ячейку и
