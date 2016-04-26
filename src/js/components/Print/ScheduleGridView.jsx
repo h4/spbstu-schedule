@@ -5,6 +5,7 @@ var reactRedux = require('react-redux');
 var actions = require('../../actions/FacultyActions');
 var LessonsTablePdf = require('../Print/LessonsTablePdf.jsx');
 var du = require('../../utils/date')
+var Pager = require('../Schedule/Pager.jsx')
 
 var ScheduleGridView = React.createClass({
     componentWillMount: function () {
@@ -12,7 +13,9 @@ var ScheduleGridView = React.createClass({
     },
     componentWillReceiveProps: function(newProps) {
         if(newProps.groupId !== this.props.groupId ||
-           newProps.teacherId !== this.props.teacherId) {
+           newProps.teacherId !== this.props.teacherId ||
+           newProps.currentWeek !== this.props.currentWeek
+        ) {
             this.update(newProps)
         }
     },
@@ -137,15 +140,19 @@ var ScheduleGridView = React.createClass({
         }
     },
     
+    renderLoading: function() {
+        return (
+            <div className="schedule-page">
+                <div>Данные загружаются...</div>
+            </div>
+        )
+    },
+    
     render: function() {
-        if (this.props.isFetching) {
-            return (
-                <div className="schedule-page">
-                    <div>Данные загружаются...</div>
-                </div>
-            )
+        if (this.props.isFetching || !this.props.data) {
+            return this.renderLoading()
         }
-        
+
         var extract
         if (this.props.groupId) {
             extract = this.extractByGroup
@@ -156,18 +163,35 @@ var ScheduleGridView = React.createClass({
         var data2 = extract(this.props.nextWeek)
 
         var data = _.merge(data1, data2)
-
-        if(_.isEmpty(data.weeks) || (_.isEmpty(data.weeks.even) && _.isEmpty(data.weeks.odd)) ) {
-            return (
-                <div className="schedule-page">
-                    <h3 className="page__h3">Занятий нет</h3>
-                </div>
-            )
+        
+        var week = this.week(du.dString(this.props.currentWeek))
+        if(!week) {
+            return this.renderLoading()
+        }
+        
+        var pagerLink
+        var printLink
+        if (this.props.groupId) {
+            if(!data || !data.group) {
+                return this.renderLoading()
+            }
+            pagerLink = `/faculty/${data.faculty.id}/groups/${data.group.id}/print`
+            printLink = `/faculty/${data.faculty.id}/groups/${data.group.id}/pdf?date=${du.qString(this.props.currentWeek)}`
+        } else if(this.props.teacherId) {
+            if(!data || !data.teacher) {
+                return this.renderLoading()
+            }
+            pagerLink = `/teachers/${data.teacher.id}/print`
+            printLink = `/teachers/${data.teacher.id}/pdf?date=${du.qString(this.props.currentWeek)}`
         }
         
         return (
             <div className="schedule-page">
                 {this.renderHeader(data)}
+                <a href={printLink} className="printBtn">
+                    <i className="fa fa-print" /> Печать
+                </a>
+                <Pager week={week} link={pagerLink} />
                 <LessonsTablePdf lessons={data.weeks} showGroups={Boolean(this.props.teacherId)} />
             </div>
         )
