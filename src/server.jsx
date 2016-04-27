@@ -21,7 +21,7 @@ import _ from 'lodash'
 import childProcess from 'child_process'
 import phantomjs from 'phantomjs-prebuilt'
 import temp from 'temp'
-import generateCal from './js/server/ical'
+import ical from './js/server/ical'
 
 const apiRoot = process.env.API_ROOT;
 const callApi = callApiFactory(apiRoot);
@@ -60,9 +60,6 @@ function handleRender(req, res) {
             if (route.renderPdf) {
                 // Send pdf file
                 return sendPdf(req, res, routerState)
-            } else if (route.renderCal) {
-                // Send schedule in ical format
-                return sendCal(req, res, routerState, store)
             }
 
             switch (path) {
@@ -76,6 +73,7 @@ function handleRender(req, res) {
 
                     break;
                 case pathEnum.groupScheduleDefault:
+                case pathEnum.groupScheduleCal:
                     endpoint = `scheduler/${params.groupId}${location.search}`;
                     actionType = 'FETCH_LESSONS';
 
@@ -84,6 +82,7 @@ function handleRender(req, res) {
                 case pathEnum.teacherSchedulePrint:
                     break;
                 case pathEnum.teacherScheduleDefault:
+                case pathEnum.teacherScheduleCal:
                     endpoint = `teachers/${params.teacherId}/scheduler${location.search}`;
                     actionType = 'FETCH_TEACHER_SCHEDULE';
 
@@ -119,7 +118,11 @@ function handleRender(req, res) {
                             type: actionType,
                             response
                         });
-
+                        
+                        if (route.renderCal) {
+                            // Send schedule in ical format
+                            return renderCal(req, res, route, store)
+                        }
                         render(store, route, res)
                 });
             } else {
@@ -189,24 +192,10 @@ function sendPdf(req, res, routerState) {
     }
 }
 
-function sendCal(req, res, routerState, store) {
-    var endpoint = `scheduler/${routerState.params.groupId}${routerState.location.search}`;
-    var actionType = 'FETCH_LESSONS';
-
-    callApi(endpoint)
-        .then((response) => {
-            store.dispatch({
-                type: actionType,
-                response
-            });
-            generateCal(req, res, store)
-            res.end('')
-        })
-        .catch((e) => {
-            console.error(e)
-            res.status(500)
-            res.end('')
-        })
+function renderCal(req, res, route, store) {
+    var Cal = ical[route.renderCal]
+    var cal = new Cal(req, res, store.getState())
+    cal.serve()
 }
 
 function send404(res) {

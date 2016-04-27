@@ -27,6 +27,7 @@ const pathEnum = {
         teacherSchedule: '/teachers/:teacherId?date=:date',
         teacherSchedulePrint: '/teachers/:teacherId/print',
         teacherSchedulePdf: '/teachers/:teacherId/pdf',
+        teacherScheduleCal: '/teachers/:teacherId/ical',
         placeScheduleDefault: '/places/:buildingId/:placeId',
         placeSchedule: '/places/:buildingId/:placeId?date=:date',
         searchTeacher: '/search/teacher(?q=:q)',
@@ -52,12 +53,13 @@ var routes = (
         <Route path={pathEnum.groupSchedule} component={Schedule} />
         <Route path={pathEnum.groupSchedulePrint} component={ScheduleGridView} />
         <Route path={pathEnum.groupSchedulePdf} renderPdf={{redirect: pathEnum.groupSchedulePrint, pageSize: '297mm*210mm'}} />
-        <Route path={pathEnum.groupScheduleCal} renderCal />
+        <Route path={pathEnum.groupScheduleCal} renderCal='GroupCal' />
         
         <Route path={pathEnum.teacherSchedulePrint} component={ScheduleGridView} />
         <Route path={pathEnum.teacherSchedulePdf} renderPdf={{redirect: pathEnum.teacherSchedulePrint, pageSize: '297mm*210mm'}} />
         <Route path={pathEnum.teacherScheduleDefault} component={Teacher} />
         <Route path={pathEnum.teacherSchedule} component={Teacher} />
+        <Route path={pathEnum.teacherScheduleCal} renderCal='TeacherCal' />
         
         <Route path={pathEnum.placeScheduleDefault} component={Place} />
         <Route path={pathEnum.placeSchedule} component={Place} />

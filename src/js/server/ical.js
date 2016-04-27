@@ -2,66 +2,112 @@ var _ = require('lodash');
 var ical = require('ical-generator')
 var moment = require('moment');
 
-function generateCal(req, res, store) {
-    var cal = getCal(req, store)
-    cal.serve(res)
-}
-
-function getCal(req, store) {
-    var state = store.getState()
-    var lessons = getLessons(state)
-    var events = _.map(lessons, l => lessonEvent(l))
-    var group = _.get(state, ['lessons', 'group'])
-    return ical({
-        domain: req.get('host'),
-        name: 'Расписание группы ' + group.name,
-        prodId: {company: 'spbstu.ru', product: 'ical', language: 'RU'},
-        timezone: 'Europe/Moscow',
-        url: req.protocol + '://' + req.get('host') + req.url,
-        ttl: 60 * 60 * 24 * 7,
-        events: events
-    })
-}
-
-function getLessons(state) {
-    var groupId = _.get(state, ['lessons', 'group', 'id'])
-    if(!groupId) return [];
-    var week = _.get(state, ['lessons', 'week', 'date_start'])
-    if(!week) return [];
-    var data = _.get(state, ['lessons', 'data', groupId])
-    if(!data || data.length == 0) return [];
+var Cal = class {
+    constructor(req, res, state) {
+        this.state = state
+        this.req = req
+        this.res = res
+    }
     
-    var lessons = _.flatMap(data, day =>
-        _.map(day.lessons, lesson => {lesson.weekday = day.weekday; lesson.week = week; return lesson} )
-    )
-    lessons = _.sortBy(lessons, ['weekday', 'time_start'])
-    return lessons
+    serve() {
+        this.ical().serve(this.res)
+    }
+    
+    ical() {
+        return ical({
+            domain: this.req.get('host'),
+            name: this.getName(),
+            prodId: {company: 'spbstu.ru', product: 'ical', language: 'RU'},
+            timezone: 'Europe/Moscow',
+            url: this.req.protocol + '://' + this.req.get('host') + this.req.url,
+            ttl: 60 * 60 * 24 * 7,
+            events: this.getEvents()
+        })
+    }
+    
+    getEvents() {
+        return _.map(this.getLessons(), l => this.lessonEvent(l))
+    }
+    
+    getLessons() {
+        var week = this.getWeek()
+        if(!week) return [];
+        var data = this.getData();
+        if(!data) return [];
+        
+        var lessons = _.flatMap(data, day =>
+            _.map(day.lessons, lesson => {lesson.weekday = day.weekday; lesson.week = week; return lesson} )
+        )
+        lessons = _.sortBy(lessons, ['weekday', 'time_start'])
+        return lessons
+    }
+    
+    
+    lessonEvent(lesson) {
+        return {
+            start: this.dateFor(lesson, lesson.time_start),
+            end: this.dateFor(lesson, lesson.time_end),
+            summary: lesson.subject,
+            description: '',
+            location: this.placeName(lesson.auditories[0])
+        }
+    }
+    
+    placeName(place) {
+        if(!place) return '';
+        var building = place.building.abbr || ''
+        return building + ' ' + place.name
+    }
+    
+    dateFor(lesson, time) {
+        var time = moment(time, 'HH:mm')
+        return moment(lesson.week, 'YYYY.MM.DD')
+            .day(lesson.weekday)
+            .hour(time.hour())
+            .minutes(time.minutes())
+            .toDate()
+    }
+    
+    getData() {throw 'should be implemented'}
+    getWeek() {throw 'should be implemented'}
+    getName() {throw 'should be implemented'}
 }
 
-function lessonEvent(lesson) {
-    return {
-        start: dateFor(lesson, lesson.time_start),
-        end: dateFor(lesson, lesson.time_end),
-        summary: lesson.subject,
-        description: '',
-        location: placeName(lesson.auditories[0])
+var GroupCal = class extends Cal {
+    getData() {
+        var groupId = _.get(this.state, ['lessons', 'group', 'id'])
+        if(!groupId) return null;
+        var data = _.get(this.state, ['lessons', 'data', groupId])
+        if(!data || data.length == 0) return null;
+        return data
+    }
+    
+    getWeek() {
+        return _.get(this.state, ['lessons', 'week', 'date_start'])
+    }
+    
+    getName() {
+        var group = this.state.lessons.group
+        return 'Расписание группы ' + group.name
     }
 }
 
-function placeName(place) {
-    if(!place) return '';
-    var building = place.building.abbr || ''
-    return building + ' ' + place.name
+var TeacherCal = class extends Cal {
+    getData() {
+        var teacherId = _.get(this.state, ['teacherSchedule', 'teacher', 'id'])
+        if(!teacherId) return null;
+        var data = _.get(this.state, ['teacherSchedule', 'data', teacherId])
+        if(!data || data.length == 0) return [];
+        return data
+    }
+    
+    getWeek() {
+        return _.get(this.state, ['teacherSchedule', 'week', 'date_start'])
+    }
+    
+    getName() {
+        return 'Расписание'
+    }
 }
 
-
-function dateFor(lesson, time) {
-    var time = moment(time, 'HH:mm')
-    return moment(lesson.week, 'YYYY.MM.DD')
-        .day(lesson.weekday)
-        .hour(time.hour())
-        .minutes(time.minutes())
-        .toDate()
-}
-
-module.exports = generateCal
+module.exports = {GroupCal, TeacherCal}
