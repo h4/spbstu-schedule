@@ -169,28 +169,38 @@ var ScheduleGridView = React.createClass({
             return this.renderLoading()
         }
         
-        var pagerLink
-        var printLink
+        var baseLink
+        var dateAppendix = `?date=${du.qString(this.props.currentWeek)}`
         if (this.props.groupId) {
             if(!data || !data.group) {
                 return this.renderLoading()
             }
-            pagerLink = `/faculty/${data.faculty.id}/groups/${data.group.id}/print`
-            printLink = `/faculty/${data.faculty.id}/groups/${data.group.id}/pdf?date=${du.qString(this.props.currentWeek)}`
+            baseLink = `/faculty/${data.faculty.id}/groups/${data.group.id}/`
+            
         } else if(this.props.teacherId) {
             if(!data || !data.teacher) {
                 return this.renderLoading()
             }
-            pagerLink = `/teachers/${data.teacher.id}/print`
-            printLink = `/teachers/${data.teacher.id}/pdf?date=${du.qString(this.props.currentWeek)}`
+            baseLink = `/teachers/${data.teacher.id}/`
         }
-        
+        var listLink = baseLink + dateAppendix
+        var pagerLink = baseLink + 'print'
+        var printLink = baseLink + 'pdf' + dateAppendix
+        var calLink = baseLink + 'ical' + dateAppendix
+
         return (
             <div className="schedule-page">
                 {this.renderHeader(data)}
+                <a href={listLink} className="printBtn">
+                    <i className="fa fa-th-list" /> Список
+                </a>
+                <a href={calLink} className="printBtn">
+                    <i className="fa fa-calendar" /> iCal
+                </a>
                 <a href={printLink} className="printBtn">
                     <i className="fa fa-print" /> Печать
                 </a>
+                
                 <Pager week={week} link={pagerLink} />
                 <LessonsTablePdf lessons={data.weeks} showGroups={Boolean(this.props.teacherId)} />
             </div>

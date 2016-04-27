@@ -58,6 +58,12 @@ var Teacher = React.createClass({
                 <a href={`/teachers/${teacher.id}/print?date=${du.qString(du.getWeek(week.date_start))}`} className="printBtn">
                     <i className="fa fa-th" /> Сетка
                 </a>
+                <a href={`/teachers/${teacher.id}/ical?date=${du.qString(du.getWeek(week.date_start))}`} className="printBtn">
+                    <i className="fa fa-calendar" /> iCal
+                </a>
+                <a href={`/teachers/${teacher.id}/pdf?date=${du.qString(du.getWeek(week.date_start))}`} className="printBtn">
+                    <i className="fa fa-print" /> Печать
+                </a>
 
                 <h2 className="page__h2">{teacher.full_name}</h2>
 

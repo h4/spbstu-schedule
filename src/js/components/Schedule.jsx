@@ -85,6 +85,10 @@ var Schedule = React.createClass({
                 <a href={`/faculty/${faculty.id}/groups/${group.id}/ical?date=${du.qString(du.getWeek(week.date_start))}`} className="printBtn">
                     <i className="fa fa-calendar" /> iCal
                 </a>
+                <a href={`/faculty/${faculty.id}/groups/${group.id}/pdf?date=${du.qString(du.getWeek(week.date_start))}`} className="printBtn">
+                    <i className="fa fa-print" /> Печать
+                </a>
+
                 <h2 className="page__h2">{faculty.name}</h2>
                 <h3 className="page__h3">Группа № {group.name}</h3>
 
