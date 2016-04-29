@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var ical = require('ical-generator')
 var moment = require('moment');
+var url = require('url');
 
 var Cal = class {
     constructor(req, res, state) {
@@ -19,7 +20,7 @@ var Cal = class {
             name: this.getName(),
             prodId: {company: 'spbstu.ru', product: 'ical', language: 'RU'},
             timezone: 'Europe/Moscow',
-            url: this.req.protocol + '://' + this.req.get('host') + this.req.url,
+            url: this.req.protocol + '://' + this.req.get('host') + url.parse(this.req.url).pathname,
             ttl: 60 * 60 * 24 * 7,
             events: this.getEvents()
         })
