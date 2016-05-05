@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var ical = require('ical-generator')
-var moment = require('moment');
+var moment = require('moment-timezone');
 
 var Cal = class {
     constructor(req, res, state) {
@@ -19,8 +19,8 @@ var Cal = class {
             name: this.getName(),
             prodId: {company: 'spbstu.ru', product: 'ical', language: 'RU'},
             timezone: 'Europe/Moscow',
-            url: this.req.protocol + '://' + this.req.get('host') + this.req.url,
-            ttl: 60 * 60 * 24 * 7,
+            // url: this.req.protocol + '://' + this.req.get('host') + this.req.url,
+            // ttl: 60 * 60 * 24 * 7,
             events: this.getEvents()
         })
     }
@@ -60,11 +60,8 @@ var Cal = class {
     }
     
     dateFor(lesson, time) {
-        var time = moment(time, 'HH:mm')
-        return moment(lesson.week, 'YYYY.MM.DD')
+        return moment.tz(lesson.week + ' ' + time, 'YYYY.MM.DD HH:mm', 'Europe/Moscow')
             .day(lesson.weekday)
-            .hour(time.hour())
-            .minutes(time.minutes())
             .toDate()
     }
     
