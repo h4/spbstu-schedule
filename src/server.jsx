@@ -30,7 +30,6 @@ const app = new Express();
 
 var fs = require('fs');
 var template = fs.readFileSync('./index.html', {encoding: 'utf-8'});
-var cleanTemplate = fs.readFileSync('./pdf.html', {encoding: 'utf-8'});
 
 app.use('/assets', Express.static('assets'));
 app.use('/img', Express.static('img'));
@@ -141,11 +140,7 @@ function render(store, route, res) {
         const finalState = store.getState();
 
         // Send the rendered page back to the client
-        if(route.clean) {
-            res.send(renderCleanPage(html, finalState));
-        } else {
-            res.send(renderFullPage(html, finalState));
-        }
+        res.send(renderFullPage(html, finalState));
         res.end('');
     } catch (e) {
         res.status(500);
@@ -155,12 +150,6 @@ function render(store, route, res) {
 
 function renderFullPage(html, initialState) {
     return template
-        .replace('${html}', html)
-        .replace('${initialState}', JSON.stringify(initialState));
-}
-
-function renderCleanPage(html, initialState) {
-    return cleanTemplate
         .replace('${html}', html)
         .replace('${initialState}', JSON.stringify(initialState));
 }

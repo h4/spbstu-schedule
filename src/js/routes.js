@@ -36,7 +36,6 @@ const pathEnum = {
 
 
 // renderPdf: custom params for server side pdf rendering
-// clean: use clean page for rendering (pdf.html template)
 /* renderPdf = {
     redirect: route-pattern, link to url which will be rendered to pdf
     pageSize: string, for possible values see pdf.js

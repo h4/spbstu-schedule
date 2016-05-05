@@ -111,16 +111,8 @@ var Time = React.createClass({
 })
 
 var Subject = React.createClass({
-    className: function() {
-        if (this.props.name.length > 40) {
-            return 'subject small_subject'
-        } else {
-            return 'subject'
-        }
-    },
-
     render: function() {
-        return <div className={this.className()} >{this.props.name}</div>
+        return <div className='subject' >{this.props.name}</div>
     }
 })
 
