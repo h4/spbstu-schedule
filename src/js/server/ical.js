@@ -18,9 +18,9 @@ var Cal = class {
             domain: this.req.get('host'),
             name: this.getName(),
             prodId: {company: 'spbstu.ru', product: 'ical', language: 'RU'},
-            timezone: 'Europe/Moscow',
-            url: this.req.protocol + '://' + this.req.get('host') + this.req.url,
-            ttl: 60 * 60 * 24 * 7,
+            // timezone: 'Europe/Moscow',
+            // url: this.req.protocol + '://' + this.req.get('host') + this.req.url,
+            // ttl: 60 * 60 * 24 * 7,
             events: this.getEvents()
         })
     }
