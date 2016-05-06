@@ -5,11 +5,13 @@ var babelify = require('babelify');
 var envify = require('envify');
 var source = require('vinyl-source-stream');
 var watchify = require('watchify')
+var uglifyify = require('uglifyify')
 
 var bundler = browserify({ cache: {}, packageCache: {} })
     .transform(babelify)
     .transform(reactify, {"es6": true})
     .transform(envify)
+    .transform(uglifyify, {global: true})
     .add('src/js/app.js')
 
 function bundle() {
