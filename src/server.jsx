@@ -22,6 +22,7 @@ import childProcess from 'child_process'
 import phantomjs from 'phantomjs-prebuilt'
 import temp from 'temp'
 import ical from './js/server/ical'
+import compression from 'compression'
 
 const apiRoot = process.env.API_ROOT;
 const callApi = callApiFactory(apiRoot);
@@ -30,6 +31,8 @@ const app = new Express();
 
 var fs = require('fs');
 var template = fs.readFileSync('./index.html', {encoding: 'utf-8'});
+
+app.use(compression())
 
 app.use('/assets', Express.static('assets'));
 app.use('/img', Express.static('img'));

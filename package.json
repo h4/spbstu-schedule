@@ -23,7 +23,8 @@
     "redux-localstorage": "^0.4.0",
     "phantomjs-prebuilt": "^2.1.7",
     "temp": "^0.8.3",
-    "ical-generator": "^0.2.7"
+    "ical-generator": "^0.2.7",
+    "compression": "^1.6.1"
   },
   "devDependencies": {
     "babelify": "^6.3.0",
