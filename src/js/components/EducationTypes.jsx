@@ -4,11 +4,10 @@ var reactRedux = require('react-redux');
 var actions = require('../actions/FacultyActions');
 
 const educationTypes = {
-    '0': "бакалавр",
-    '1': "магистр",
-    '2': "специалист",
-    '3': "аспирант",
-    '4': "ДПО"
+    '0': "Бакалавр",
+    '1': "Магистр",
+    '2': "Специалист",
+    '3': "Аспирант"
 }
 
 var EducationTypeLink = React.createClass({
