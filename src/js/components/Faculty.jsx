@@ -4,6 +4,7 @@ var reactRedux = require('react-redux');
 var actions = require('../actions/FacultyActions');
 var Groups = require('./Groups.jsx');
 var GroupTypes = require('./GroupTypes.jsx');
+var EducationTypes = require('./EducationTypes.jsx');
 
 var Faculty = React.createClass({
     componentWillMount: function () {
@@ -29,7 +30,8 @@ var Faculty = React.createClass({
     groupGroupsByLevel: function(groups) {
         if (groups) {
             return _.chain(groups)
-                .filter(x => this.props.filter === 'all' || x.type === this.props.filter)
+                .filter(x => this.props.typeFilter === 'all' || x.type === this.props.typeFilter)
+                .filter(x => this.props.educationFilter === 'all' || x.kind.toString() === this.props.educationFilter)
                 .sortBy('level')
                 .orderBy([ this.getGroupNum, this.getSubgroupNum ])
                 .groupBy('level')
@@ -61,12 +63,16 @@ var Faculty = React.createClass({
                 </div>
             )
         }
-
+        
+        
+        
+        
         return (
             <div className="faculty">
                 <h2 className="page__h2">{faculty.name}</h2>
                 <div className="tabs-area">
                     <GroupTypes faculty={this.props.facultyId} />
+                    <EducationTypes faculty={this.props.facultyId}  />
                     <div className="tabbed-area__pane">
                         <div className="faculty__levels">
                             {
@@ -101,7 +107,8 @@ var Faculty = React.createClass({
 Faculty.propTypes = {
     dispatch: React.PropTypes.func.isRequired,
     isFetching: React.PropTypes.bool.isRequired,
-    filter: React.PropTypes.string.isRequired
+    typeFilter: React.PropTypes.string.isRequired,
+    educationFilter: React.PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
@@ -109,7 +116,8 @@ function mapStateToProps(state) {
         isFetching: state.groups.isFetching,
         faculty: state.groups.faculty,
         groups: state.groups.data,
-        filter: state.persist.groupTypeFilter
+        typeFilter: state.persist.groupTypeFilter,
+        educationFilter: state.persist.educationTypeFilter
     }
 }
 
