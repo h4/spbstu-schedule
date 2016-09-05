@@ -73,6 +73,14 @@ function setGroupTypeFilter(filter) {
     }
 }
 
+function setEducationTypeFilter(filter) {
+    return {
+        type: 'SET_EDUCATION_FILTER',
+        filter
+    }
+}
+
+
 module.exports = {
     fetchFaculties: function () {
         return function(dispatch) {
@@ -95,6 +103,12 @@ module.exports = {
     setGroupTypeFilter: function(filter) {
         return function(dispatch) {
             return dispatch(setGroupTypeFilter(filter));
+        };
+    },
+    
+    setEducationTypeFilter: function(filter) {
+        return function(dispatch) {
+            return dispatch(setEducationTypeFilter(filter));
         };
     },
 

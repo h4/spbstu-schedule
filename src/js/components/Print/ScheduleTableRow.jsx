@@ -52,6 +52,22 @@ function mergeSubgroups (a, b) {
     return a
 }
 
+function mergeGroupsForTeacherIfPossible(lessons) {
+    var canMerge = _.every(lessons, a => {
+        var b = lessons[0]
+        return a.subject === b.subject && a.typeObj.name === b.typeObj.name && _.isEqual(a.auditories, b.auditories)
+    })
+    if (lessons.length > 1 && canMerge) {
+        return [_.reduce(lessons, mergeGroupsForTeacher)]
+    } else {
+        return lessons
+    }
+}
+
+function mergeGroupsForTeacher(a, b) {
+    a.groups = _.unionBy(a.groups, b.groups, 'id')
+    return a
+}
 
 function getRows(lessonsEven, lessonsOdd, time, showGroups) {
     lessonsEven = lessonsEven || []
@@ -60,8 +76,13 @@ function getRows(lessonsEven, lessonsOdd, time, showGroups) {
     lessonsEven = _.groupBy(lessonsEven, 'weekday')
     lessonsOdd = _.groupBy(lessonsOdd, 'weekday')
 
-    lessonsEven = _.mapValues(lessonsEven, x => mergeSubgroupsIfPossible(x))
-    lessonsOdd = _.mapValues(lessonsOdd, x => mergeSubgroupsIfPossible(x))
+    if(showGroups) {
+        lessonsEven = _.mapValues(lessonsEven, x => mergeGroupsForTeacherIfPossible(x))
+        lessonsOdd = _.mapValues(lessonsOdd, x => mergeGroupsForTeacherIfPossible(x))
+    } else {
+        lessonsEven = _.mapValues(lessonsEven, x => mergeSubgroupsIfPossible(x))
+        lessonsOdd = _.mapValues(lessonsOdd, x => mergeSubgroupsIfPossible(x))
+    }
 
     var odd_cells = _.times(6, i => <Cell key={i} lessons={lessonsOdd[i + 1]} merge={canMerge(lessonsOdd[i + 1], lessonsEven[i + 1])} showGroups={showGroups} />)
     var even_cells = _.map(odd_cells, (c, i) => {

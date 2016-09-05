@@ -224,13 +224,17 @@ function places(state, action) {
 
 function groupTypeFilter(state, action) {
     var baseState = {
-        groupTypeFilter: 'common'
+        groupTypeFilter: 'common',
+        educationTypeFilter: '0'
     };
     state = _.extend(baseState, state);
 
     switch (action.type) {
         case 'SET_GROUPTYPE_FILTER':
             state.groupTypeFilter = action.filter;
+            return state;
+        case 'SET_EDUCATION_FILTER':
+            state.educationTypeFilter = action.filter;
             return state;
         default :
             return state;
