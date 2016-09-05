@@ -6,8 +6,9 @@ var actions = require('../actions/FacultyActions');
 const educationTypes = {
     '0': "Бакалавр",
     '1': "Магистр",
-    '2': "Специалист",
-    '3': "Аспирант"
+    '2': "Специалист"
+    //'3': "Аспирант"
+    //'4': "ДПО"
 }
 
 var EducationTypeLink = React.createClass({
