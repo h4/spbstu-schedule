@@ -126,6 +126,9 @@ function handleRender(req, res) {
                             return renderCal(req, res, route, store)
                         }
                         render(store, route, res)
+                }).catch(error => {
+                    console.error("API FETCH ERROR:", error.message, 'ON ENDPOINT: ', endpoint);
+                    send404(res);
                 });
             } else {
                 render(store, route, res)
