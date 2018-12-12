@@ -61,7 +61,7 @@ var EducationTypes = React.createClass({
                     </li>
                 )}
             </ul>
-        )
+        );
     },
     propTypes: {
         filter: React.PropTypes.oneOf(Object.keys(educationTypes)).isRequired,
@@ -74,4 +74,5 @@ EducationTypes = reactRedux.connect(
     })
 )(EducationTypes);
 
-module.exports = EducationTypes
+module.exports = EducationTypes;
+

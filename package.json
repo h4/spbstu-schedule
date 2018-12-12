@@ -49,7 +49,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "gulp",
-    "start": "cd ./src && node server.js"
+    "start": "cd ./src && node $NODE_DEBUG_OPTION server.js"
   },
   "author": "Mikhail Baranov <mikhail.baranov@gmail.com>",
   "license": "ISC",
