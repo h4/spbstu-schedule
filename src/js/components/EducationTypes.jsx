@@ -54,7 +54,7 @@ EducationTypeLink = reactRedux.connect(mapStateToProps, mapDispatchToProps)(Educ
 var EducationTypes = React.createClass({
     render: function() {
         const faculty = this.props.faculty;
-        if (faculty === 117) {
+            if (faculty === 117) {
             return (
                 <ul className="tabbed-area__tabs">
                     <li>

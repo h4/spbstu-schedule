@@ -3,7 +3,7 @@ var fetch = require('isomorphic-fetch');
 var _ = require('lodash');
 
 function callApiFactory(root) {
-    var API_ROOT =  root || 'http://ruz2.spbstu.ru/api/v1/ruz/';
+    var API_ROOT =  root || 'https://ruz.spbstu.ru/api/v1/ruz/';
 
     return function(endpoint) {
         var fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint;
