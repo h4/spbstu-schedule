@@ -8,7 +8,7 @@ const educationTypes = {
     '1': "Магистр",
     '2': "Специалист",
     //'3': "Аспирант",
-    //'6': "СПО",
+    '6': "СПО",
     //'4': "ДПО"
 }
 
@@ -53,17 +53,6 @@ EducationTypeLink = reactRedux.connect(mapStateToProps, mapDispatchToProps)(Educ
 
 var EducationTypes = React.createClass({
     render: function() {
-        const faculty = this.props.faculty;
-            if (faculty === 117) {
-            return (
-                <ul className="tabbed-area__tabs">
-                    <li>
-                        <EducationTypeLink filter={6} displayName={"СПО"} />
-                    </li>
-                </ul>
-            );
-        }
-        
         return (
             <ul className="tabbed-area__tabs">
                 {Object.keys(educationTypes).map((educationType) =>
@@ -85,4 +74,5 @@ EducationTypes = reactRedux.connect(
     })
 )(EducationTypes);
 
-module.exports = EducationTypes
+module.exports = EducationTypes;
+
