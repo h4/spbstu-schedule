@@ -24,6 +24,8 @@ import temp from 'temp'
 import ical from './js/server/ical'
 import compression from 'compression'
 
+var xssFilters = require("xss-filters");
+
 const apiRoot = process.env.API_ROOT;
 const callApi = callApiFactory(apiRoot);
 
@@ -157,7 +159,7 @@ function render(store, route, res) {
 function renderFullPage(html, initialState) {
     return template
         .replace('${html}', html)
-        .replace('${initialState}', JSON.stringify(initialState));
+        .replace('${initialState}', xssFilters.inHTMLData(JSON.stringify(initialState)));
 }
 
 function sendPdf(req, res, routerState) {
